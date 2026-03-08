@@ -18,6 +18,17 @@ env:
   IMAGE_NAME: faberge-frontend
 
 jobs:
+  hadolint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Hadolint
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+  
   docker:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -72,6 +83,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
+          target: prod
           push: true
           tags: ${{ env.TAGS }}
           cache-from: type=gha
