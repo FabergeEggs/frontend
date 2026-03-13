@@ -27,10 +27,10 @@ FROM node:lts AS prod
 WORKDIR /frontend
 ENV NODE_ENV=production
 
-COPY --from=builder /frontend/.next ./.next
-COPY --from=builder /frontend/public ./public
-COPY --from=builder /frontend/package.json ./package.json
-COPY --from=builder /frontend/node_modules ./node_modules
+COPY --from=prod /frontend/.next ./.next
+COPY --from=prod /frontend/public ./public
+COPY --from=prod /frontend/package.json ./package.json
+COPY --from=prod /frontend/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["npm", "start"]
