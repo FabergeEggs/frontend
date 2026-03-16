@@ -1,9 +1,17 @@
-import '@/app/ui/global.css';
+import "@/app/ui/global.css";
+import NavLinks from "./ui/nav-links";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <NavLinks />
+      </body>
     </html>
   );
 }
