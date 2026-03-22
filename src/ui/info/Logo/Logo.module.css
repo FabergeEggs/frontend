@@ -1,0 +1,9 @@
+.logo {
+    display: flex;
+    align-items: center;
+    color: var(--active-dark-color);
+}
+
+.text {
+    margin-left: 7px;
+}

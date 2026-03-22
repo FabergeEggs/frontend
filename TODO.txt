@@ -1,0 +1,5 @@
+Global:
+- next-intl
+
+ui/images/HeaderIcon:
+- Replace stub by image

@@ -1,0 +1,10 @@
+:root {
+    --bg-color: #FBF8F0;
+    --main-color: #FFFFFF;
+    --varity1-color: #E8E7DE;
+    --varity2-color: #E8ECE4;
+    --active-dark-color: #3C4930;
+    --active-light-color: #F4C850;
+
+    --active-dark-color-darken: #3c493090;
+}

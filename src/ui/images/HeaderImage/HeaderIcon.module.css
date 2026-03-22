@@ -1,0 +1,10 @@
+.icon {
+    display: inline-block;
+
+    border: none;
+    border-radius: 14px;
+    background-color: var(--varity1-color);
+    
+    height: 40px;
+    width: 40px;
+}

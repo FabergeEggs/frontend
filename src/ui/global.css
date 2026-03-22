@@ -1,0 +1,39 @@
+body {
+    font-family: 'Inter';
+    font-weight: 400;
+
+    background-color: var(--bg-color);
+}
+
+.basic-box {
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 10px;
+    border: none;
+
+    height: 30px;
+    line-height: 30px;
+    vertical-align: top;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.basic-btn {
+    font-size: 14px;
+    border-radius: 10px;
+    border: none;
+
+    height: 40px;
+
+    cursor: pointer;
+
+    transition: filter 0.15s;
+}
+
+.basic-btn:hover {
+    filter: brightness(90%)
+}
+
+.basic-btn:active {
+    filter: brightness(65%)
+}
