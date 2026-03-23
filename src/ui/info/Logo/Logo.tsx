@@ -1,5 +1,5 @@
 import styles from './Logo.module.css'
-import HeaderIcon from '../../images/HeaderImage/HeaderIcon'
+import HeaderIcon from '../../images/HeaderIcon/HeaderIcon'
 
 export default function Logo() {
     return (

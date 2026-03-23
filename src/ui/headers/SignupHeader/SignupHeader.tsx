@@ -2,7 +2,7 @@ import styles from './SignupHeader.module.css'
 
 import Logo from '../../info/Logo/Logo'
 import GreenButton from '../../buttons/GreenButton/GreenButton'
-import HeaderIcon from '../../images/HeaderImage/HeaderIcon'
+import HeaderIcon from '../../images/HeaderIcon/HeaderIcon'
 
 import Link from 'next/link'
 
