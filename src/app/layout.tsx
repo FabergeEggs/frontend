@@ -1,5 +1,11 @@
 import "@/src/ui/global.css";
 import "@/src/ui/variables.css"
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ 
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700']
+});
 
 export default function RootLayout({
   children,
@@ -8,12 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-        </style>
-      </head>
-      <body>
+      <body className={inter.className}>
         {children}
       </body>
     </html>

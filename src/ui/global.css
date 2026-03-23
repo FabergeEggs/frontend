@@ -1,8 +1,19 @@
-body {
-    font-family: 'Inter';
-    font-weight: 400;
+html, body {margin: 0; height: 100%; overflow: hidden}
 
+body {
+    font-weight: 400;
     background-color: var(--bg-color);
+}
+
+/* * {
+    font-family: inherit;
+    font-weight: inherit;
+} */
+
+/* These elements does not inherit by default: */
+input, textarea, select, button {
+    font-family: inherit;
+    font-weight: inherit;
 }
 
 .basic-box {
@@ -37,3 +48,30 @@ body {
 .basic-btn:active {
     filter: brightness(65%)
 }
+
+
+.basic-input {
+    height: 50px;
+    border: 1px solid var(--active-dark-color);
+    border-radius: 10px;
+    
+    font-size: 16px;    /* Media: mobile - 14px*/
+    transition: filter 0.15s;
+
+    box-sizing: border-box;
+    width: 100%;
+
+    padding-left: 11px;  /* ← moves both placeholder and typed text */
+}
+.basic-input::placeholder {
+    
+    color: var(--placeholder-color);
+}
+
+/* .basic-input:hover {
+    filter: brightness(90%)
+}
+
+.basic-input:active {
+    filter: brightness(65%)
+} */

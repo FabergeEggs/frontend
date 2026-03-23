@@ -1,0 +1,7 @@
+.container {
+    flex: 1; /* takes all remaining space after header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

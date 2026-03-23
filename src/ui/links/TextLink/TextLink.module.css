@@ -1,0 +1,9 @@
+.link {
+    color: var(--active-dark-color);
+    text-decoration: underline dotted;
+    text-decoration-thickness: 10%;
+    text-decoration-skip-ink: auto;
+    text-underline-offset: 3px;    /* moves line down, away from letters */
+
+    font-size: 16px;
+}

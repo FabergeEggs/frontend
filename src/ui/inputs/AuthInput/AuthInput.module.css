@@ -1,0 +1,8 @@
+.input {
+    margin-top: 5px;
+    transition: background-color 0.1s; /* empty: off-on */
+}
+
+.empty {
+    background-color: var(--varity2-color);
+}

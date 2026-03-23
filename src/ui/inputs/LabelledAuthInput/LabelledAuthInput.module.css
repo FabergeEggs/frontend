@@ -1,0 +1,8 @@
+.text {
+    padding-left: 2px;
+    font-size: 20px; /* media: 20-18-16 */
+}
+
+.container {
+    width: 100%;
+}
