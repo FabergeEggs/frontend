@@ -3,3 +3,7 @@ Global:
 
 ui/images/HeaderIcon:
 - Replace stub by image
+
+
+PROBLEMS:
+- TextLink: the "text-decoration-skip-ink: auto" property splits some dots into two, whick looks bad if zoom enough.
