@@ -1,10 +1,10 @@
 import styles from './HeaderIcon.module.css'
 
 /*{image}: {image: string}*/
-export default function HeaderIcon() { 
+export default function HeaderIcon({className} : {className?: string}) { 
     // Import image
     return (
-        <div className={styles.icon}>
+        <div className={`${styles.icon} ${className ?? ''}`}>
         </div>
     )
 }

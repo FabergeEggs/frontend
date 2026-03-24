@@ -6,3 +6,15 @@
 .container {
     width: 100%;
 }
+
+@media (max-width: 834px) {
+    .text {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 360px) {
+    .text {
+        font-size: 16px;
+    }
+}

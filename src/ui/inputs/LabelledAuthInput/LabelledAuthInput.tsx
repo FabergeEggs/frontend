@@ -1,6 +1,5 @@
 import styles from "./LabelledAuthInput.module.css";
 import AuthInput from "../AuthInput/AuthInput";
-import AuthInputProps from "../AuthInput/AuthInput";
 
 interface LabelledAuthInputProps {
   type?: "password" | "email" | "text";
@@ -15,10 +14,7 @@ export default function LabelledAuthInput({
   placeholder,
   required,
 }: LabelledAuthInputProps) {
-  let visibility: "visible" | "hidden" = "visible";
-  if (required != null && required == false) {
-    visibility = "hidden";
-  }
+  const visibility = required === false ? 'hidden' : 'visible'
   return (
     <div className={styles.container}>
       <label htmlFor={label}>

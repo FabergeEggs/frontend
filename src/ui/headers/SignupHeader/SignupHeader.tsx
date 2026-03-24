@@ -14,7 +14,7 @@ export default function SignupHeader() {
                 <Link href="/login">
                     <GreenButton className={styles.loginBtn} text="Войти"/>
                 </Link>
-                <HeaderIcon />
+                <HeaderIcon className={styles.headerIcon}/>
             </div>
         </header>
     )

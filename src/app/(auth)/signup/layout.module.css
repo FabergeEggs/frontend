@@ -6,16 +6,22 @@
 
     max-width: 1140px;
     margin: 0 auto;
+    padding-left: 20px;   /* защита от прилипания к краям */
+    padding-right: 20px;  /* на промежуточных размерах */
 }
 
-@media(max-width: 834px) {
+/* Планшет */
+@media (max-width: 834px) {
     .layout {
-        max-width: 654px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 
-@media(max-width: 320px) {
+/* Мобильный */
+@media (max-width: 360px) {
     .layout {
-        max-width: 304px;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }

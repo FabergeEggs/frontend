@@ -37,8 +37,8 @@ export default function SignupForm() {
         text="Зарегистрироваться"
         onClick={() => console.log("Registration")}
       />
-      <p>
-        У вас уже есть аккаунт? <TextLink href="/login">Войдите тут</TextLink>
+      <p className={styles.loginRef}>
+        У вас уже есть аккаунт? <TextLink className={styles.loginRef} href="/login">Войдите тут</TextLink>
       </p>
     </form>
   );
