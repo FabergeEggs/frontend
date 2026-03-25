@@ -19,7 +19,7 @@
 }
 
 /* Мобильный */
-@media (max-width: 360px) {
+@media (max-width: 400px) {
     .layout {
         padding-left: 8px;
         padding-right: 8px;

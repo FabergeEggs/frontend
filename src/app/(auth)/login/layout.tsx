@@ -1,5 +1,5 @@
 import styles from '../layout.module.css'
-import SignupHeader from "@/src/ui/headers/SignupHeader/SignupHeader";
+import LoginHeader from '@/src/ui/headers/LoginHeader/LoginHeader';
 
 export default function Layout({
   children,
@@ -8,7 +8,7 @@ export default function Layout({
 }) {
   return (
     <div className={styles.layout}>
-        <SignupHeader/>
+        <LoginHeader/>
         {children}
     </div>
   );

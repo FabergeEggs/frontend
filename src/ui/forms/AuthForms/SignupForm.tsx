@@ -1,9 +1,9 @@
 "use client";
 
-import styles from "./SignupForm.module.css";
-import LabelledAuthInput from "../../inputs/LabelledAuthInput/LabelledAuthInput";
-import GreenButton from "../../buttons/GreenButton/GreenButton";
-import TextLink from "../../links/TextLink/TextLink";
+import styles from './AuthForm.module.css'
+import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledSignupInput";
+import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
+import TextLink from "@/src/ui/links/TextLink/TextLink";
 
 export default function SignupForm() {
   return (
@@ -37,8 +37,8 @@ export default function SignupForm() {
         text="Зарегистрироваться"
         onClick={() => console.log("Registration")}
       />
-      <p className={styles.loginRef}>
-        У вас уже есть аккаунт? <TextLink className={styles.loginRef} href="/login">Войдите тут</TextLink>
+      <p className={styles.authRef}>
+        У вас уже есть аккаунт? <TextLink className={styles.authRef} href="/login">Войдите тут</TextLink>
       </p>
     </form>
   );

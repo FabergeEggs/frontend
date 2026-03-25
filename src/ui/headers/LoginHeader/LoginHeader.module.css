@@ -6,13 +6,13 @@
 
 }
 
-.loginBtn {
-    width: 149px;
+.signupBtn {
+    width: 185px;
     margin-right: 15px;
 }
 
 @media (max-width: 834px) {
-    .loginBtn {
+    .signupBtn {
         margin-right: 10px;
     }
 }
@@ -22,11 +22,10 @@
         height: 30px;
     }
 
-    .loginBtn {
-        width: 89px;
-        height: 30px;
-
+    .signupBtn {
+        width: 148px;
         font-size: 12px;
+        height: 30px;
     }
 }
 

@@ -1,12 +1,6 @@
 import styles from "./LabelledAuthInput.module.css";
 import AuthInput from "../AuthInput/AuthInput";
-
-interface LabelledAuthInputProps {
-  type?: "password" | "email" | "text";
-  label: string;
-  placeholder: string;
-  required?: boolean;
-}
+import LabelledAuthInputProps from "./LabelledAuthInputProps";
 
 export default function LabelledAuthInput({
   type,

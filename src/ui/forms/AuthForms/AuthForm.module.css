@@ -15,12 +15,13 @@
     height: 643px; */
     width: 100%;        /* занимает доступное пространство */
     max-width: 500px;   /* но не больше 500px */
-    /* min-height: 643px;   */
     
-    padding-left: 30px;
+    /* padding-left: 30px;
     padding-right: 30px;
     padding-top: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 20px; */
+
+    padding: 20px 30px;
 
 }
 
@@ -48,6 +49,10 @@
     font-size: 18px;
 }
 
+.resetPasswordRef {
+    width: 100%;
+}
+
 @media (max-width: 834px) {
     .form {
         max-width: 430px;
@@ -62,14 +67,15 @@
         font-size: 24px;
     }
 
-    .loginRef {
+    .authRef {
         font-size: 14px;
     }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
     .form {
         max-width: 304px;
+        padding: 10px 15px;
     }
 
     .submitBtn {
@@ -80,7 +86,7 @@
         font-size: 20px;
     }
 
-    .loginRef {
+    .authRef {
         font-size: 12px;
     }
 }
