@@ -1,12 +1,13 @@
-html, body {
-    margin: 0; 
-    /* height: 100%; 
+html,
+body {
+  margin: 0;
+  /* height: 100%; 
     overflow: hidden */
 }
 
 body {
-    font-weight: 400;
-    background-color: var(--bg-color);
+  font-weight: 400;
+  background-color: var(--bg-color);
 }
 
 /* * {
@@ -15,68 +16,79 @@ body {
 } */
 
 /* These elements does not inherit by default: */
-input, textarea, select, button {
-    font-family: inherit;
-    font-weight: inherit;
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-weight: inherit;
 }
 
 input:focus,
 select:focus,
 textarea:focus,
 button:focus {
-    outline: 1px solid black; /* Some browsers make red outline, which is not what our site needs */
+  outline: 1px solid black; /* Some browsers make red outline, which is not what our site needs */
 }
 
 .basic-box {
-    display: inline-block;
-    font-size: 14px;
-    border-radius: 10px;
-    border: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
 
-    height: 30px;
-    line-height: 30px;
-    vertical-align: top;
-    padding-left: 15px;
-    padding-right: 15px;
+  height: 30px;
+  line-height: 30px;
+  vertical-align: top;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .basic-btn {
-    font-size: 14px;
-    border-radius: 10px;
-    border: none;
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
 
-    height: 40px;
+  height: 40px;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    transition: filter 0.15s;
+  transition: filter 0.15s;
 }
 
 .basic-btn:hover {
-    filter: brightness(90%)
+  filter: brightness(90%);
 }
 
 .basic-btn:active {
-    filter: brightness(65%)
+  filter: brightness(65%);
 }
 
+/* Separation (basic-input-container & basic-input) is made for comfortable work with inputs with images */
+.basic-input-container {
+  display: flex;
+  align-items: center;
+
+  height: 50px;
+  border: 1px solid var(--active-dark-color);
+  border-radius: 10px;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  transition: background-color 0.1s; /* empty: off-on */
+}
 
 .basic-input {
-    height: 50px;
-    border: 1px solid var(--active-dark-color);
-    border-radius: 10px;
-    
-    font-size: 16px;    /* Media: mobile - 14px*/
-    transition: filter 0.15s;
+  flex: 1;
 
-    box-sizing: border-box;
-    width: 100%;
+  font-size: 16px;
+  transition: filter 0.15s;
 
-    padding-left: 11px;  /* ← moves both placeholder and typed text */
+  padding-left: 11px; /* <- moves both placeholder and typed text */
 }
 .basic-input::placeholder {
-    
-    color: var(--placeholder-color);
+  color: var(--placeholder-color);
 }
 
 /* .basic-input:hover {

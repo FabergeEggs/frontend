@@ -1,7 +1,8 @@
 "use client";
 
-import styles from './AuthForm.module.css'
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledSignupInput";
+import styles from "./AuthForm.module.css";
+import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
+import LabelledAuthTextarea from "../../inputs/LabelledAuthInputs/LabelledAuthTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 
@@ -16,7 +17,7 @@ export default function SignupForm() {
           label="Почта"
           placeholder="example@mail.ru"
         />
-        <LabelledAuthInput
+        <LabelledAuthTextarea
           label="О себе"
           placeholder="Расскажите о себе..."
           required={false}
@@ -38,7 +39,10 @@ export default function SignupForm() {
         onClick={() => console.log("Registration")}
       />
       <p className={styles.authRef}>
-        У вас уже есть аккаунт? <TextLink className={styles.authRef} href="/login">Войдите тут</TextLink>
+        У вас уже есть аккаунт?{" "}
+        <TextLink className={styles.authRef} href="/login">
+          Войдите тут
+        </TextLink>
       </p>
     </form>
   );

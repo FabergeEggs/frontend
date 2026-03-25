@@ -1,7 +1,9 @@
-export default function Page() {
+import ProfilePictureInput from "@/src/ui/inputs/ProfilePictureInput/ProfilePictureInput";
 
-    return (
-        <>
-        </>
-    )
+export default function Page() {
+  return (
+    <>
+      <ProfilePictureInput />
+    </>
+  );
 }

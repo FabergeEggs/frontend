@@ -2,27 +2,25 @@
 
 import { useState } from "react";
 import styles from "./AuthInput.module.css";
-import InputProps from "../InputProps";
+import TextareaProps from "../TextareaProps";
 
 /* This element changes its background-color depending on whether the input field is empty or not */
-export default function AuthInput({
-  type,
+export default function AuthTextarea({
   id,
   placeholder,
   required,
-}: InputProps) {
+}: TextareaProps) {
   const [className, setClassName] = useState(styles.empty);
 
-  function handleInput(target: HTMLInputElement) {
+  function handleInput(target: HTMLTextAreaElement) {
     if (target.value) setClassName("");
     else setClassName(styles.empty);
   }
 
   return (
-    <input
-      className={`basic-input-container basic-input ${styles.input} ${className}`}
+    <textarea
+      className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
       onChange={(e) => handleInput(e.target)}
-      type={type ?? "text"}
       id={id}
       placeholder={placeholder}
       required={required ?? true}

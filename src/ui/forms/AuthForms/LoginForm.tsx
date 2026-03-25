@@ -1,7 +1,7 @@
 "use client";
 
-import styles from './AuthForm.module.css'
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledSignupInput";
+import styles from "./AuthForm.module.css";
+import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 
@@ -18,7 +18,9 @@ export default function LoginForm() {
         />
       </div>
       <p className={styles.resetPasswordRef}>
-        <TextLink className={styles.authRef} href="/reset-password">Забыли пароль?</TextLink>
+        <TextLink className={styles.authRef} href="/reset-password">
+          Забыли пароль?
+        </TextLink>
       </p>
       <GreenButton
         className={styles.submitBtn}
@@ -26,7 +28,10 @@ export default function LoginForm() {
         onClick={() => console.log("Login")}
       />
       <p className={styles.authRef}>
-        Ещё нет аккаунта? <TextLink className={styles.authRef} href="/signup">Зарегистрируйтесь тут</TextLink>
+        Ещё нет аккаунта?{" "}
+        <TextLink className={styles.authRef} href="/signup">
+          Зарегистрируйтесь тут
+        </TextLink>
       </p>
     </form>
   );

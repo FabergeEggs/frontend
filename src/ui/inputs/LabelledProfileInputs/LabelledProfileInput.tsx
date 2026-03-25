@@ -1,14 +1,14 @@
-import styles from "./LabelledAuthInput.module.css";
-import AuthInput from "../AuthInput/AuthInput";
-import LabelledAuthInputProps from "./LabelledAuthInputProps";
+import styles from "./LabelledProfileInput.module.css";
+import ProfileInput from "../ProfileInput/ProfileInput";
+import LabelledInputProps from "../LabelledInputProps";
 
-export default function LabelledAuthInput({
+export default function LabelledProfileInput({
   type,
   label,
   placeholder,
   required,
-}: LabelledAuthInputProps) {
-  const visibility = required === false ? 'hidden' : 'visible'
+}: LabelledInputProps) {
+  const visibility = required === false ? "hidden" : "visible";
   return (
     <div className={styles.container}>
       <label htmlFor={label}>
@@ -16,12 +16,12 @@ export default function LabelledAuthInput({
           {label}{" "}
           <span style={{ visibility: visibility, color: "red" }}>*</span>
         </span>
-        <AuthInput
+        <ProfileInput
           type={type}
           id={label}
           placeholder={placeholder}
           required={required}
-        ></AuthInput>
+        ></ProfileInput>
       </label>
     </div>
   );

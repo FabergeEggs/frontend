@@ -1,10 +1,11 @@
 import "@/src/ui/global.css";
-import "@/src/ui/variables.css"
-import { Inter } from 'next/font/google';
+import "@/src/ui/variables.css";
+import styles from "./layout.module.css";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ 
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600', '700']
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <div className={styles.layout}>{children}</div>
       </body>
     </html>
   );
