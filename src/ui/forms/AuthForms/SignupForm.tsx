@@ -37,6 +37,7 @@ export default function SignupForm() {
       router.push("/profile");
     } catch (error: any) {
       const msg = error.response?.data.error;
+      console.error(error.response);
       console.error("Registration failed: ", msg);
     }
   };
