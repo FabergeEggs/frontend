@@ -1,10 +1,10 @@
-import styles from '../page.module.css'
-import SignupForm from '@/src/ui/forms/AuthForms/SignupForm'
+import styles from "../authpage.module.css";
+import SignupForm from "@/src/ui/forms/AuthForms/SignupForm";
 
 export default function Page() {
   return (
-    <div className={styles.container}>
-      <SignupForm/>
+    <div className={`pagecontainer ${styles.container}`}>
+      <SignupForm />
     </div>
-  )
+  );
 }

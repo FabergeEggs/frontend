@@ -1,4 +1,5 @@
 import "@/src/ui/global.css";
+import "@/src/ui/pagecontainer.css";
 import "@/src/ui/variables.css";
 import styles from "./layout.module.css";
 import { Inter } from "next/font/google";

@@ -10,7 +10,11 @@ export default function LoginForm() {
     <form className={styles.form}>
       <p className={styles.title}>Войти</p>
       <div className={styles.inputs}>
-        <LabelledAuthInput type="email" label="Почта" placeholder="Введите почту..." />
+        <LabelledAuthInput
+          type="email"
+          label="Почта"
+          placeholder="Введите почту..."
+        />
         <LabelledAuthInput
           type="password"
           label="Пароль"

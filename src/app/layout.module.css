@@ -1,27 +1,37 @@
 .layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding-top: 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
 
-    max-width: 1140px;
-    margin: 0 auto;
-    padding-left: 20px;   /* защита от прилипания к краям */
-    padding-right: 20px;  /* на промежуточных размерах */
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-left: 20px; /* защита от прилипания к краям */
+  padding-right: 20px; /* на промежуточных размерах */
 }
 
 /* Планшет */
 @media (max-width: 834px) {
-    .layout {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
+  .layout {
+    /* padding-left: 15px;
+        padding-right: 15px; */
+    padding-left: 90px;
+    padding-right: 90px;
+  }
+}
+
+/* <!> */
+@media (max-width: 520px) {
+  .layout {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
 }
 
 /* Мобильный */
 @media (max-width: 400px) {
-    .layout {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
+  .layout {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
 }

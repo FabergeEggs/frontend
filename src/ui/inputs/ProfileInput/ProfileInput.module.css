@@ -37,10 +37,19 @@
   background-color: var(--varity1-color);
 }
 
+@media (max-width: 1000px) {
+  .container {
+    width: 400px;
+  }
+}
 @media (max-width: 834px) {
   .container {
     height: 40px;
     width: 327px;
+  }
+
+  .textareaContainer {
+    height: 84px;
   }
 
   .textarea {
