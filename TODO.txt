@@ -14,3 +14,5 @@ AuthInput
 PROBLEMS:
 - TextLink: the "text-decoration-skip-ink: auto" property splits some dots into two, whick looks bad if zoom enough.
 - Кривой адаптив: padding увеличивается для корректности отображения Header на Authpage, но для ProfilePage это не нужно и вообще это выглядит криво, т.к. по мере уменьшения ширины экрана в один прекрасный момент ширина формы резко увеличивается
+- Захардкожена высота сайта => есть скролл без контента
+- Глазик в инпуте пароля
