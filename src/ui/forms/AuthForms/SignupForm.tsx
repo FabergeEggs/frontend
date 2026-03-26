@@ -100,7 +100,6 @@ export default function SignupForm() {
         type="submit"
         className={styles.submitBtn}
         text="Зарегистрироваться"
-        onClick={() => console.log("Registration")}
       />
       <p className={styles.authRef}>
         У вас уже есть аккаунт?{" "}
