@@ -62,7 +62,7 @@ export default function SignupForm() {
       <p className={styles.title}>Регистрация</p>
       <div className={styles.inputs}>
         <LabelledAuthInput 
-          name="name" 
+          name="username" 
           label="Имя" 
           placeholder="Введите своё имя..." 
           onChange={handleChange}
