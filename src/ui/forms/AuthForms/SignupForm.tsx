@@ -32,6 +32,7 @@ export default function SignupForm() {
     }
 
     try {
+      console.log("Submitting registration with data: ", formData);
       const response = await register(formData);
       console.log("Registration successful: ", response);
       router.push("/profile");
