@@ -6,10 +6,12 @@ import InputProps from "../InputProps";
 
 /* This element changes its background-color depending on whether the input field is empty or not */
 export default function AuthInput({
+  name,
   type,
   id,
   placeholder,
   required,
+  onChange,
 }: InputProps) {
   const [className, setClassName] = useState(styles.empty);
 
@@ -20,8 +22,9 @@ export default function AuthInput({
 
   return (
     <input
+      name={name}
       className={`basic-input-container basic-input ${styles.input} ${className}`}
-      onChange={(e) => handleInput(e.target)}
+      onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
       type={type ?? "text"}
       id={id}
       placeholder={placeholder}

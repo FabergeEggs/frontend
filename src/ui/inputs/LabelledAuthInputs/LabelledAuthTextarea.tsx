@@ -3,18 +3,22 @@ import AuthTextarea from "../AuthInput/AuthTextarea";
 import LabelledTextareaProps from "../LabelledTextareaProps";
 
 export default function LabelledAuthTextarea({
+  name,
   label,
   placeholder,
   required,
+  onChange
 }: LabelledTextareaProps) {
   return (
     <div className={styles.container}>
       <label htmlFor={label}>
         <span className={styles.text}>{label}</span>
         <AuthTextarea
+          name = {name}
           id={label}
           placeholder={placeholder}
           required={required}
+          onChange={onChange}
         ></AuthTextarea>
       </label>
     </div>

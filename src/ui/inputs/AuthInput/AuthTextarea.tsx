@@ -6,9 +6,11 @@ import TextareaProps from "../TextareaProps";
 
 /* This element changes its background-color depending on whether the input field is empty or not */
 export default function AuthTextarea({
+  name,
   id,
   placeholder,
   required,
+  onChange
 }: TextareaProps) {
   const [className, setClassName] = useState(styles.empty);
 
@@ -19,8 +21,9 @@ export default function AuthTextarea({
 
   return (
     <textarea
+      name={name}
       className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
-      onChange={(e) => handleInput(e.target)}
+      onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
       id={id}
       placeholder={placeholder}
       required={required ?? true}

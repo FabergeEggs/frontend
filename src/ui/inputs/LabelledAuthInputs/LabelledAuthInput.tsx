@@ -3,10 +3,12 @@ import AuthInput from "../AuthInput/AuthInput";
 import LabelledInputProps from "../LabelledInputProps";
 
 export default function LabelledAuthInput({
+  name,
   type,
   label,
   placeholder,
   required,
+  onChange
 }: LabelledInputProps) {
   const visibility = required === false ? "hidden" : "visible";
   return (
@@ -17,10 +19,12 @@ export default function LabelledAuthInput({
           <span style={{ visibility: visibility, color: "red" }}>*</span>
         </span>
         <AuthInput
+          name={name}
           type={type}
           id={label}
           placeholder={placeholder}
           required={required}
+          onChange={onChange}
         ></AuthInput>
       </label>
     </div>
