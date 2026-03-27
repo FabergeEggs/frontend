@@ -6,15 +6,8 @@ Global:
 ui/images/HeaderIcon:
 - Replace stub by image
 
-
-AuthInput
-- Password repeat validation
-
-
 PROBLEMS:
-- TextLink: the "text-decoration-skip-ink: auto" property splits some dots into two, whick looks bad if zoom enough.
-- Кривой адаптив: padding увеличивается для корректности отображения Header на Authpage, но для ProfilePage это не нужно и вообще это выглядит криво, т.к. по мере уменьшения ширины экрана в один прекрасный момент ширина формы резко увеличивается
-- Захардкожена высота сайта => есть скролл без контента
-- Глазик в инпуте пароля
+- Fix adaptive /login - "Registration" button width is too big
+- Валидация в форме авторизации, подсвечивание invalid полей
 
 - Кнопка зарегистрироваться не активна до тех пор пока все поля не заполнены, пароли в двух полях не совпадают, пароль короче 6 символов и не содержит хотя бы одну букву и цифру одновременно.

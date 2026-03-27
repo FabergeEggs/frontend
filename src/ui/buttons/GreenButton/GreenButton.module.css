@@ -1,6 +1,6 @@
 .btn {
-    color: var(--main-color);
-    background-color: var(--active-dark-color);
+  color: var(--main-color);
+  background-color: var(--active-dark-color);
 
-    vertical-align: top;
+  vertical-align: top;
 }

@@ -1,6 +1,6 @@
 .container {
   margin-top: 5px;
-  width: 555px /*-327-303*/;
+  width: 100%;
 }
 
 .textareaContainer {
@@ -37,15 +37,9 @@
   background-color: var(--varity1-color);
 }
 
-@media (max-width: 1000px) {
-  .container {
-    width: 400px;
-  }
-}
 @media (max-width: 834px) {
   .container {
     height: 40px;
-    width: 327px;
   }
 
   .textareaContainer {
@@ -59,9 +53,6 @@
 }
 
 @media (max-width: 400px) {
-  .container {
-    width: 303px;
-  }
   .input {
     font-size: 14px;
   }

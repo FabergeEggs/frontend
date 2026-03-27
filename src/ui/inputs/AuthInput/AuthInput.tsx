@@ -24,11 +24,18 @@ export default function AuthInput({
     <input
       name={name}
       className={`basic-input-container basic-input ${styles.input} ${className}`}
-      onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
+      onChange={(e) => {
+        handleInput(e.target);
+        if (onChange) onChange?.(e);
+      }}
       type={type ?? "text"}
       id={id}
       placeholder={placeholder}
       required={required ?? true}
+      // <!> Why linter ругается?
+      autocomplete="off"
+      autocapitalize="off"
+      autocrrect="off"
     />
   );
 }

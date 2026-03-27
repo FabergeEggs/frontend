@@ -64,6 +64,15 @@ button:focus {
   filter: brightness(65%);
 }
 
+.basic-btn-disabled {
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
+
+  height: 40px;
+  opacity: 0.5;
+}
+
 /* Separation (basic-input-container & basic-input) is made for comfortable work with inputs with images */
 .basic-input-container {
   display: flex;

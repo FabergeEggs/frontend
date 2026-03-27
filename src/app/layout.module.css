@@ -1,5 +1,5 @@
 .layout {
-  min-height: 100vh;
+  min-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   padding-top: 15px;
@@ -15,18 +15,18 @@
   .layout {
     /* padding-left: 15px;
         padding-right: 15px; */
-    padding-left: 90px;
-    padding-right: 90px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 
-/* <!> */
+/* <!>
 @media (max-width: 520px) {
   .layout {
     padding-left: 30px;
     padding-right: 30px;
   }
-}
+} */
 
 /* Мобильный */
 @media (max-width: 400px) {

@@ -6,7 +6,7 @@ import LabelledAuthTextarea from "../../inputs/LabelledAuthInputs/LabelledAuthTe
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { register } from "@/src/lib/api/auth";
 import { useRouter } from "next/navigation";
 
@@ -22,7 +22,16 @@ export default function SignupForm() {
     phone: "",
   });
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [submitActive, setSubmitActive] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setSubmitActive(
+      !!formData.username &&
+        !!formData.password &&
+        formData.password === confirmPassword,
+    );
+  }, [formData, confirmPassword]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +52,11 @@ export default function SignupForm() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -51,22 +64,23 @@ export default function SignupForm() {
     }));
   };
 
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const { value } = e.target;
     setConfirmPassword(value);
-  }
-
+  };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <p className={styles.title}>Регистрация</p>
       <div className={styles.inputs}>
-        <LabelledAuthInput 
-          name="username" 
-          label="Имя" 
-          placeholder="Введите своё имя..." 
+        <LabelledAuthInput
+          name="username"
+          label="Имя"
+          placeholder="Введите своё имя..."
           onChange={handleChange}
-          />
+        />
         <LabelledAuthInput
           name="email"
           type="email"
@@ -98,6 +112,7 @@ export default function SignupForm() {
       </div>
       <GreenButton
         type="submit"
+        disabled={!submitActive}
         className={styles.submitBtn}
         text="Зарегистрироваться"
       />
