@@ -33,9 +33,9 @@ export default function AuthInput({
       placeholder={placeholder}
       required={required ?? true}
       // <!> Why linter ругается?
-      autocomplete="off"
-      autocapitalize="off"
-      autocrrect="off"
+      autoComplete="off"
+      autoCapitalize="off"
+      autoCorrect="off"
     />
   );
 }

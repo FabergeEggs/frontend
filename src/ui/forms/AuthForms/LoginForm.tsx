@@ -41,14 +41,14 @@ export default function LoginForm() {
 
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={`${styles.container} ${styles.form}`}>
       <p className={styles.title}>Войти</p>
       <div className={styles.inputs}>
         <LabelledAuthInput
           name="login"  // login is an email
           type="email"
           label="Почта"
-          placeholder="Введите почту..."
+          placeholder="example@mail.ru"
           onChange={handleChange}
         />
         <LabelledAuthInput

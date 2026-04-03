@@ -1,0 +1,27 @@
+.error {
+    box-sizing: border-box;
+    width: 100%;
+    height: 68px;
+    padding: 20px;
+
+    border: 1px solid var(--danger-color);
+    background-color: var(--bg-danger-color);
+    border-radius: 6px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media (max-width: 834px) {
+    .error {
+        height: 50px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 400px) {
+    .error {
+        height: 40px;
+    }
+}

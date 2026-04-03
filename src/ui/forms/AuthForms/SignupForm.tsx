@@ -5,6 +5,7 @@ import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthIn
 import LabelledAuthTextarea from "../../inputs/LabelledAuthInputs/LabelledAuthTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
+import ValidationError from "../ValidationError/ValidationError";
 
 import { useState, useEffect } from "react";
 import { register } from "@/src/lib/api/auth";
@@ -44,7 +45,7 @@ export default function SignupForm() {
       console.log("Submitting registration with data: ", formData);
       const response = await register(formData);
       console.log("Registration successful: ", response);
-      router.push("/profile");
+      router.push(`/email-confirm?email=${encodeURIComponent(formData.email)}`)
     } catch (error: any) {
       const msg = error.response?.data.error;
       console.error(error.response);
@@ -72,56 +73,59 @@ export default function SignupForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <p className={styles.title}>Регистрация</p>
-      <div className={styles.inputs}>
-        <LabelledAuthInput
-          name="username"
-          label="Имя"
-          placeholder="Введите своё имя..."
-          onChange={handleChange}
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <p className={styles.title}>Регистрация</p>
+        <div className={styles.inputs}>
+          <LabelledAuthInput
+            name="first_name"
+            label="Имя"
+            placeholder="Введите своё имя..."
+            onChange={handleChange}
+          />
+          <LabelledAuthInput
+            name="email"
+            type="email"
+            label="Почта"
+            placeholder="example@mail.ru"
+            onChange={handleChange}
+          />
+          <LabelledAuthTextarea
+            name="about"
+            label="О себе"
+            placeholder="Расскажите о себе..."
+            required={false}
+            onChange={handleChange}
+          />
+          <LabelledAuthInput
+            name="password"
+            type="password"
+            label="Пароль"
+            placeholder="Введите пароль..."
+            onChange={handleChange}
+          />
+          <LabelledAuthInput
+            name="confirmPassword"
+            type="password"
+            label="Повтор пароля"
+            placeholder="Введите пароль ещё раз..."
+            onChange={handleConfirmPasswordChange}
+          />
+        </div>
+        <GreenButton
+          type="submit"
+          disabled={!submitActive}
+          className={styles.submitBtn}
+          text="Зарегистрироваться"
         />
-        <LabelledAuthInput
-          name="email"
-          type="email"
-          label="Почта"
-          placeholder="example@mail.ru"
-          onChange={handleChange}
-        />
-        <LabelledAuthTextarea
-          name="about"
-          label="О себе"
-          placeholder="Расскажите о себе..."
-          required={false}
-          onChange={handleChange}
-        />
-        <LabelledAuthInput
-          name="password"
-          type="password"
-          label="Пароль"
-          placeholder="Введите пароль..."
-          onChange={handleChange}
-        />
-        <LabelledAuthInput
-          name="confirmPassword"
-          type="password"
-          label="Повтор пароля"
-          placeholder="Введите пароль ещё раз..."
-          onChange={handleConfirmPasswordChange}
-        />
-      </div>
-      <GreenButton
-        type="submit"
-        disabled={!submitActive}
-        className={styles.submitBtn}
-        text="Зарегистрироваться"
-      />
-      <p className={styles.authRef}>
-        У вас уже есть аккаунт?{" "}
-        <TextLink className={styles.authRef} href="/login">
-          Войдите тут
-        </TextLink>
-      </p>
-    </form>
+        <p className={styles.authRef}>
+          У вас уже есть аккаунт?{" "}
+          <TextLink className={styles.authRef} href="/login">
+            Войдите тут
+          </TextLink>
+        </p>
+      </form>
+      <ValidationError message="Lol"/>
+    </div>
   );
 }

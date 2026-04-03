@@ -15,6 +15,18 @@ export const register = async (request: RegisterRequestDTO) => {
   return data;
 };
 
+
+// User id as a param instead of email?
+export const emailConfirm = async (email: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.EMAIL_CONFIRM, { email });
+  return data;
+}
+
+export const resetPassword = async (email: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, { email });
+  return data;
+}
+
 // Change to GET PROFILE
 // Session - NEEDS access_token from COOKIE
 // export const getCompany = async () => {
