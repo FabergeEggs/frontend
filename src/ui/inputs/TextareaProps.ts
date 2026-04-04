@@ -1,7 +1,12 @@
+import { ChangeHandler, RefCallBack } from "react-hook-form";
+
 export default interface TextareaProps {
-  name: string;
+  name?: string;
   id: string;
   placeholder: string;
   required?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+  onChange?: ChangeHandler | ((e: React.ChangeEvent<HTMLTextAreaElement>) => void);
+  onFocus?: () => void;
+  onBlur?: ChangeHandler | (() => void);
+  ref?: RefCallBack;
 }

@@ -12,7 +12,7 @@ export default function ResetPassword() {
 
   const handleSend = async () => {
       try {
-        console.log("Submitting reset password with data: ", email);
+        console.log("Submitting reset password with data: ", email); // DEBUG
         const response = await resetPassword(email);
         console.log("Reset password successful: ", response);
       } catch (error: any) {

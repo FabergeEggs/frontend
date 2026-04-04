@@ -1,11 +1,16 @@
 import styles from "../authpage.module.css";
 import EmailConfirm from "@/src/ui/forms/AuthForms/EmailConfirm";
 
-// Probably not the best solution. Other variants: cookie, storage
-export default function Page({ query }: { query: { email: string } }) {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { email?: string };
+}) {
+  const email = searchParams.email ?? "";
+
   return (
     <div className={`pagecontainer ${styles.container}`}>
-      <EmailConfirm email={query.email} />
+      <EmailConfirm email={email} />
     </div>
-  )
+  );
 }

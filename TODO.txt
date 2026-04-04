@@ -1,4 +1,5 @@
-<!> - search this for moments that need better solution
+<!> - moments that need better solution
+DEBUG - debug moments that should be deleted on production
 
 Global:
 - next-intl

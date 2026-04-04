@@ -10,7 +10,10 @@ export default function AuthTextarea({
   id,
   placeholder,
   required,
-  onChange
+  onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: TextareaProps) {
   const [className, setClassName] = useState(styles.empty);
 
@@ -27,6 +30,9 @@ export default function AuthTextarea({
       id={id}
       placeholder={placeholder}
       required={required ?? true}
+      ref={ref}
+      onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
 }

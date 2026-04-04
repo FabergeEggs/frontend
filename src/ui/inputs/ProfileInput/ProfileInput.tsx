@@ -11,6 +11,7 @@ export default function ProfileInput({
   type,
   id,
   placeholder,
+  value,
   required,
 }: InputProps) {
   const [className, setClassName] = useState(styles.empty);
@@ -28,6 +29,7 @@ export default function ProfileInput({
         type={type ?? "text"}
         id={id}
         placeholder={placeholder}
+        value={value}
         required={required ?? true}
       />
       <div className={styles.editImageContainer}>

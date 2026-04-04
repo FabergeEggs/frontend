@@ -39,6 +39,10 @@
 
 }
 
+.error {
+    color: red;
+    margin: 0;
+}
 
 .inputs {
     width: 100%;
@@ -93,7 +97,7 @@
         font-size: 24px;
     }
 
-    .authRef {
+    .authRef, .error {
         font-size: 14px;
     }
 }
@@ -115,7 +119,7 @@
         font-size: 20px;
     }
 
-    .authRef {
+    .authRef, .error {
         font-size: 12px;
     }
 }

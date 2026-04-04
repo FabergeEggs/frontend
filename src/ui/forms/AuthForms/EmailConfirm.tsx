@@ -1,40 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./AuthForm.module.css";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 
-import { emailConfirm } from "@/src/lib/api/auth";
+import { emailResendVerification } from "@/src/lib/api/auth";
+
+const COOLDOWN_SECONDS = 300; // 5 минут
 
 export default function EmailConfirm({email}: {email: string}) {
-  const [sent, setSent] = useState(true);
+  const [cooldown, setCooldown] = useState(COOLDOWN_SECONDS);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
 
   const handleSend = async () => { 
-    setSent(true);
+    setError(null);
     try {
-      console.log("Sending email confirm again ", email);
-      const response = await emailConfirm(email);
-      console.log("Email confirm successful: ", response);
+      console.log("Resending email confirm to:", email); // DEBUG
+      const response = await emailResendVerification(email);
+      setCooldown(COOLDOWN_SECONDS); // сбрасываем таймер
+      console.log("Email confirm successful: ", response); 
     } catch (error: any) {
-      const msg = error.response?.data.error;
-      console.error(error.response);
-      console.error("Email confirm failed: ", msg);
+      const status = error.response?.status;
+      if (status === 429) {
+        setError("Слишком много запросов. Подождите немного");
+      } else {
+        setError("Не удалось отправить письмо. Попробуйте позже");
+      }
+      console.error("Email confirm failed:", error.response);
     }
   }
+
+  const formatCooldown = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
 
   return (
     <div className={`${styles.container} ${styles.form}`}>
       <p className={styles.title}>Подтверждение почты</p>
-      <p className={styles.text}>На указанный вами адрес электронной почты {email} было отправлено письмо для её подтверждения. </p>
+      <p className={styles.text}>На указанный вами адрес электронной почты <strong>{email}</strong> было отправлено письмо для её подтверждения. </p>
+      {error && (
+        <p style={{ color: "var(--danger-color)", margin: 0 }}>{error}</p>
+      )}
       <p className={styles.subtitle}>
         Письмо не пришло?
       </p>
-      <p className={styles.text}>Повторную отправку письма можно делать не чаще, чем 1 раз в 5 минуту</p>
+      <p className={styles.text}>Повторную отправку письма можно делать не чаще, чем 1 раз в 5 минут</p>
       <GreenButton
         className={styles.submitBtn}
         onClick={handleSend}
-        text="Отправить ещё раз"
-        disabled={sent}
+        text={
+          cooldown > 0
+            ? `Отправить ещё раз (${formatCooldown(cooldown)})`
+            : "Отправить ещё раз"
+        }
+        disabled={cooldown > 0}
       />
     </div>
   );

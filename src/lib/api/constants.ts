@@ -4,8 +4,9 @@ export enum ApiRoutes {
   REGISTER = "/auth/register", // POST -> ID юзера
   REFRESH_TOKEN = "/auth/refresh",
   LOGOUT = "/auth/logout",
+  ME = "/auth/me",
 
-  EMAIL_CONFIRM = "/auth/confirmation", // Email confirmation
+  EMAIL_RESEND_VERIFICATION = "/auth/resend-verification-public", // Email confirmation
   RESET_PASSWORD = "/auth/reset_password", // Password reset request
 
   // 

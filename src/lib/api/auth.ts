@@ -17,8 +17,8 @@ export const register = async (request: RegisterRequestDTO) => {
 
 
 // User id as a param instead of email?
-export const emailConfirm = async (email: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.EMAIL_CONFIRM, { email });
+export const emailResendVerification = async (email: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.EMAIL_RESEND_VERIFICATION, { email });
   return data;
 }
 
@@ -36,6 +36,10 @@ export const resetPassword = async (email: string) => {
 
 //   return data;
 // };
+export const me = async () => {
+  const { data }: { data: MeResponseDTO } = await axiosInstance.get(ApiRoutes.ME);
+  return data;
+}
 
 export const refreshToken = async () => {
   await axiosInstance.head(ApiRoutes.REFRESH_TOKEN);

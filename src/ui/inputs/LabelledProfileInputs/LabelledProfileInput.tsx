@@ -6,6 +6,7 @@ export default function LabelledProfileInput({
   type,
   label,
   placeholder,
+  value,
   required,
 }: LabelledInputProps) {
   const visibility = required === false ? "hidden" : "visible";
@@ -19,6 +20,7 @@ export default function LabelledProfileInput({
         <ProfileInput
           type={type}
           id={label}
+          value={value}
           placeholder={placeholder}
           required={required}
         ></ProfileInput>

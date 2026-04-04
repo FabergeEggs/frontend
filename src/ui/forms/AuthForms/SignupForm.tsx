@@ -7,114 +7,97 @@ import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { register } from "@/src/lib/api/auth";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { signupSchema } from "@/src/lib/utils/zodSchemas";
 
 export default function SignupForm() {
-  // Явно указываем, что значения не могут быть undefined
-  const [formData, setFormData] = useState<RegisterRequestDTO>({
-    username: "",
-    email: "",
-    password: "",
-    first_name: "",
-    last_name: "",
-    about: "",
-    phone: "",
-  });
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [submitActive, setSubmitActive] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    setSubmitActive(
-      !!formData.username &&
-        !!formData.password &&
-        formData.password === confirmPassword,
-    );
-  }, [formData, confirmPassword]);
+  const { register: registerField, trigger, formState: {errors, dirtyFields, isValid}} = useForm<z.infer<typeof signupSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(signupSchema)
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.password !== confirmPassword) {
-      alert("Пароли не совпадают!");
-      return;
-    }
+    setServerError(null);
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    const formValues = Object.fromEntries(formData.entries());
+
+    const registerRequestData: RegisterRequestDTO = {
+      username: "", 
+      email: formValues.email as string,
+      password: formValues.password as string,
+      first_name: formValues.first_name as string,
+      last_name: "",
+      about: formValues.about as string,
+      phone: "",
+    };
 
     try {
-      console.log("Submitting registration with data: ", formData);
-      const response = await register(formData);
+      console.log("Submitting registration with data: ", registerRequestData); // DEBUG
+      const response = await register(registerRequestData);
       console.log("Registration successful: ", response);
-      router.push(`/email-confirm?email=${encodeURIComponent(formData.email)}`)
+      router.push(`/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`)
     } catch (error: any) {
-      const msg = error.response?.data.error;
-      console.error(error.response);
-      console.error("Registration failed: ", msg);
+      const status = error.response?.status;
+      if (status === 409) {
+        setServerError("Пользователь с такой почтой уже существует");
+      } else {
+        setServerError("Ошибка регистрации. Попробуйте позже");
+      }
+      console.error("Registration failed: ", error.response);
     }
-  };
-
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const { value } = e.target;
-    setConfirmPassword(value);
   };
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit} className={styles.form}>
+      <form onSubmit={handleSubmit} className={styles.form} noValidate>
         <p className={styles.title}>Регистрация</p>
         <div className={styles.inputs}>
           <LabelledAuthInput
-            name="first_name"
             label="Имя"
             placeholder="Введите своё имя..."
-            onChange={handleChange}
+            {...registerField("first_name")}
           />
           <LabelledAuthInput
-            name="email"
             type="email"
             label="Почта"
             placeholder="example@mail.ru"
-            onChange={handleChange}
+            {...registerField("email")}
           />
+          {errors.email && <p className={styles.error}>Неверный формат почты</p>}
           <LabelledAuthTextarea
-            name="about"
             label="О себе"
             placeholder="Расскажите о себе..."
             required={false}
-            onChange={handleChange}
+            {...registerField("about")}
           />
           <LabelledAuthInput
-            name="password"
             type="password"
             label="Пароль"
             placeholder="Введите пароль..."
-            onChange={handleChange}
+            {...registerField("password", {onChange: () => trigger("confirmPassword")})}
           />
+          {errors.password && <p className={styles.error}>{errors.password.message}</p>}
           <LabelledAuthInput
-            name="confirmPassword"
             type="password"
             label="Повтор пароля"
             placeholder="Введите пароль ещё раз..."
-            onChange={handleConfirmPasswordChange}
+            {...registerField("confirmPassword")}
           />
+          {dirtyFields.confirmPassword && errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword.message}</p>}
         </div>
         <GreenButton
           type="submit"
-          disabled={!submitActive}
+          disabled={!isValid}
           className={styles.submitBtn}
           text="Зарегистрироваться"
         />
@@ -125,7 +108,7 @@ export default function SignupForm() {
           </TextLink>
         </p>
       </form>
-      <ValidationError message="Lol"/>
+      {serverError && <ValidationError messages={[serverError]} />}
     </div>
   );
 }

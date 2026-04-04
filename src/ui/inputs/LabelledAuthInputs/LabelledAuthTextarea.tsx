@@ -7,7 +7,10 @@ export default function LabelledAuthTextarea({
   label,
   placeholder,
   required,
-  onChange
+  onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: LabelledTextareaProps) {
   return (
     <div className={styles.container}>
@@ -19,6 +22,9 @@ export default function LabelledAuthTextarea({
           placeholder={placeholder}
           required={required}
           onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          ref={ref}
         ></AuthTextarea>
       </label>
     </div>

@@ -8,7 +8,10 @@ export default function LabelledAuthInput({
   label,
   placeholder,
   required,
-  onChange
+  onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: LabelledInputProps) {
   const visibility = required === false ? "hidden" : "visible";
   return (
@@ -16,7 +19,7 @@ export default function LabelledAuthInput({
       <label htmlFor={label}>
         <span className={styles.text}>
           {label}{" "}
-          <span style={{ visibility: visibility, color: "red" }}>*</span>
+          <span style={{ visibility, color: "red" }}>*</span>
         </span>
         <AuthInput
           name={name}
@@ -25,7 +28,10 @@ export default function LabelledAuthInput({
           placeholder={placeholder}
           required={required}
           onChange={onChange}
-        ></AuthInput>
+          onFocus={onFocus}
+          onBlur={onBlur}
+          ref={ref}
+        />
       </label>
     </div>
   );

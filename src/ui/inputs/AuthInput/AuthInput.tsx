@@ -12,6 +12,9 @@ export default function AuthInput({
   placeholder,
   required,
   onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: InputProps) {
   const [className, setClassName] = useState(styles.empty);
 
@@ -24,18 +27,15 @@ export default function AuthInput({
     <input
       name={name}
       className={`basic-input-container basic-input ${styles.input} ${className}`}
-      onChange={(e) => {
-        handleInput(e.target);
-        if (onChange) onChange?.(e);
-      }}
+      onChange={(e) => { handleInput(e.target); onChange?.(e); }}
+      onFocus={onFocus}
+      onBlur={onBlur}
       type={type ?? "text"}
       id={id}
       placeholder={placeholder}
       required={required ?? true}
-      // <!> Why linter ругается?
-      autoComplete="off"
-      autoCapitalize="off"
-      autoCorrect="off"
+      autoComplete="new-password"
+      ref={ref}
     />
   );
 }
