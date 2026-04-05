@@ -29,7 +29,10 @@ export default function EmailConfirm({email}: {email: string}) {
       console.log("Email confirm successful: ", response); 
     } catch (error: any) {
       const status = error.response?.status;
-      if (status === 429) {
+      if (status === 404) {
+        setError("Пользователя с данной почтой не существует");
+      }
+      else if (status === 429) {
         setError("Слишком много запросов. Подождите немного");
       } else {
         setError("Не удалось отправить письмо. Попробуйте позже");

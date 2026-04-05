@@ -3,12 +3,14 @@
 import { useState } from "react";
 import styles from "./AuthForm.module.css";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
+import ValidationError from "../ValidationError/ValidationError";
 
 import { resetPassword } from "@/src/lib/api/auth";
 import LabelledAuthInput from "../../inputs/LabelledAuthInputs/LabelledAuthInput";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const handleSend = async () => {
       try {
@@ -19,6 +21,14 @@ export default function ResetPassword() {
         const msg = error.response?.data.error;
         console.error(error.response);
         console.error("Reset password failed: ", msg);
+
+        const status = error.response?.status;
+        if (status === 404) {
+          setServerError("Пользователя с данной почтой не существует");
+        } else {
+          setServerError("Ошибка входа. Попробуйте позже");
+        }
+        console.error("Reset password failed: ", error.response);
       }
     };
   
@@ -27,21 +37,25 @@ export default function ResetPassword() {
     };
 
   return (
-    <div className={`${styles.container} ${styles.form}`}>
-      <p className={styles.title}>Восстановление пароля</p>
-      <p className={styles.text}>Для восстановления пароля укажите почту вашего аккаунта. На неё будет отправлена дальнейшая инструкция. </p>
-      <LabelledAuthInput
-        name="email" 
-        type="email"
-        label="Почта:"
-        placeholder="example@mail.ru"
-        onChange={handleChange}
-      />
-      <GreenButton
-        className={styles.submitBtn}
-        onClick={handleSend}
-        text="Отправить"
-      />
+    <div className={styles.container}>
+      <div className={styles.form}>
+        <p className={styles.title}>Восстановление пароля</p>
+        <p className={styles.text}>Для восстановления пароля укажите почту вашего аккаунта. На неё будет отправлена дальнейшая инструкция. </p>
+        <LabelledAuthInput
+          name="email" 
+          type="email"
+          label="Почта:"
+          placeholder="example@mail.ru"
+          onChange={handleChange}
+        />
+        <GreenButton
+          className={styles.submitBtn}
+          onClick={handleSend}
+          text="Отправить"
+        />
+      </div>
+      {serverError && <ValidationError messages={[serverError]} />}
     </div>
+    
   );
 }

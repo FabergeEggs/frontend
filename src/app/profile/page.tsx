@@ -1,3 +1,5 @@
+"use client"
+
 import styles from "./profilepage.module.css";
 import LabelledProfileInput from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileInput";
 import LabelledProfileTextarea from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileTextarea";

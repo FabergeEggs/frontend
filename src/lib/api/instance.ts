@@ -29,15 +29,15 @@ axiosInstance.interceptors.response.use(
         // );
         await axiosInstance.post(
           // `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`,
-          `http://localhost:8001${ApiRoutes.REFRESH_TOKEN}`,
+          `http://localhost:8001${ApiRoutes.REFRESH_TOKEN}`, // <!> - change this URL for auth service
           { withCredentials: true }
         );
         return axiosInstance.request(origin);
       } catch (e) {
         console.log(e);
-        // if (typeof window !== "undefined") {
-        //   window.location.href = "/login";
-        // }
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
       }
     }
     throw error;

@@ -31,6 +31,7 @@ export default function ProfileInput({
         placeholder={placeholder}
         value={value}
         required={required ?? true}
+        autoComplete="new-password"
       />
       <div className={styles.editImageContainer}>
         <Image src={EditImage} alt="Edit" />

@@ -29,6 +29,7 @@ export default function ProfileTextarea({
         id={id}
         placeholder={placeholder}
         required={required ?? true}
+        autoComplete="new-password"
       />
       <div className={styles.editImageContainer}>
         <Image className={styles.editImage} src={EditImage} alt="Edit" />
