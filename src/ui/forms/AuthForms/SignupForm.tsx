@@ -32,7 +32,6 @@ export default function SignupForm() {
     const formValues = Object.fromEntries(formData.entries());
 
     const registerRequestData: RegisterRequestDTO = {
-      username: "", 
       email: formValues.email as string,
       password: formValues.password as string,
       first_name: formValues.first_name as string,

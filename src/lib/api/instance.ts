@@ -5,7 +5,7 @@ import { ApiRoutes } from './constants'
 // AUTH INSTANCE
 const axiosInstance = axios.create({
   // baseURL: process.env.NEXT_PUBLIC_AUTH_API_URL,
-  baseURL: "http://localhost:8001",
+  baseURL: "http://localhost:8001", // <!> 
   withCredentials: true,
 });
 
@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
         // );
         await axiosInstance.post(
           // `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`,
-          `http://localhost:8001${ApiRoutes.REFRESH_TOKEN}`, // <!> - change this URL for auth service
+          `http://localhost:8001${ApiRoutes.REFRESH_TOKEN}`, // <!> 
           { withCredentials: true }
         );
         return axiosInstance.request(origin);
