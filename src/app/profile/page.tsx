@@ -1,48 +1,29 @@
-"use client"
-
 import styles from "./profilepage.module.css";
-import LabelledProfileInput from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileInput";
-import LabelledProfileTextarea from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileTextarea";
 import ProfilePictureInput from "@/src/ui/inputs/ProfilePictureInput/ProfilePictureInput";
-import { me } from "@/src/lib/api/auth";
-import { useEffect, useState } from "react";
+import ProfileForm from "@/src/ui/forms/ProfileForm/ProfileForm";
 
-export default function Page() {
-  const [userData, setUserData] = useState<MeResponseDTO | null>(null);
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const data = await me();
-      setUserData(data);
-    };
+export default async function Page() {
+  // Think about authentication.
+  // HTTP-only cookies are only on server. So, I need to make it a Server component?
+  // Or create some hook to check auth.
+  // For short: can I access access token from here without request to backend?
 
-    fetchUserData();
-  }, []);
+  // const cookieStore = await cookies();
+  // const token = cookieStore.get("access_token");
+
+  // if (!token) {
+  //   redirect("/login");
+  // }
+  // console.log(cookieStore);
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
-      <div className={styles.profileInfo}>
+      <div>
         <h2 className={styles.title}>Профиль</h2>
-        <LabelledProfileInput name="given_name" label="Имя" placeholder="Введите имя..." />
-        <LabelledProfileInput
-          name="email"
-          type="email"
-          label="Почта"
-          placeholder="Введите почту..."
-          value={userData?.email}
-        />
-        <LabelledProfileTextarea
-          name="about"
-          label="О себе"
-          placeholder="Расскажите о себе..."
-          value={userData?.about}
-        />
-        <LabelledProfileInput
-          name="password"
-          type="password"
-          label="Пароль"
-          placeholder="Введите пароль..."
-        />
+        <ProfileForm />
       </div>
       <div className={styles.pictureInputContainer}>
         <ProfilePictureInput />

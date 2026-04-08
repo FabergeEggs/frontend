@@ -8,8 +8,9 @@ export enum ApiRoutes {
 
   EMAIL_RESEND_VERIFICATION = "/auth/resend-verification-public", // Email confirmation
   RESET_PASSWORD = "/auth/reset_password", // Password reset request
+  FORGOT_PASSWORD = "/auth/forgot_password",
+  CHANGE_PASSWORD = "/auth/change-password",
 
   // PROFILE
-  PROFILE = "/profile"
-  
+  PROFILE = "/profile",
 }
