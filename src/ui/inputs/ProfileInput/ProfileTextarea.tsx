@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./ProfileInput.module.css";
 import TextareaProps from "../TextareaProps";
 import EditImage from "@/public/assets/edit.svg";
@@ -12,20 +11,12 @@ export default function ProfileTextarea({
   placeholder,
   required,
 }: TextareaProps) {
-  const [className, setClassName] = useState(styles.empty);
-
-  function handleInput(target: HTMLTextAreaElement) {
-    if (target.value) setClassName("");
-    else setClassName(styles.empty);
-  }
-
   return (
     <div
-      className={`basic-input-container ${styles.container} ${styles.textareaContainer} ${className}`}
+      className={`basic-input-container ${styles.container} ${styles.textareaContainer}`}
     >
       <textarea
         className={`basic-input ${styles.input} ${styles.textarea}`}
-        onChange={(e) => handleInput(e.target)}
         id={id}
         placeholder={placeholder}
         required={required ?? true}

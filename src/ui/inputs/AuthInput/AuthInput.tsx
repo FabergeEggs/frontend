@@ -27,7 +27,10 @@ export default function AuthInput({
     <input
       name={name}
       className={`basic-input-container basic-input ${styles.input} ${className}`}
-      onChange={(e) => { handleInput(e.target); onChange?.(e); }}
+      onChange={(e) => {
+        handleInput(e.target);
+        onChange?.(e);
+      }}
       onFocus={onFocus}
       onBlur={onBlur}
       type={type ?? "text"}

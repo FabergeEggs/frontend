@@ -8,8 +8,12 @@ export default function LabelledProfileInput({
   placeholder,
   value,
   required,
+  onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: LabelledInputProps) {
-  const visibility = required === false ? "hidden" : "visible";
+  const visibility = required === true && !value ? "visible" : "hidden";
   return (
     <div className={styles.container}>
       <label htmlFor={label}>
@@ -23,6 +27,10 @@ export default function LabelledProfileInput({
           value={value}
           placeholder={placeholder}
           required={required}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          ref={ref}
         ></ProfileInput>
       </label>
     </div>

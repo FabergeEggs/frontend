@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./ProfileInput.module.css";
 import InputProps from "../InputProps";
 import EditImage from "@/public/assets/edit.svg";
@@ -13,27 +12,31 @@ export default function ProfileInput({
   placeholder,
   value,
   required,
+  onChange,
+  onFocus,
+  onBlur,
+  ref,
 }: InputProps) {
-  const [className, setClassName] = useState(styles.empty);
-
-  function handleInput(target: HTMLInputElement) {
-    if (target.value) setClassName("");
-    else setClassName(styles.empty);
+  function privet() {
+    console.log("AHAAHA!");
   }
 
   return (
-    <div className={`basic-input-container ${styles.container} ${className}`}>
+    <div className={`basic-input-container ${styles.container}`}>
       <input
         className={`basic-input ${styles.input}`}
-        onChange={(e) => handleInput(e.target)}
+        onChange={(e) => onChange?.(e)}
+        onFocus={onFocus}
+        onBlur={onBlur}
         type={type ?? "text"}
         id={id}
         placeholder={placeholder}
         value={value}
         required={required ?? true}
         autoComplete="new-password"
+        ref={ref}
       />
-      <div className={styles.editImageContainer}>
+      <div onClick={() => privet} className={styles.editImageContainer}>
         <Image src={EditImage} alt="Edit" />
       </div>
     </div>

@@ -2,43 +2,56 @@
 
 import LabelledProfileInput from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileInput";
 import LabelledProfileTextarea from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileTextarea";
-import { me } from "@/src/lib/api/auth";
-import { useLayoutEffect, useState } from "react";
+// import { me } from "@/src/lib/api/auth";
+// import { useEffect, useState } from "react";
 import styles from "./ProfileForm.module.css";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { profileSchema } from "@/src/lib/utils/zodSchemas";
+
+import { useEffect } from "react";
 
 export default function ProfileForm() {
-  const [userData, setUserData] = useState<MeResponseDTO | null>(null);
+  const { register: registerField } = useForm<z.infer<typeof profileSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      first_name: "Алексей",
+      email: "lexander@gmail.com",
+      password: "",
+      confirmPassword: "",
+      about: "Великий учёный 19-го века",
+    },
+  });
 
-  // useLayoutEffect(() => {
-  //   const fetchUserData = async () => {
-  //     const data = await me();
-  //     setUserData(data);
-  //   };
-  //   fetchUserData();
-  // }, []);
+  useEffect(() => {
+    // const fetchUserData = async () => {
+    //   const data = await me();
+    //   setUserData(data);
+    // };
+    // fetchUserData();
+  }, []);
 
   return (
     <div className={styles.profileInfo}>
       <LabelledProfileInput
-        name="given_name"
         label="Имя"
         placeholder="Введите имя..."
+        {...registerField("first_name")}
       />
       <LabelledProfileInput
-        name="email"
         type="email"
         label="Почта"
         placeholder="Введите почту..."
-        value={userData?.email}
+        {...registerField("email")}
       />
       <LabelledProfileTextarea
-        name="about"
         label="О себе"
         placeholder="Расскажите о себе..."
-        value={userData?.about}
+        {...registerField("about")}
       />
       <LabelledProfileInput
-        name="password"
         type="password"
         label="Пароль"
         placeholder="Введите пароль..."

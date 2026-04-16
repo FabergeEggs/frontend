@@ -19,9 +19,13 @@ export default function SignupForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { register: registerField, trigger, formState: {errors, dirtyFields, isValid}} = useForm<z.infer<typeof signupSchema>>({
+  const {
+    register: registerField,
+    trigger,
+    formState: { errors, dirtyFields, isValid },
+  } = useForm<z.infer<typeof signupSchema>>({
     mode: "onChange",
-    resolver: zodResolver(signupSchema)
+    resolver: zodResolver(signupSchema),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,7 +48,9 @@ export default function SignupForm() {
       console.log("Submitting registration with data: ", registerRequestData); // DEBUG
       const response = await register(registerRequestData);
       console.log("Registration successful: ", response);
-      router.push(`/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`)
+      router.push(
+        `/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`,
+      );
     } catch (error: any) {
       const status = error.response?.status;
       if (status === 409) {
@@ -72,7 +78,9 @@ export default function SignupForm() {
             placeholder="example@mail.ru"
             {...registerField("email")}
           />
-          {errors.email && <p className={styles.error}>Неверный формат почты</p>}
+          {errors.email && (
+            <p className={styles.error}>Неверный формат почты</p>
+          )}
           <LabelledAuthTextarea
             label="О себе"
             placeholder="Расскажите о себе..."
@@ -83,16 +91,22 @@ export default function SignupForm() {
             type="password"
             label="Пароль"
             placeholder="Введите пароль..."
-            {...registerField("password", {onChange: () => trigger("confirmPassword")})}
+            {...registerField("password", {
+              onChange: () => trigger("confirmPassword"),
+            })}
           />
-          {errors.password && <p className={styles.error}>{errors.password.message}</p>}
+          {errors.password && (
+            <p className={styles.error}>{errors.password.message}</p>
+          )}
           <LabelledAuthInput
             type="password"
             label="Повтор пароля"
             placeholder="Введите пароль ещё раз..."
             {...registerField("confirmPassword")}
           />
-          {dirtyFields.confirmPassword && errors.confirmPassword && <p className={styles.error}>{errors.confirmPassword.message}</p>}
+          {dirtyFields.confirmPassword && errors.confirmPassword && (
+            <p className={styles.error}>{errors.confirmPassword.message}</p>
+          )}
         </div>
         <GreenButton
           type="submit"
