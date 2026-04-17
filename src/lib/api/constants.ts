@@ -5,6 +5,7 @@ export enum ApiRoutes {
   REFRESH_TOKEN = "/auth/refresh",
   LOGOUT = "/api/v1/auth/logout",
   ME = "/api/v1/auth/me",
+  VERIFY_EMAIL = "/api/v1/auth/verify-email", // Email confirmation by link from email message
 
   EMAIL_RESEND_VERIFICATION = "/auth/resend-verification-public", // Email confirmation
   RESET_PASSWORD = "/auth/reset_password", // Password reset request
@@ -16,6 +17,4 @@ export enum ApiRoutes {
 
   // PROJECT
   PROJECT = "/project",
-  PROJECT_INFO = "/info",
-  PROJECT_STATISTICS = "/statistics"
 }

@@ -15,17 +15,26 @@ export const register = async (request: RegisterRequestDTO) => {
   return data;
 };
 
-
 // User id as a param instead of email?
 export const emailResendVerification = async (email: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.EMAIL_RESEND_VERIFICATION, { email });
+  const { data } = await axiosInstance.post(
+    ApiRoutes.EMAIL_RESEND_VERIFICATION,
+    { email },
+  );
   return data;
-}
+};
+
+export const verifyEmail = async (key: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.VERIFY_EMAIL, { key });
+  return data;
+};
 
 export const resetPassword = async (email: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, { email });
+  const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, {
+    email,
+  });
   return data;
-}
+};
 
 // Change to GET PROFILE
 // Session - NEEDS access_token from COOKIE
@@ -39,7 +48,7 @@ export const resetPassword = async (email: string) => {
 export const me = async (): Promise<MeResponseDTO> => {
   const { data } = await axiosInstance.get(ApiRoutes.ME);
   return data;
-}
+};
 
 export const refreshToken = async () => {
   await axiosInstance.head(ApiRoutes.REFRESH_TOKEN);
