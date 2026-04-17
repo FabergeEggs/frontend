@@ -89,7 +89,7 @@ export default function SignupForm() {
       setEmailErrors([]);
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setServerError(null);
 

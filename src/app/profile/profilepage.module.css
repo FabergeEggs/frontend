@@ -1,21 +1,29 @@
-.container {
+/* .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   row-gap: 10px; /* <!> */
+/*} */
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .title {
   font-size: 28px;
   font-weight: 500;
+  display: inline;
+  margin-right: 10px;
 }
 
-.subtitle {
-  font-size: 22px;
-  font-weight: 400;
+.profileContainer {
+  flex: 1;
 }
 
 .pictureInputContainer {
+  flex: 1;
   display: flex;
   justify-content: end;
   align-items: end;
@@ -27,11 +35,36 @@
   gap: 10px;
 }
 
-@media (max-width: 800px) {
-  /* 650px */
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.myProjectsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.link {
+  text-decoration: none;
+}
+
+/* .myProjectsContainer {
+  
+} */
+
+@media (max-width: 675px) {
   .container {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
+    flex-direction: column;
   }
   .pictureInputContainer {
     justify-content: start;
@@ -41,6 +74,7 @@
 @media (max-width: 400px) {
   .title {
     font-size: 24px;
+    margin-bottom: 10px;
   }
   .subtitle {
     font-size: 18px;

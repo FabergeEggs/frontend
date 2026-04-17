@@ -11,6 +11,7 @@ export default function LabelledProfileInput({
   onChange,
   onFocus,
   onBlur,
+  onConfirm,
   ref,
 }: LabelledInputProps) {
   const visibility = required === true && !value ? "visible" : "hidden";
@@ -30,6 +31,7 @@ export default function LabelledProfileInput({
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          onConfirm={onConfirm}
           ref={ref}
         ></ProfileInput>
       </label>

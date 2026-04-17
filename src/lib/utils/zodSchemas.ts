@@ -42,3 +42,12 @@ export const profileSchema = z
     message: "Пароли не совпадают",
     path: ["confirmPassword"],
   });
+
+
+export const projectSchema = z
+  .object({
+    label: z.string().min(1),
+    short_description: z.string().min(1),
+    description: z.string().min(1),
+    tags: z.array(z.string()).min(1),
+  })

@@ -3,14 +3,20 @@
 import styles from "./ProfileInput.module.css";
 import TextareaProps from "../TextareaProps";
 import EditImage from "@/public/assets/edit.svg";
+import ConfirmImage from "@/public/assets/check.svg"
 import Image from "next/image";
+
+import { useState } from "react";
 
 /* This element changes its background-color depending on whether the input field is empty or not */
 export default function ProfileTextarea({
   id,
   placeholder,
   required,
+  onConfirm
 }: TextareaProps) {
+  const [disabled, setDisabled] = useState(true);
+
   return (
     <div
       className={`basic-input-container ${styles.container} ${styles.textareaContainer}`}
@@ -21,10 +27,15 @@ export default function ProfileTextarea({
         placeholder={placeholder}
         required={required ?? true}
         autoComplete="new-password"
+        onKeyDown={onConfirm}
+        disabled={disabled}
       />
-      <div className={styles.editImageContainer}>
-        <Image className={styles.editImage} src={EditImage} alt="Edit" />
-      </div>
+      { disabled && <div onClick={() => setDisabled(false)} className={styles.imageContainer}>
+        <Image src={EditImage} alt="Edit" />
+      </div>}
+      {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true)}} className={styles.imageContainer}> 
+          <Image src={ConfirmImage} alt="Confirm" />
+        </div>}
     </div>
   );
 }

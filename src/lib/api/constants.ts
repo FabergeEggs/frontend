@@ -1,10 +1,10 @@
 export enum ApiRoutes {
   // AUTH
-  LOGIN = "/auth/login",
-  REGISTER = "/auth/register", // POST -> ID юзера
+  LOGIN = "/api/v1/auth/login",
+  REGISTER = "/api/v1/auth/register", // POST -> ID юзера
   REFRESH_TOKEN = "/auth/refresh",
-  LOGOUT = "/auth/logout",
-  ME = "/auth/me",
+  LOGOUT = "/api/v1/auth/logout",
+  ME = "/api/v1/auth/me",
 
   EMAIL_RESEND_VERIFICATION = "/auth/resend-verification-public", // Email confirmation
   RESET_PASSWORD = "/auth/reset_password", // Password reset request
@@ -13,4 +13,9 @@ export enum ApiRoutes {
 
   // PROFILE
   PROFILE = "/profile",
+
+  // PROJECT
+  PROJECT = "/project",
+  PROJECT_INFO = "/info",
+  PROJECT_STATISTICS = "/statistics"
 }

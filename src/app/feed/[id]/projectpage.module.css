@@ -1,0 +1,71 @@
+.projectContainer {
+    display: flex;
+    gap: 15px;
+}
+
+.card {
+    background-color: white;
+    border: 0.5px solid var(--active-dark-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    height: 480px;
+    padding: 30px;
+}
+
+.label {
+    font-weight: 400;
+    font-size: 28px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    font-size: 16px;
+    margin-bottom: 10px;        
+}
+
+.infoPiece {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.infoDescription {
+    color: var(--active-dark-color)
+}
+
+.countInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.count {
+    font-size: 32px;
+}
+
+.tags {
+  display: flex;
+  gap: 7px;
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.box {
+    background-color: white;
+    border: 0.5px solid var(--active-dark-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    height: 150px;
+    width: 150px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,5 +1,5 @@
 import { ApiRoutes } from "./constants";
-import axiosInstance from "./instance";
+import axiosInstance from "./auth_instance";
 
 export const login = async (request: LoginRequestDTO) => {
   const { data } = await axiosInstance.post(ApiRoutes.LOGIN, request);
@@ -36,8 +36,8 @@ export const resetPassword = async (email: string) => {
 
 //   return data;
 // };
-export const me = async () => {
-  const { data }: { data: MeResponseDTO } = await axiosInstance.get(ApiRoutes.ME);
+export const me = async (): Promise<MeResponseDTO> => {
+  const { data } = await axiosInstance.get(ApiRoutes.ME);
   return data;
 }
 

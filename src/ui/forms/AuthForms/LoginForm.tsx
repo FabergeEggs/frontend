@@ -23,7 +23,7 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema)
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setServerError(null);
 

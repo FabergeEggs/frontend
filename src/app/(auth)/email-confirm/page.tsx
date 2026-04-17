@@ -1,11 +1,12 @@
 import styles from "../authpage.module.css";
 import EmailConfirm from "@/src/ui/forms/AuthForms/EmailConfirm";
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: { email?: string };
 }) {
+  console.log(await searchParams);
   const email = searchParams.email ?? "";
 
   return (

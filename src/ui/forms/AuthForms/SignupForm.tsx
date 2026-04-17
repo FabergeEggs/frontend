@@ -28,7 +28,7 @@ export default function SignupForm() {
     resolver: zodResolver(signupSchema),
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     setServerError(null);
 

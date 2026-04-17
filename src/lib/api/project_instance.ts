@@ -2,10 +2,9 @@ import axios from "axios";
 import { ApiRoutes } from './constants'
 
 
-// AUTH INSTANCE
+// Profile INSTANCE
 const axiosInstance = axios.create({
-  // baseURL: process.env.NEXT_PUBLIC_AUTH_API_URL,
-  baseURL: "http://localhost:8001", // <!> 
+  baseURL: process.env.NEXT_PUBLIC_PROJECTS_API_URL,
   withCredentials: true,
 });
 
@@ -29,7 +28,7 @@ axiosInstance.interceptors.response.use(
         // );
         await axiosInstance.post(
           // `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`,
-          `http://localhost:8001${ApiRoutes.REFRESH_TOKEN}`, // <!> 
+          `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`, // <!> 
           { withCredentials: true }
         );
         return axiosInstance.request(origin);

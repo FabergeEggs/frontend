@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import styles from "./AuthInput.module.css";
 import InputProps from "../InputProps";
 
@@ -14,25 +13,23 @@ export default function AuthInput({
   onChange,
   onFocus,
   onBlur,
+  onKeyDown,
+  value,
   ref,
 }: InputProps) {
-  const [className, setClassName] = useState(styles.empty);
-
-  function handleInput(target: HTMLInputElement) {
-    if (target.value) setClassName("");
-    else setClassName(styles.empty);
-  }
+  const className = value ? "" : styles.empty;
 
   return (
     <input
       name={name}
       className={`basic-input-container basic-input ${styles.input} ${className}`}
+      value={value}
       onChange={(e) => {
-        handleInput(e.target);
         onChange?.(e);
       }}
       onFocus={onFocus}
       onBlur={onBlur}
+      onKeyDown={onKeyDown}
       type={type ?? "text"}
       id={id}
       placeholder={placeholder}

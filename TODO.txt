@@ -7,11 +7,13 @@ ui/images/HeaderIcon:
 PROBLEMS:
 - Fix adaptive /login - "Registration" button width is too big
 - No "eye" on login inputs
+- Форма создания проекта: 1. Теги не проработаны, 2. У названия есть красная *, у остальных полей - нет
 
 
 Отложенное не-MVP:
 - Почта введена неправильно — почта меняется и повторно отправляется письмо (USE CASE)
 - next-intl
+- Понакидать user-select: none; где надо, чтобы нельзя было выделять текст
 
 План до спринта:
 1. Сверстать:

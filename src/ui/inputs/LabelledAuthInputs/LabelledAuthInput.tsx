@@ -8,9 +8,11 @@ export default function LabelledAuthInput({
   label,
   placeholder,
   required,
+  value,
   onChange,
   onFocus,
   onBlur,
+  onKeyDown,
   ref,
 }: LabelledInputProps) {
   const visibility = required === false ? "hidden" : "visible";
@@ -26,10 +28,12 @@ export default function LabelledAuthInput({
           type={type}
           id={label}
           placeholder={placeholder}
+          value={value}
           required={required}
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          onKeyDown={onKeyDown}
           ref={ref}
         />
       </label>

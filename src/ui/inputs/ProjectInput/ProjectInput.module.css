@@ -1,0 +1,29 @@
+.input {
+  margin-top: 5px;
+}
+
+.textarea {
+  padding-top: 15px;
+  resize: none;
+  /* overflow: hidden; */
+}
+
+.empty {
+  background-color: var(--varity2-color);
+}
+
+@media (max-width: 834px) {
+  .input {
+    height: 40px;
+  }
+
+  .textarea {
+    padding-top: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .textarea {
+    padding-top: 7px;
+  }
+}
