@@ -18,9 +18,12 @@ export default function LoginForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
-  const { register: registerField, formState: {isValid}} = useForm<z.infer<typeof loginSchema>>({
+  const {
+    register: registerField,
+    formState: { isValid },
+  } = useForm<z.infer<typeof loginSchema>>({
     mode: "onChange",
-    resolver: zodResolver(loginSchema)
+    resolver: zodResolver(loginSchema),
   });
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -54,43 +57,42 @@ export default function LoginForm() {
     }
   };
 
-
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
-      <p className={styles.title}>Войти</p>
-      <div className={styles.inputs}>
-        <LabelledAuthInput
-          type="email"
-          label="Почта"
-          placeholder="example@mail.ru"
-          {...registerField("login")}
+        <p className={styles.title}>Войти</p>
+        <div className={styles.inputs}>
+          <LabelledAuthInput
+            type="email"
+            label="Почта"
+            placeholder="example@mail.ru"
+            {...registerField("login")}
+          />
+          <LabelledAuthInput
+            type="password"
+            label="Пароль"
+            placeholder="Введите пароль..."
+            {...registerField("password")}
+          />
+        </div>
+        <p className={styles.resetPasswordRef}>
+          <TextLink className={styles.authRef} href="/reset-password">
+            Забыли пароль?
+          </TextLink>
+        </p>
+        <GreenButton
+          type="submit"
+          className={styles.submitBtn}
+          disabled={!isValid}
+          text="Войти"
         />
-        <LabelledAuthInput
-          type="password"
-          label="Пароль"
-          placeholder="Введите пароль..."
-          {...registerField("password")}
-        />
-      </div>
-      <p className={styles.resetPasswordRef}>
-        <TextLink className={styles.authRef} href="/reset-password">
-          Забыли пароль?
-        </TextLink>
-      </p>
-      <GreenButton
-        type="submit"
-        className={styles.submitBtn}
-        disabled={!isValid}
-        text="Войти"
-      />
-      <p className={styles.authRef}>
-        Ещё нет аккаунта?{" "}
-        <TextLink className={styles.authRef} href="/signup">
-          Зарегистрируйтесь тут
-        </TextLink>
-      </p>
-    </form>
+        <p className={styles.authRef}>
+          Ещё нет аккаунта?{" "}
+          <TextLink className={styles.authRef} href="/signup">
+            Зарегистрируйтесь тут
+          </TextLink>
+        </p>
+      </form>
       {serverError && <ValidationError messages={[serverError]} />}
     </div>
   );

@@ -6,16 +6,18 @@ const PUBLIC_ROUTES = [
   "/signup",
   "/reset-password",
   "/email-confirm",
-  "/veriy-email",
+  "/verify-email",
 ];
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("access_token")?.value;
+  const token = request.cookies.get("refresh_token")?.value;
+  console.log(token);
 
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
   // Не авторизован + закрытая страница -> на логин
   if (!token && !isPublic) {
+    console.log("Вы не авторизованы!");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
