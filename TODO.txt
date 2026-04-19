@@ -8,48 +8,12 @@ PROBLEMS:
 - Fix adaptive /login - "Registration" button width is too big
 - No "eye" on login inputs
 - Форма создания проекта: 1. Теги не проработаны, 2. У названия есть красная *, у остальных полей - нет
-
+- React-Query (сохранение загруженных с бэка данных - например, профиль)
 
 Отложенное не-MVP:
 - Почта введена неправильно — почта меняется и повторно отправляется письмо (USE CASE)
 - next-intl
 - Понакидать user-select: none; где надо, чтобы нельзя было выделять текст
 
-План до спринта:
-1. Сверстать:
-- /profile: Мои проекты и т.д.
-- форма создания проекта
 
-proxy.ts:
 
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-const PUBLIC_ROUTES = [
-  "/login",
-  "/signup",
-  "/reset-password",
-  "/email-confirmation",
-];
-
-export function proxy(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const token = request.cookies.get("access_token")?.value;
-
-  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
-  // Не авторизован + закрытая страница -> на логин
-  // if (!token && !isPublic) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
-
-  // // Авторизован + страница логина -> на ленту
-  // if (token && isPublic) {
-  //   return NextResponse.redirect(new URL("/feed", request.url));
-  // }
-
-  // return NextResponse.next();
-}
-
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"],
-};

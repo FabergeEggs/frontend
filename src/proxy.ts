@@ -12,7 +12,6 @@ const PUBLIC_ROUTES = [
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("refresh_token")?.value;
-  console.log(token);
 
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
   // Не авторизован + закрытая страница -> на логин

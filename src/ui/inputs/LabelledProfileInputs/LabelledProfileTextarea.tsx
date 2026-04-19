@@ -6,6 +6,8 @@ export default function LabelledProfileTextarea({
   label,
   placeholder,
   required,
+  name,
+  ref,
   onConfirm
 }: LabelledTextareaProps) {
   return (
@@ -17,6 +19,8 @@ export default function LabelledProfileTextarea({
           placeholder={placeholder}
           required={required}
           onConfirm={onConfirm}
+          name={name}
+          ref={ref}
         ></ProfileTextarea>
       </label>
     </div>

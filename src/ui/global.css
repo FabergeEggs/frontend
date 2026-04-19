@@ -44,6 +44,12 @@ button:focus {
   padding-right: 15px;
 }
 
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .basic-btn {
   font-size: 14px;
   border-radius: 10px;

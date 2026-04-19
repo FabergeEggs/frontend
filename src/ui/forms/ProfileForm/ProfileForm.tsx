@@ -7,54 +7,59 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { profileSchema } from "@/src/lib/utils/zodSchemas";
+import { updateProfile } from "@/src/lib/api/profile";
+import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { useRef } from "react"
 
-import { useEffect } from "react";
 
-export default function ProfileForm({ data } : {data : MeResponseDTO}) {
-  const { register: registerField } = useForm<z.infer<typeof profileSchema>>({
+export default function ProfileForm({ data } : {data : ProfileDTO}) {
+  const { register: registerField, watch } = useForm<z.infer<typeof profileSchema>>({
     mode: "onChange",
     resolver: zodResolver(profileSchema),
-    // defaultValues: {
-    //   first_name: "Алексей",
-    //   email: "lexander@gmail.com",
-    //   password: "",
-    //   confirmPassword: "",
-    //   about: "Великий учёный 19-го века",
-    // },
     defaultValues: {
-      first_name: data.given_name,
+      first_name: data.first_name,
       email: data.email,
       password: "xxxxxxxxxxx",
       confirmPassword: "",
-      about: data.about,
+      about: data.bio,
     },
   });
 
-  useEffect(() => {
-    // const fetchUserData = async () => {
-    //   const data = await me();
-    //   setUserData(data);
-    // };
-    // fetchUserData();
-  }, []);
+  const {userId} = useAuth()
+  const formRef = useRef<HTMLFormElement>(null)
+
+  function updateProfileWithFormData() {
+    if (!formRef.current) return
+    const formData = new FormData(formRef.current);
+    const formValues = Object.fromEntries(formData.entries());
+    console.log(formValues)
+    
+    updateProfile(userId!, {
+      first_name: formValues.first_name as string,
+      last_name: "",
+      bio: formValues.about as string,
+      avatar_url: ""
+    })
+  }
 
   return (
-    <div className={styles.profileInfo}>
+    <form ref={formRef} className={styles.profileInfo}>
       <LabelledProfileInput
         label="Имя"
         placeholder="Введите имя..."
+        onConfirm={updateProfileWithFormData}
         {...registerField("first_name")}
       />
       <LabelledProfileInput
         type="email"
         label="Почта"
         placeholder="Введите почту..."
-        onConfirm={() => console.log("HAh!")}
         {...registerField("email")}
       />
       <LabelledProfileTextarea
         label="О себе"
         placeholder="Расскажите о себе..."
+        onConfirm={updateProfileWithFormData}
         {...registerField("about")}
       />
       <LabelledProfileInput
@@ -62,6 +67,6 @@ export default function ProfileForm({ data } : {data : MeResponseDTO}) {
         label="Пароль"
         placeholder="Введите пароль..."
       />
-    </div>
+    </form>
   );
 }

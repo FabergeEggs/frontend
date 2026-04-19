@@ -13,6 +13,8 @@ export default function ProfileTextarea({
   id,
   placeholder,
   required,
+  name,
+  ref,
   onConfirm
 }: TextareaProps) {
   const [disabled, setDisabled] = useState(true);
@@ -27,8 +29,9 @@ export default function ProfileTextarea({
         placeholder={placeholder}
         required={required ?? true}
         autoComplete="new-password"
-        onKeyDown={onConfirm}
         disabled={disabled}
+        name={name}
+        ref={ref}
       />
       { disabled && <div onClick={() => setDisabled(false)} className={styles.imageContainer}>
         <Image src={EditImage} alt="Edit" />

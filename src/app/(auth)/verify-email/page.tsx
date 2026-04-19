@@ -20,11 +20,7 @@ export default function VerifyEmailPage() {
 
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className="centered"
     >
       Подтверждение email...
       {serverError && <ValidationError messages={[serverError]} />}

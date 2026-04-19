@@ -17,11 +17,7 @@ export default function VerifyEmailPage() {
 
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      className="centered"
     >
       Выход из аккаунта...
       {serverError && <ValidationError messages={[serverError]} />}

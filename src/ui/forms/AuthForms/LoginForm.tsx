@@ -14,13 +14,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { loginSchema } from "@/src/lib/utils/zodSchemas";
 
+import { useAuth } from "@/src/lib/providers/AuthProvider";
+
 export default function LoginForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const router = useRouter();
 
+  const { setUserId } = useAuth()
+
   const {
     register: registerField,
     formState: { isValid },
+    watch
   } = useForm<z.infer<typeof loginSchema>>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -40,6 +45,7 @@ export default function LoginForm() {
     try {
       console.log("Submitting login with data: ", loginData); // DEBUG
       const response = await login(loginData);
+      setUserId(response.user_id)
       console.log("Login successful: ", response);
       router.push("/profile");
     } catch (error: any) {

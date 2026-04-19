@@ -1,35 +1,51 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
 import { refreshToken } from "@/src/lib/api/auth";
-import { setAccessToken } from "../api/tokenStore";
+import { usePathname } from "next/navigation"
 
 interface AuthContextType {
-  userId: string | null;
-  setUserId: (id: string | null) => void;
+  userId: string
+  isLoading: boolean
+  setUserId: (id: string) => void
 }
 
 const AuthContext = createContext<AuthContextType>({
-  userId: null,
+  userId: "",
+  isLoading: true,
   setUserId: () => {},
 });
+
+const AUTH_ROUTES = ["/login", "/signup", "/reset-password", "/email-confirm", "/verify-email"]
 
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const pathname = usePathname()
 
   useEffect(() => {
+    const isAuthPage = AUTH_ROUTES.some(route => pathname.startsWith(route))
+    
+    if (isAuthPage) {
+      setIsLoading(false)
+      return
+    }
+
     refreshToken()
       .then((data) => {
         // setUserId(data.user_id)
+        console.log("SETTING USER ID IN AUTH CONTEXT") // DEBUG
+        setUserId("08bbe2d4-824d-4eac-8984-001ff1954429")
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setIsLoading(false))
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userId, setUserId }}>
+    <AuthContext.Provider value={{ userId, isLoading, setUserId }}>
       {children}
     </AuthContext.Provider>
   );

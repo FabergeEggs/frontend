@@ -1,32 +1,26 @@
-import { email } from "zod";
-import ProfileClient from "./client";
+"use client"
+
+import styles from "./profilepage.module.css";
+import ProfilePictureInput from "@/src/ui/inputs/ProfilePictureInput/ProfilePictureInput";
+import ProfileForm from "@/src/ui/forms/ProfileForm/ProfileForm";
+import Image from "next/image";
+import TextImageButton from "@/src/ui/buttons/TextImageButton/TextImageButton";
+import ProjectCard from "@/src/ui/info/ProjectCard/ProjectCard";
+import Link from "next/link";
+
+import ArrowRight from "@/public/assets/arrow-right.svg"
+import ArrowDown from "@/public/assets/arrow-down.svg"
+import NewImage from "@/public/assets/profile/new.svg"
+import FindImage from "@/public/assets/profile/find.svg"
+
+import { useState, useEffect } from "react";
 import { getProfile } from "@/src/lib/api/profile";
 import { ProjectStatusEnum } from "@/src/lib/models/export/project";
+import { useAuth } from "@/src/lib/providers/AuthProvider";
 
-export default async function Page() {
-  // Fetch прямо на сервере — куки передаются автоматически
-  // const userData = await getProfile("08bbe2d4-824d-4eac-8984-001ff1954429"); // если настроить серверный fetch
-  
-  
-  const userData = {
-    sub: "abc",
-    email: "lexander@gmail.com",
-    given_name: "Алексей", // Имя
-    about: "",   // О себе
-    realm_roles: ["Priv", "Password", "asd"],
-    client_roles: {
-      "frontend": ["view_profile", "edit_profile"],
-      "api": ["read", "write"]
-    },
-    raw_claims: {
-      "email": "alexey@example.com",
-      "email_verified": true,
-      "name": "Алексей",
-      "preferred_username": "alexey"
-    }
-  }
 
-  const testProjectData = {
+
+const testProjectData = {
     id: "kek",
     label: "Перепись населения в городе Ижевск",
     creator: "Somewho",
@@ -43,14 +37,94 @@ export default async function Page() {
     answers_count: 128,
   };
 
-  const myProjects = [testProjectData];
-  const projectParticipations = [testProjectData, testProjectData];
+const myProjects = [testProjectData];
+const projectParticipations = [testProjectData, testProjectData];
+
+export default function ProfilePage() {
+  // userData, myProjects, projectParticipations
+  const [showMyProjects, setShowMyProjects] = useState(true);
+  const [showParticipatingProjects, setShowParticipatingProjects] = useState(true);
+
+  const [userData, setUserData] = useState<ProfileDTO>({
+    id: "",
+    user_id: "",
+    username: "",
+    email: "",
+    first_name: "",
+    last_name: "",
+    bio: "",
+    avatar_url: "",
+    created_at: new Date(),
+    is_active: true
+  });
+
+  const toggleProjects = () => {
+    setShowMyProjects(prev => !prev);
+  };
+
+  const toggleParticipatingProjects = () => { 
+    setShowParticipatingProjects(prev => !prev);
+  };
+
+  const { userId, isLoading } = useAuth();
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
+  useEffect(() => {
+    if (isLoading || !userId) return
+    async function loadProfile() {
+      const data = await getProfile(userId);
+       console.log("USER LOADED!: ", data);
+       setUserData(data)
+       setIsLoadingProfile(false);
+    }
+    
+    // 
+    loadProfile()
+  }, [userId, isLoading])
+
+  if (isLoading || isLoadingProfile) return <div className="centered">Загрузка...</div>
 
   return (
-    <ProfileClient
-      userData={userData}
-      myProjects={myProjects}
-      projectParticipations={projectParticipations}
-    />
+    <div className="pagecontainer">
+      <div className={styles.container}>
+        <div className={styles.profileContainer}>
+          <h2 className={styles.title}>Профиль</h2>
+          <ProfileForm data={userData}/>
+        </div>
+        <div className={styles.pictureInputContainer}>
+          <ProfilePictureInput  />
+        </div>
+      </div>
+      <div className={styles.projectsContainer}>
+        <div className={styles.myProjectsContainer}>
+          <div className={styles.myProjectsHeader}>
+            <div className={styles.headerTitle} onClick={toggleProjects}>
+              <h2 className={styles.title}>Мои проекты</h2>
+              <Image src={showMyProjects ? ArrowDown : ArrowRight} alt="arrow-right" />
+            </div>
+            <Link className={styles.link} href="/feed/create">
+              <TextImageButton src={NewImage} text="Создать новый проект"/>
+            </Link>
+          </div>
+          { showMyProjects && <div className={styles.projects}>
+            {myProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
+            </div>}
+        </div>
+        <div className={styles.myProjectsContainer}>
+          <div className={styles.myProjectsHeader}>
+            <div className={styles.headerTitle} onClick={toggleParticipatingProjects}>
+              <h2 className={styles.title}>Участие в проектах</h2>
+              <Image src={showParticipatingProjects ? ArrowDown : ArrowRight} alt="arrow-right" />
+            </div>
+            <Link className={styles.link} href="/feed">
+              <TextImageButton src={FindImage} text="Найти новый проект"/>
+            </Link>
+          </div>
+          { showParticipatingProjects && <div className={styles.projects}>
+            {projectParticipations.map((value, index) => <ProjectCard {...value} key={index} />)}
+            
+          </div>}
+        </div>
+      </div>
+    </div>
   );
 }

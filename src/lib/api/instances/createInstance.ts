@@ -11,8 +11,6 @@ export function createInstance(baseURL: string | undefined): AxiosInstance {
   // Attach access token to every request
   instance.interceptors.request.use((config) => {
     const token = getAccessToken()
-    console.log("CONFIG: ", config)
-    console.log("TOKEN: ", token)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }

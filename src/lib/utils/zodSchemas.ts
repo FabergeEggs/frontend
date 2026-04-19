@@ -36,7 +36,7 @@ export const profileSchema = z
       .regex(/\d.*\d/, "Пароль должен содержать минимум 2 цифры")
       .regex(/[!@#$%^&*]/, "Пароль должен содержать минимум 1 спецсимвол"),
     confirmPassword: z.string(),
-    about: z.string().optional(),
+    about: z.string(), // .optional() - removed for UpdateRequestDTO
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Пароли не совпадают",
