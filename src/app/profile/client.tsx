@@ -13,7 +13,8 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { me } from "@/src/lib/api/auth"
 
 export default function ProfileClient({ userData, myProjects, projectParticipations }: { userData: MeResponseDTO, myProjects: ProjectFull[], projectParticipations: ProjectFull[] }) {
   const [showMyProjects, setShowMyProjects] = useState(true);
@@ -26,6 +27,10 @@ export default function ProfileClient({ userData, myProjects, projectParticipati
   const toggleParticipatingProjects = () => { 
     setShowParticipatingProjects(prev => !prev);
   };
+
+  useEffect(() => {
+    me().then((data) => console.log(data));
+  }, [])
 
   return (
     <div className="pagecontainer">

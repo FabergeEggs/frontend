@@ -1,28 +1,30 @@
 import { email } from "zod";
 import ProfileClient from "./client";
-import { me } from "@/src/lib/api/auth";
+import { getProfile } from "@/src/lib/api/profile";
 import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 
 export default async function Page() {
   // Fetch прямо на сервере — куки передаются автоматически
-  const userData = await me(); // если настроить серверный fetch
-  // const userData = {
-  //   sub: "abc",
-  //   email: "lexander@gmail.com",
-  //   given_name: "Алексей", // Имя
-  //   about: "",   // О себе
-  //   realm_roles: ["Priv", "Password", "asd"],
-  //   client_roles: {
-  //     "frontend": ["view_profile", "edit_profile"],
-  //     "api": ["read", "write"]
-  //   },
-  //   raw_claims: {
-  //     "email": "alexey@example.com",
-  //     "email_verified": true,
-  //     "name": "Алексей",
-  //     "preferred_username": "alexey"
-  //   }
-  // }
+  // const userData = await getProfile("08bbe2d4-824d-4eac-8984-001ff1954429"); // если настроить серверный fetch
+  
+  
+  const userData = {
+    sub: "abc",
+    email: "lexander@gmail.com",
+    given_name: "Алексей", // Имя
+    about: "",   // О себе
+    realm_roles: ["Priv", "Password", "asd"],
+    client_roles: {
+      "frontend": ["view_profile", "edit_profile"],
+      "api": ["read", "write"]
+    },
+    raw_claims: {
+      "email": "alexey@example.com",
+      "email_verified": true,
+      "name": "Алексей",
+      "preferred_username": "alexey"
+    }
+  }
 
   const testProjectData = {
     id: "kek",

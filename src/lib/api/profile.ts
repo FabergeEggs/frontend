@@ -1,8 +1,9 @@
 import { ApiRoutes } from "./constants";
-import axiosInstance from "./profile_instance";
+import axiosInstance from "./instances/profile_instance";
 
 export const getProfile = async (id: string) => {
   const { data } = await axiosInstance.get(`${ApiRoutes.PROFILE}/${id}`);
+  console.log(`RESULT GET PROFILE: ${data}`); // DEBUG
   return data;
 };
 

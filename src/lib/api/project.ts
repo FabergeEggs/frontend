@@ -1,5 +1,5 @@
 import { ApiRoutes } from "./constants";
-import axiosInstance from "./project_instance";
+import axiosInstance from "./instances/project_instance";
 
 export const createProject = async (request: ProjectCreateDTO) => {
   const { data } = await axiosInstance.post(ApiRoutes.PROJECT, request);
