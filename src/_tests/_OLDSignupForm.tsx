@@ -4,10 +4,10 @@
 
 import styles from "./AuthForm.module.css";
 import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
-import LabelledAuthTextarea from "../../inputs/LabelledAuthInputs/LabelledAuthTextarea";
+import LabelledAuthTextarea from "../ui/inputs/LabelledAuthInputs/LabelledAuthTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
-import ValidationError from "../ValidationError/ValidationError";
+import ValidationError from "../ui/forms/ValidationError/ValidationError";
 
 import { useState, useEffect } from "react";
 import { register } from "@/src/lib/api/auth";
@@ -94,9 +94,7 @@ export default function SignupForm() {
     setServerError(null);
 
     try {
-      console.log("Submitting registration with data: ", formData); // DEBUG
       const response = await register(formData);
-      console.log("Registration successful: ", response);
       router.push(`/email-confirm?email=${encodeURIComponent(formData.email)}`)
     } catch (error: any) {
       const status = error.response?.status;

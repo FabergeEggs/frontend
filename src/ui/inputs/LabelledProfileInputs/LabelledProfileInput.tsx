@@ -3,8 +3,7 @@ import ProfileInput from "../ProfileInput/ProfileInput";
 import LabelledInputProps from "../LabelledInputProps";
 import { forwardRef } from "react";
 
-const LabelledProfileInput = forwardRef<HTMLInputElement, LabelledInputProps>((props, ref) => {
-  const {
+export default function LabelledProfileInput({
     type,
     label,
     placeholder,
@@ -16,7 +15,8 @@ const LabelledProfileInput = forwardRef<HTMLInputElement, LabelledInputProps>((p
     onConfirm,
     onKeyDown,
     name,
-  } = props
+    ref
+  }: LabelledInputProps) {
 
   const visibility = required === true && !value ? "visible" : "hidden";
   return (
@@ -40,9 +40,5 @@ const LabelledProfileInput = forwardRef<HTMLInputElement, LabelledInputProps>((p
           name={name}
         ></ProfileInput>
       </label>
-    </div>
-  );
-})
-
-LabelledProfileInput.displayName = "LabelledProfileInput"
-export default LabelledProfileInput
+    </div>)
+  }

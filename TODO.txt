@@ -10,6 +10,23 @@ PROBLEMS:
 - Форма создания проекта: 1. Теги не проработаны, 2. У названия есть красная *, у остальных полей - нет
 - React-Query (сохранение загруженных с бэка данных - например, профиль)
 
+- Идея: сделать общий обработчик ошибок запроса с setServerError, по типу
+
+try {
+    const response = await login(loginData);
+    setUserId(response.user_id)
+    router.push("/profile");
+} catch (error: any) {
+    const status = error.response?.status;
+    if (status === 401) {
+    setServerError("Неверный логин или пароль");
+    } else {
+    setServerError("Ошибка входа. Попробуйте позже");
+    }
+
+    console.error("Login failed: ", error.response);
+}
+
 Отложенное не-MVP:
 - Почта введена неправильно — почта меняется и повторно отправляется письмо (USE CASE)
 - next-intl

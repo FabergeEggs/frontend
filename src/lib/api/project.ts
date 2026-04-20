@@ -7,18 +7,14 @@ export const createProject = async (request: ProjectCreateDTO) => {
 };
 
 export const getProjectInfo = async (id: string) => {
-  console.log("INFO ID: ", id);
   const { data } = await axiosInstance.get(`${ApiRoutes.PROJECT}/${id}/info`);
-  console.log("INFO: ", data);
   return data;
 };
 
 export const getProjectStatistics = async (id: string) => {
-  console.log("STATS ID: ", id);
   const { data } = await axiosInstance.get(
     `${ApiRoutes.PROJECT}/${id}/statistics`,
   );
-  console.log("STATS: ", data);
   return data;
 };
 

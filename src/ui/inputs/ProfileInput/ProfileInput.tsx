@@ -6,10 +6,11 @@ import EditImage from "@/public/assets/edit.svg";
 import ConfirmImage from "@/public/assets/check.svg"
 import Image from "next/image";
 
-import { forwardRef, useState } from "react";
+import { useState } from "react";
 
 /* This element changes its background-color depending on whether the input field is empty or not */
-const ProfileInput = forwardRef<HTMLInputElement, InputProps>(({
+
+export default function ProfileInput({
   type,
   id,
   placeholder,
@@ -20,8 +21,9 @@ const ProfileInput = forwardRef<HTMLInputElement, InputProps>(({
   onBlur,
   onConfirm,
   onKeyDown,
-  name
-}, ref) => {
+  name,
+  ref
+}: InputProps) {
   const [disabled, setDisabled] = useState(true);
 
   return (
@@ -49,7 +51,4 @@ const ProfileInput = forwardRef<HTMLInputElement, InputProps>(({
         </div>}
     </div>
   );
-})
-
-ProfileInput.displayName = "ProfileInput"
-export default ProfileInput
+}

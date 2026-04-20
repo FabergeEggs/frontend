@@ -45,9 +45,7 @@ export default function SignupForm() {
     };
 
     try {
-      console.log("Submitting registration with data: ", registerRequestData); // DEBUG
       const response = await register(registerRequestData);
-      console.log("Registration successful: ", response);
       router.push(
         `/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`,
       );

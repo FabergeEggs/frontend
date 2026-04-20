@@ -2,6 +2,7 @@
 
 import LabelledProfileInput from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileInput";
 import LabelledProfileTextarea from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileTextarea";
+import ProfileInfoField from "../../info/ProfileInfoField/ProfileInfoField";
 import styles from "./ProfileForm.module.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,7 +33,6 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
     if (!formRef.current) return
     const formData = new FormData(formRef.current);
     const formValues = Object.fromEntries(formData.entries());
-    console.log(formValues)
     
     updateProfile(userId!, {
       first_name: formValues.first_name as string,
@@ -50,11 +50,9 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
         onConfirm={updateProfileWithFormData}
         {...registerField("first_name")}
       />
-      <LabelledProfileInput
-        type="email"
+      <ProfileInfoField
         label="Почта"
-        placeholder="Введите почту..."
-        {...registerField("email")}
+        value={data.email}
       />
       <LabelledProfileTextarea
         label="О себе"

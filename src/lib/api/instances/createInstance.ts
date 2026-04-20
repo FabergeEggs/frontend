@@ -1,51 +1,52 @@
-import axios, { AxiosInstance } from "axios"
-import { setAccessToken, getAccessToken, clearAccessToken } from "../tokenStore"
-import { ApiRoutes } from "../constants"
+import axios, { AxiosInstance } from "axios";
+import {
+  setAccessToken,
+  getAccessToken,
+  clearAccessToken,
+} from "../tokenStore";
+import { ApiRoutes } from "../constants";
 
 export function createInstance(baseURL: string | undefined): AxiosInstance {
+  /** Type of baseURL is "string | undefined" because in .env file variables are of this type */
   const instance = axios.create({
     baseURL,
     withCredentials: true,
-  })
+  });
 
   // Attach access token to every request
   instance.interceptors.request.use((config) => {
-    const token = getAccessToken()
+    const token = getAccessToken();
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    return config
-  })
+    return config;
+  });
 
   // Refresh on 401
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      const origin = error.config
-      if (
-        error.response?.status === 401 &&
-        origin &&
-        !origin._isRetry
-      ) {
-        origin._isRetry = true
+      const origin = error.config;
+      if (error.response?.status === 401 && origin && !origin._isRetry) {
+        origin._isRetry = true;
         try {
           const { data } = await axios.post(
             `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`,
             {},
-            { withCredentials: true }
-          )
-          setAccessToken(data.access_token)
-          return instance.request(origin)
+            { withCredentials: true },
+          );
+          setAccessToken(data.access_token);
+          return instance.request(origin);
         } catch {
-          clearAccessToken()
+          clearAccessToken();
           if (typeof window !== "undefined") {
-            window.location.href = "/login"
+            window.location.href = "/login";
           }
         }
       }
-      throw error
-    }
-  )
+      throw error;
+    },
+  );
 
-  return instance
+  return instance;
 }

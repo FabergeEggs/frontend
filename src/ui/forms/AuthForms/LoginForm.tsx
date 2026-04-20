@@ -43,22 +43,17 @@ export default function LoginForm() {
     };
 
     try {
-      console.log("Submitting login with data: ", loginData); // DEBUG
       const response = await login(loginData);
       setUserId(response.user_id)
-      console.log("Login successful: ", response);
       router.push("/profile");
     } catch (error: any) {
-      const msg = error.response?.data.error;
-      console.error(error.response);
-      console.error("Login failed: ", msg);
-
       const status = error.response?.status;
       if (status === 401) {
         setServerError("Неверный логин или пароль");
       } else {
         setServerError("Ошибка входа. Попробуйте позже");
       }
+
       console.error("Login failed: ", error.response);
     }
   };

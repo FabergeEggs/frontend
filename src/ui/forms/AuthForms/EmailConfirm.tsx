@@ -26,7 +26,7 @@ export default function EmailConfirm({ email }: { email: string }) {
       console.log("Resending email confirm to:", email); // DEBUG
       const response = await emailResendVerification(email);
       setCooldown(COOLDOWN_SECONDS); // сбрасываем таймер
-      console.log("Email confirm successful: ", response);
+      console.log("Email resend successful: ", response);
     } catch (error: any) {
       const status = error.response?.status;
       if (status === 404) {
