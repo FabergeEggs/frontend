@@ -27,7 +27,7 @@ export default function AuthTextarea({
         <textarea
           name={name}
           className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
-          onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
+          onChange={(e) => { handleInput(e.target); onChange?.(e); }}
           id={name}
           placeholder={placeholder}
           required={required ?? true}

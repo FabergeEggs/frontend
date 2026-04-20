@@ -102,6 +102,11 @@ button:focus {
 
   padding-left: 11px; /* <- moves both placeholder and typed text */
 }
+
+.basic-input:focus {
+  outline: none;
+}
+
 .basic-input::placeholder {
   color: var(--placeholder-color);
 }

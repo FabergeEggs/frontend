@@ -5,6 +5,7 @@ import Image from "next/image";
 import InputProps from "../InputProps";
 import { useState } from "react";
 
+
 export default function ProfileInput({
     type,
     label,

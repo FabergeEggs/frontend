@@ -45,7 +45,7 @@
   outline: none;
 }
 
-.container:has(.input:placeholder-shown) {
+.inputContainer:has(.input:placeholder-shown) {
   background-color: var(--varity1-color);
 }
 

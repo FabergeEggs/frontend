@@ -1,5 +1,7 @@
 .container {
   width: 100%;
+
+  pointer-events: none;
 }
 
 .inputContainer {

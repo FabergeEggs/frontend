@@ -18,3 +18,45 @@
         font-size: 16px;
     }
 }
+
+/* Inner settings */
+
+.input {
+  margin-top: 5px;
+}
+
+.textarea {
+  padding-top: 15px;
+  height: 50px;
+  resize: none;
+  /* overflow: hidden; */
+}
+
+/* .empty {
+  background-color: var(--varity2-color);
+} */
+
+.input {
+  background: none;
+  border: none;
+}
+.input:focus {
+  outline: none;
+}
+
+
+.inputContainer:has(.input:placeholder-shown) {
+  background-color: var(--varity2-color);
+}
+
+@media (max-width: 834px) {
+  .textarea {
+    padding-top: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .textarea {
+    padding-top: 7px;
+  }
+}

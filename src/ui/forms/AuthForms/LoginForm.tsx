@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./AuthForm.module.css";
-import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import AuthInput from "../../inputs/AuthInput/AuthInput";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";

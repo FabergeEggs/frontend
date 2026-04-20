@@ -20,7 +20,7 @@ export default function ProfileTextarea({
       <label htmlFor={label}>
         <span className={styles.text}>{label}</span>
         <div
-      className={`basic-input-container ${styles.container} ${styles.textareaContainer}`}
+      className={`basic-input-container ${styles.inputContainer} ${styles.textareaContainer}`}
         >
           <textarea
             className={`basic-input ${styles.input} ${styles.textarea}`}
