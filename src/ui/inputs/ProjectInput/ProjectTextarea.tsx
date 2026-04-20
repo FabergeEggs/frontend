@@ -1,19 +1,17 @@
-"use client";
-
-import { useState } from "react";
 import styles from "./ProjectInput.module.css";
 import TextareaProps from "../TextareaProps";
 
-/* This element changes its background-color depending on whether the input field is empty or not */
+import { useState } from "react";
+
 export default function ProjectTextarea({
   name,
-  id,
+  label,
   placeholder,
   required,
   onChange,
   onFocus,
   onBlur,
-  ref,  
+  ref,
   height
 }: TextareaProps) {
   const [className, setClassName] = useState(styles.empty);
@@ -24,17 +22,22 @@ export default function ProjectTextarea({
   }
 
   return (
-    <textarea
-      name={name}
-      style={{ height: height ? height + "px" : "auto" }}
-      className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
-      onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
-      id={id}
-      placeholder={placeholder}
-      required={required ?? true}
-      ref={ref}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    />
+    <div className={styles.container}>
+      <label htmlFor={label}>
+        <span className={styles.text}>{label}</span>
+        <textarea
+          name={name}
+          style={{ height: height ? height + "px" : "auto" }}
+          className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
+          onChange={(e) => { handleInput(e.target); if (onChange) onChange?.(e); }}
+          id={name}
+          placeholder={placeholder}
+          required={required ?? true}
+          ref={ref}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
+      </label>
+    </div>
   );
 }

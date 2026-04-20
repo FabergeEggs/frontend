@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./AuthForm.module.css";
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";
@@ -63,13 +63,13 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
         <p className={styles.title}>Войти</p>
         <div className={styles.inputs}>
-          <LabelledAuthInput
+          <AuthInput
             type="email"
             label="Почта"
             placeholder="example@mail.ru"
             {...registerField("login")}
           />
-          <LabelledAuthInput
+          <AuthInput
             type="password"
             label="Пароль"
             placeholder="Введите пароль..."

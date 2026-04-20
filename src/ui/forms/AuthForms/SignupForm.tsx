@@ -1,8 +1,8 @@
 "use client";
 
 import styles from "./AuthForm.module.css";
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
-import LabelledAuthTextarea from "../../inputs/LabelledAuthInputs/LabelledAuthTextarea";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import AuthTextarea from "../../inputs/AuthInput/AuthTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";
@@ -65,12 +65,12 @@ export default function SignupForm() {
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
         <p className={styles.title}>Регистрация</p>
         <div className={styles.inputs}>
-          <LabelledAuthInput
+          <AuthInput
             label="Имя"
             placeholder="Введите своё имя..."
             {...registerField("first_name")}
           />
-          <LabelledAuthInput
+          <AuthInput
             type="email"
             label="Почта"
             placeholder="example@mail.ru"
@@ -79,13 +79,13 @@ export default function SignupForm() {
           {errors.email && (
             <p className={styles.error}>Неверный формат почты</p>
           )}
-          <LabelledAuthTextarea
+          <AuthTextarea
             label="О себе"
             placeholder="Расскажите о себе..."
             required={false}
             {...registerField("about")}
           />
-          <LabelledAuthInput
+          <AuthInput
             type="password"
             label="Пароль"
             placeholder="Введите пароль..."
@@ -96,7 +96,7 @@ export default function SignupForm() {
           {errors.password && (
             <p className={styles.error}>{errors.password.message}</p>
           )}
-          <LabelledAuthInput
+          <AuthInput
             type="password"
             label="Повтор пароля"
             placeholder="Введите пароль ещё раз..."

@@ -1,54 +1,57 @@
-"use client";
-
 import styles from "./ProfileInput.module.css";
-import InputProps from "../InputProps";
 import EditImage from "@/public/assets/edit.svg";
 import ConfirmImage from "@/public/assets/check.svg"
 import Image from "next/image";
-
+import InputProps from "../InputProps";
 import { useState } from "react";
 
-/* This element changes its background-color depending on whether the input field is empty or not */
-
 export default function ProfileInput({
-  type,
-  id,
-  placeholder,
-  value,
-  required,
-  onChange,
-  onFocus,
-  onBlur,
-  onConfirm,
-  onKeyDown,
-  name,
-  ref
-}: InputProps) {
-  const [disabled, setDisabled] = useState(true);
+    type,
+    label,
+    placeholder,
+    value,
+    required,
+    onChange,
+    onFocus,
+    onBlur,
+    onConfirm,
+    onKeyDown,
+    name,
+    ref
+  }: InputProps) {
 
+  const [disabled, setDisabled] = useState(true);
+  const visibility = required === true && !value ? "visible" : "hidden";
   return (
-    <div className={`basic-input-container ${styles.container}`}>
-      <input
-        className={`basic-input ${styles.input}`}
-        onChange={(e) => onChange?.(e)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        type={type ?? "text"}
-        id={id}
-        placeholder={placeholder}
-        required={required ?? true}
-        autoComplete="new-password"
-        onKeyDown={onKeyDown}
-        ref={ref}
-        name={name}
-        disabled={disabled}
-      />
-      { disabled && <div onClick={() => setDisabled(false)} className={styles.imageContainer}>
-        <Image src={EditImage} alt="Edit" />
-      </div>}
-      {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true)} } className={styles.imageContainer}> 
-          <Image src={ConfirmImage} alt="Confirm" />
+  <div className={styles.container}>
+    <label htmlFor={label}>
+      <span className={styles.text}>
+        {label}{" "}
+        <span style={{ visibility: visibility, color: "red" }}>*</span>
+      </span>
+      <div className={`basic-input-container ${styles.inputContainer}`}>
+        <input
+          className={`basic-input ${styles.input}`}
+          onChange={(e) => onChange?.(e)}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          type={type ?? "text"}
+          id={name}
+          placeholder={placeholder}
+          required={required ?? true}
+          autoComplete="new-password"
+          onKeyDown={onKeyDown}
+          ref={ref}
+          name={name}
+          disabled={disabled}
+        />
+        { disabled && <div onClick={() => setDisabled(false)} className={styles.imageContainer}>
+          <Image src={EditImage} alt="Edit" />
         </div>}
-    </div>
-  );
+        {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true)} } className={styles.imageContainer}> 
+            <Image src={ConfirmImage} alt="Confirm" />
+          </div>}
+      </div>
+    </label>
+  </div>)
 }

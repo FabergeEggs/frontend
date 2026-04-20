@@ -3,7 +3,7 @@ import { ChangeHandler, RefCallBack } from "react-hook-form";
 export default interface InputProps {
   name?: string;
   type?: "password" | "email" | "text";
-  id: string;
+  label: string;
   placeholder: string;
   disabled?: boolean;
   value?: string;

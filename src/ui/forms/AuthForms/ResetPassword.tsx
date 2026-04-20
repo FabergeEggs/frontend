@@ -6,7 +6,7 @@ import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
 
 import { resetPassword } from "@/src/lib/api/auth";
-import LabelledAuthInput from "../../inputs/LabelledAuthInputs/LabelledAuthInput";
+import AuthInput from "../../inputs/AuthInput/AuthInput";
 
 export default function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ export default function ResetPassword() {
       <div className={styles.form}>
         <p className={styles.title}>Восстановление пароля</p>
         <p className={styles.text}>Для восстановления пароля укажите почту вашего аккаунта. На неё будет отправлена дальнейшая инструкция. </p>
-        <LabelledAuthInput
+        <AuthInput
           name="email" 
           type="email"
           label="Почта:"

@@ -1,8 +1,8 @@
 "use client";
 
 import styles from "./ProjectForm.module.css";
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
-import LabelledProjectTextarea from "../../inputs/LabelledProjectInput/LabelledProjectTextarea";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import ProjectTextarea from "../../inputs/ProjectInput/ProjectTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
 import ProjectFormTag from "../../info/ProjectFormTag/ProjectFormTag";
@@ -99,19 +99,19 @@ export default function ProjectForm() {
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
         <p className={styles.title}>Создание проекта</p>
         <div className={styles.inputs}>
-          <LabelledAuthInput
+          <AuthInput
             label="Название"
             placeholder="Введите название..."
             {...registerField("label")}
           />
-          <LabelledProjectTextarea
+          <ProjectTextarea
             label="Краткое описание"
             placeholder="Кратко расскажите о своём проекте..."
             required={false}
             height={100}
             {...registerField("short_description")}
           />
-          <LabelledProjectTextarea
+          <ProjectTextarea
             label="Развёрнутое описание"
             placeholder="Подробно расскажите о своём проекте..."
             required={false}
@@ -119,7 +119,7 @@ export default function ProjectForm() {
             {...registerField("description")}
           />
           <div className={styles.tagSegment}>
-            <LabelledAuthInput
+            <AuthInput
               label="Теги"
               placeholder="Введите тег..."
               required={false}

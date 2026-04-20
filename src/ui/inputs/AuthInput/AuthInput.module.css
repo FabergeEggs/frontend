@@ -1,30 +1,20 @@
-.input {
-  margin-top: 5px;
+.text {
+    padding-left: 2px;
+    font-size: 20px; /* media: 20-18-16 */
 }
 
-.textarea {
-  padding-top: 15px;
-  height: 50px;
-  resize: none;
-  /* overflow: hidden; */
-}
-
-.empty {
-  background-color: var(--varity2-color);
+.container {
+    width: 100%;
 }
 
 @media (max-width: 834px) {
-  .input {
-    height: 40px;
-  }
-
-  .textarea {
-    padding-top: 8px;
-  }
+    .text {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 400px) {
-  .textarea {
-    padding-top: 7px;
-  }
+    .text {
+        font-size: 16px;
+    }
 }

@@ -3,8 +3,8 @@
 "use client";
 
 import styles from "./AuthForm.module.css";
-import LabelledAuthInput from "@/src/ui/inputs/LabelledAuthInputs/LabelledAuthInput";
-import LabelledAuthTextarea from "../ui/inputs/LabelledAuthInputs/LabelledAuthTextarea";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import AuthTextarea from "../ui/inputs/AuthInput/AuthTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ui/forms/ValidationError/ValidationError";
@@ -131,13 +131,13 @@ export default function SignupForm() {
       <form onSubmit={handleSubmit} className={styles.form} noValidate>
         <p className={styles.title}>Регистрация</p>
         <div className={styles.inputs}>
-          <LabelledAuthInput
+          <AuthInput
             name="first_name"
             label="Имя"
             placeholder="Введите своё имя..."
             onChange={handleChange}
           />
-          <LabelledAuthInput
+          <AuthInput
             name="email"
             type="email"
             label="Почта"
@@ -149,14 +149,14 @@ export default function SignupForm() {
           {!emailFocused &&emailErrors.length > 0 && 
           <p className={styles.error}>Неверный формат почты</p> 
           }
-          <LabelledAuthTextarea
+          <AuthTextarea
             name="about"
             label="О себе"
             placeholder="Расскажите о себе..."
             required={false}
             onChange={handleChange}
           />
-          <LabelledAuthInput
+          <AuthInput
             name="password"
             type="password"
             label="Пароль"
@@ -168,7 +168,7 @@ export default function SignupForm() {
           {!passwordFocused && passwordErrors.length > 0 && 
           <p className={styles.error}> Пароль не соответствует требованиям: {passwordErrors[0]}</p> 
           }
-          <LabelledAuthInput
+          <AuthInput
             name="confirmPassword"
             type="password"
             label="Повтор пароля"

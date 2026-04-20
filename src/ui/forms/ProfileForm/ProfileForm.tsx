@@ -1,7 +1,7 @@
 "use client";
 
-import LabelledProfileInput from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileInput";
-import LabelledProfileTextarea from "@/src/ui/inputs/LabelledProfileInputs/LabelledProfileTextarea";
+import ProfileInput from "@/src/ui/inputs/ProfileInput/ProfileInput";
+import ProfileTextarea from "@/src/ui/inputs/ProfileInput/ProfileTextarea";
 import ProfileInfoField from "../../info/ProfileInfoField/ProfileInfoField";
 import styles from "./ProfileForm.module.css";
 import { useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
 
   return (
     <form ref={formRef} className={styles.profileInfo}>
-      <LabelledProfileInput
+      <ProfileInput
         label="Имя"
         placeholder="Введите имя..."
         onConfirm={updateProfileWithFormData}
@@ -54,13 +54,13 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
         label="Почта"
         value={data.email}
       />
-      <LabelledProfileTextarea
+      <ProfileTextarea
         label="О себе"
         placeholder="Расскажите о себе..."
         onConfirm={updateProfileWithFormData}
         {...registerField("about")}
       />
-      <LabelledProfileInput
+      <ProfileInput
         type="password"
         label="Пароль"
         placeholder="Введите пароль..."

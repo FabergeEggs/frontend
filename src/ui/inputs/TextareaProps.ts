@@ -2,9 +2,10 @@ import { ChangeHandler, RefCallBack } from "react-hook-form";
 
 export default interface TextareaProps {
   name?: string;
-  id: string;
+  label: string;
   placeholder: string;
   disabled?: boolean;
+  value?: string;
   required?: boolean;
   onChange?: ChangeHandler | ((e: React.ChangeEvent<HTMLTextAreaElement>) => void);
   onFocus?: () => void;
@@ -13,5 +14,4 @@ export default interface TextareaProps {
   onConfirm?: () => void;
   ref?: RefCallBack;
   height?: number;
-  
 }
