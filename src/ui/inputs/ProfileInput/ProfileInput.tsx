@@ -52,7 +52,14 @@ export default function ProfileInput({
           { disabled && <div onClick={() => { setDisabled(false); onEditSwitch?.()}} className={styles.imageContainer}>
           <Image src={EditImage} alt="Edit" />
         </div>}
-        {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true); onEditSwitch?.()} } className={styles.imageContainer}> 
+        {!disabled && <div onClick={() => { 
+            const success = onConfirm?.(); 
+            if (success) {
+              setDisabled(true); 
+              onEditSwitch?.()
+            }
+          } 
+          } className={styles.imageContainer}> 
             <Image src={ConfirmImage} alt="Confirm" />
           </div>}
         </>

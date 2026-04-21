@@ -72,12 +72,10 @@ export default function ProfilePage() {
     if (isLoading || !userId) return
     async function loadProfile() {
       const data = await getProfile(userId);
-       console.log("USER LOADED!: ", data);
        setUserData(data)
        setIsLoadingProfile(false);
     }
     
-    // 
     loadProfile()
   }, [userId, isLoading])
 
@@ -85,9 +83,9 @@ export default function ProfilePage() {
 
   return (
     <div className="pagecontainer">
+      <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <h2 className={styles.title}>Профиль</h2>
           <ProfileForm data={userData}/>
         </div>
         <div className={styles.pictureInputContainer}>

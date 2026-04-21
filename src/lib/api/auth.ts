@@ -7,7 +7,6 @@ export const login = async (request: LoginRequestDTO) => {
   if (data.access_token) {
     setAccessToken(data.access_token);
   }
-  console.log("USER LOGINNED: ", data); // DEBUG
   return data;
 };
 

@@ -30,7 +30,7 @@ export const profileSchema = z
     email: z
       .string()
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Некорректный формат почты"),
-    oldPassword: z.string(),
+    oldPassword: z.string().min(1, "Введите старый пароль"),
     newPassword: z
       .string()
       .min(8, "Пароль должен быть не менее 8 символов")

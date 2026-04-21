@@ -45,7 +45,7 @@ export default function SignupForm() {
     };
 
     try {
-      const response = await register(registerRequestData);
+      await register(registerRequestData);
       router.push(
         `/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`,
       );
