@@ -2,7 +2,7 @@ import styles from "./ProfileInput.module.css";
 import EditImage from "@/public/assets/edit.svg";
 import ConfirmImage from "@/public/assets/check.svg"
 import Image from "next/image";
-import InputProps from "../InputProps";
+import ProfileInputProps from "../ProfileInputProps";
 import { useState } from "react";
 
 
@@ -18,10 +18,12 @@ export default function ProfileInput({
     onConfirm,
     onKeyDown,
     name,
-    ref
-  }: InputProps) {
+    ref,
+    onEditSwitch,
+    hasEditButton = true,
+  }: ProfileInputProps) {
 
-  const [disabled, setDisabled] = useState(true);
+  const [disabled, setDisabled] = useState(hasEditButton);
   const visibility = required === true && !value ? "visible" : "hidden";
   return (
   <div className={styles.container}>
@@ -46,12 +48,17 @@ export default function ProfileInput({
           name={name}
           disabled={disabled}
         />
-        { disabled && <div onClick={() => setDisabled(false)} className={styles.imageContainer}>
+        {hasEditButton && <>
+          { disabled && <div onClick={() => { setDisabled(false); onEditSwitch?.()}} className={styles.imageContainer}>
           <Image src={EditImage} alt="Edit" />
         </div>}
-        {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true)} } className={styles.imageContainer}> 
+        {!disabled && <div onClick={() => { onConfirm?.(); setDisabled(true); onEditSwitch?.()} } className={styles.imageContainer}> 
             <Image src={ConfirmImage} alt="Confirm" />
           </div>}
+        </>
+        } 
+
+        
       </div>
     </label>
   </div>)

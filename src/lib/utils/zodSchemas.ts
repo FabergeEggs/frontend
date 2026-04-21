@@ -30,7 +30,8 @@ export const profileSchema = z
     email: z
       .string()
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Некорректный формат почты"),
-    password: z
+    oldPassword: z.string(),
+    newPassword: z
       .string()
       .min(8, "Пароль должен быть не менее 8 символов")
       .regex(/\d.*\d/, "Пароль должен содержать минимум 2 цифры")
@@ -38,7 +39,7 @@ export const profileSchema = z
     confirmPassword: z.string(),
     about: z.string(), // .optional() - removed for UpdateRequestDTO
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Пароли не совпадают",
     path: ["confirmPassword"],
   });

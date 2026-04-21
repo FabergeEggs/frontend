@@ -10,21 +10,24 @@ import { z } from "zod";
 import { profileSchema } from "@/src/lib/utils/zodSchemas";
 import { updateProfile } from "@/src/lib/api/profile";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 
 export default function ProfileForm({ data } : {data : ProfileDTO}) {
-  const { register: registerField, watch } = useForm<z.infer<typeof profileSchema>>({
+  const { register: registerField, setValue } = useForm<z.infer<typeof profileSchema>>({
     mode: "onChange",
     resolver: zodResolver(profileSchema),
     defaultValues: {
       first_name: data.first_name,
       email: data.email,
-      password: "xxxxxxxxxxx",
-      confirmPassword: "",
       about: data.bio,
+      oldPassword: "xxxxxxxxxxx",
+      newPassword: "",
+      confirmPassword: ""
     },
   });
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+
 
   const {userId} = useAuth()
   const formRef = useRef<HTMLFormElement>(null)
@@ -63,8 +66,28 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       <ProfileInput
         type="password"
         label="Пароль"
-        placeholder="Введите пароль..."
+        placeholder="Введите старый пароль..."
+        onEditSwitch={() => { setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
+        {...registerField("oldPassword")}
       />
+      {isEditingPassword && <>
+        <ProfileInput
+        type="password"
+        label="Новый пароль"
+        placeholder="Введите новый пароль..."
+        hasEditButton={false}
+        {...registerField("newPassword")}
+      />
+      <ProfileInput
+        type="password"
+        label="Пароль"
+        placeholder="Подтвердите новый пароль..."
+        hasEditButton={false}
+        {...registerField("confirmPassword")}
+      />
+
+      </>}
+
     </form>
   );
 }
