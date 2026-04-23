@@ -1,29 +1,17 @@
-"use client";
-import { useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { verifyEmail } from "@/src/lib/api/auth";
-import { useState } from "react";
-import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+import styles from "../authpage.module.css";
+import EmailConfirm from "@/src/ui/forms/AuthForms/EmailConfirm";
 
-export default function VerifyEmailPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const key = searchParams.get("key");
-  const [serverError, setServerError] = useState("");
-
-  useEffect(() => {
-    if (!key) return;
-    verifyEmail(key)
-      .then(() => router.push("/login?verified=true"))
-      .catch((error) => setServerError(error));
-  }, [key]);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { email?: string };
+}) {
+  console.log(await searchParams);
+  const email = searchParams.email ?? "";
 
   return (
-    <div
-      className="centered"
-    >
-      Подтверждение email...
-      {serverError && <ValidationError messages={[serverError]} />}
+    <div className={`pagecontainer ${styles.container}`}>
+      <EmailConfirm email={email} />
     </div>
   );
 }

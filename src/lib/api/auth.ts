@@ -41,6 +41,15 @@ export const emailResendVerification = async (email: string) => {
   return data;
 };
 
+export const forgotPassword = async (email: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.FORGOT_PASSWORD, {
+    "email": email,
+  });
+  return data;
+};
+
+
+// Key from email
 export const resetPassword = async (key: string, new_password: string) => {
   const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, {
     key: key,
@@ -49,9 +58,12 @@ export const resetPassword = async (key: string, new_password: string) => {
   return data;
 };
 
-export const forgotPassword = async (email: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, {
-    email,
+
+// <!>
+export const changePassword = async (old_password: string, new_password: string) => {
+  const { data } = await axiosInstance.post(ApiRoutes.CHANGE_PASSWORD, {
+    old_password: old_password,
+    new_password: new_password,
   });
   return data;
 };

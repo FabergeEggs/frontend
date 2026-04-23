@@ -67,7 +67,6 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
   function updatePassword() {
     trigger(["oldPassword", "newPassword", "confirmPassword"])
 
-
     if (!formRef.current) return
     const formData = new FormData(formRef.current);
     const formValues = Object.fromEntries(formData.entries());
@@ -79,7 +78,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
     
     setValue("oldPassword", "xxxxxxxx")
     setValue("newPassword", "")
-    setValue("confirmPassword", "", {shouldDirty: false})
+    setValue("confirmPassword", "") // , {shouldDirty: false}
 
     return true;
     // ... Request
