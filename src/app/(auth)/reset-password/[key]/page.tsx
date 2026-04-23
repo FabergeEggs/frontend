@@ -1,33 +1,17 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { resetPassword } from "@/src/lib/api/auth";
-import { useState } from "react";
-import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+import styles from "../../authpage.module.css"
+import ResetPassword from "@/src/ui/forms/AuthForms/ResetPassword";
 
-export default function ResetPasswordFromLinkPage({
+export default async function ResetPasswordFromLinkPage({
   params,
 }: {
-  params: { key: string };
+  params: Promise<{key: string}>;
 }) {
-  const { key } = params; // <!> does it work?
-
-  const router = useRouter();
-  const [serverError, setServerError] = useState("");
-
-  useEffect(() => {
-    if (!key) return;
-    resetPassword(key, "new passwrod")
-      .then(() => router.push("/login"))
-      .catch((error) => setServerError(error));
-  }, [key]);
+  const { key } = await params;
 
   return (
-    <div
-      className="centered"
-    >
-      Подтверждение email...
-      {serverError && <ValidationError messages={[serverError]} />}
+    <div className={`pagecontainer ${styles.container}`}>
+      { key && <ResetPassword resetKey={key} />}
+      { !key && <p>Не дан ключ</p>}
     </div>
   );
 }

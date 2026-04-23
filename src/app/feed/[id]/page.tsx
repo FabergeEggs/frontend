@@ -43,7 +43,7 @@ export default async function Page({
           </div>
           <div className={styles.tags}>
             {data.tags &&
-              data.tags.map((tag: any, index: number) => (
+              data.tags.map((tag: Tag, index: number) => (
                 <Tag key={tag.tag_id || index}>{tag.name}</Tag>
               ))}
           </div>

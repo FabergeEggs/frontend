@@ -37,8 +37,8 @@ export default function AuthProvider({
     refreshToken()
       .then((data) => {
         // setUserId(data.user_id) <!>
-        setUserId("1e1ccc01-f31d-4cee-8c6a-b60dede271ac")
-        // setUserId("08bbe2d4-824d-4eac-8984-001ff1954429")
+        // setUserId("1e1ccc01-f31d-4cee-8c6a-b60dede271ac")
+        setUserId("08bbe2d4-824d-4eac-8984-001ff1954429")
       })
       .catch(() => {})
       .finally(() => setIsLoading(false))

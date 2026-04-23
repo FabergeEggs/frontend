@@ -4,6 +4,7 @@ import { useState } from "react";
 import styles from "./AuthForm.module.css";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
+import SubmitSuccess from "../SubmitSuccess/SubmitSuccess";
 
 import { forgotPassword } from "@/src/lib/api/auth";
 import AuthInput from "../../inputs/AuthInput/AuthInput";
@@ -11,11 +12,13 @@ import AuthInput from "../../inputs/AuthInput/AuthInput";
 export default function ResetPasswordLink() {
   const [email, setEmail] = useState("");
   const [serverError, setServerError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleSend = async () => {
       try {
         console.log("Submitting reset password with data: ", email); // DEBUG
         const response = await forgotPassword(email);
+        setSuccess(true);
         console.log("Reset password successful: ", response);
       } catch (error: any) {
         const msg = error.response?.data.error;
@@ -55,6 +58,7 @@ export default function ResetPasswordLink() {
         />
       </div>
       {serverError && <ValidationError messages={[serverError]} />}
+      {success && <SubmitSuccess messages={["Письмо успешно отправлено!"]}/>}
     </div>
     
   );

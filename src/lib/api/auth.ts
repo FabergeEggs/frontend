@@ -51,6 +51,7 @@ export const forgotPassword = async (email: string) => {
 
 // Key from email
 export const resetPassword = async (key: string, new_password: string) => {
+  console.log(`RESETTING PASS, key: ${key}\nPASS: ${new_password}`);
   const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, {
     key: key,
     new_password: new_password,

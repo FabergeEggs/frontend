@@ -10,7 +10,6 @@ import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 
 import { useState } from "react";
 import { createProject } from "@/src/lib/api/project";
-import { me } from "@/src/lib/api/auth";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

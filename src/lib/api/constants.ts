@@ -16,5 +16,6 @@ export enum ApiRoutes {
   PROFILE = "/profile",
 
   // PROJECT
-  PROJECT = "/project",
+  PROJECT = "/project", // Create, /[id] - Update
+  
 }

@@ -1,57 +1,57 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./AuthForm.module.css";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
 
-import { forgotPassword } from "@/src/lib/api/auth";
+import { resetPassword } from "@/src/lib/api/auth";
 import AuthInput from "../../inputs/AuthInput/AuthInput";
 
-export default function ResetPasswordLink() {
-  const [email, setEmail] = useState("");
+export default function ResetPassword({ resetKey }: { resetKey: string }) {
+  const [newPassword, setNewPassword] = useState("");
   const [serverError, setServerError] = useState("");
+  const router = useRouter();
 
-  const handleSend = async () => {
+  const handleSend = () => {
       try {
-        console.log("Submitting reset password with data: ", email); // DEBUG
-        const response = await forgotPassword(email);
-        console.log("Reset password successful: ", response);
+        console.log("Submitting reset password with data: ", resetKey, newPassword); // DEBUG
+        resetPassword(resetKey, newPassword)
+          .then((response) => { // <!> .then + try-catch - is it okay?
+            router.push("/login") 
+            console.log("Reset password response: ", response); // DEBUG
+          })
       } catch (error: any) {
         const msg = error.response?.data.error;
-        console.error(error.response);
         console.error("Reset password failed: ", msg);
 
-        const status = error.response?.status;
-        if (status === 404) {
-          setServerError("Пользователя с данной почтой не существует");
-        } else {
-          setServerError("Ошибка входа. Попробуйте позже");
-        }
+        // const status = error.response?.status;
+        setServerError("Ошибка входа. Попробуйте позже");
         console.error("Reset password failed: ", error.response);
       }
     };
   
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-      setEmail(e.target.value);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewPassword(e.target.value);
     };
 
   return (
     <div className={styles.container}>
       <div className={styles.form}>
-        <p className={styles.title}>Восстановление пароля</p>
-        <p className={styles.text}>Для восстановления пароля укажите почту вашего аккаунта. На неё будет отправлена дальнейшая инструкция. </p>
+        <p className={styles.title}>Изменение пароля</p>
+        <p className={styles.text}>Для изменения пароля укажите новый пароль. </p>
         <AuthInput
-          name="email" 
-          type="email"
-          label="Почта:"
-          placeholder="example@mail.ru"
+          name="new_password" 
+          type="password"
+          label="Новый пароль:"
+          placeholder="Введите новый пароль..."
           onChange={handleChange}
         />
         <GreenButton
           className={styles.submitBtn}
           onClick={handleSend}
-          text="Отправить"
+          text="Поменять пароль"
         />
       </div>
       {serverError && <ValidationError messages={[serverError]} />}

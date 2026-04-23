@@ -6,19 +6,19 @@ export const createProject = async (request: ProjectCreateDTO) => {
   return data;
 };
 
-export const getProjectInfo = async (id: string) => {
+export const getProjectInfo = async (id: string): Promise<ProjectInfoDTO> => {
   const { data } = await axiosInstance.get(`${ApiRoutes.PROJECT}/${id}/info`);
   return data;
 };
 
-export const getProjectStatistics = async (id: string) => {
+export const getProjectStatistics = async (id: string): Promise<ProjectStatisticsDTO> => {
   const { data } = await axiosInstance.get(
     `${ApiRoutes.PROJECT}/${id}/statistics`,
   );
   return data;
 };
 
-export const getProject = async (id: string) => {
+export const getProject = async (id: string): Promise<ProjectFull> => {
   const info = await getProjectInfo(id);
   const statistics = await getProjectStatistics(id);
   return { ...info, ...statistics };
