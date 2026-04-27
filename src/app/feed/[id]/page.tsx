@@ -8,6 +8,50 @@ import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
+import ProjectCardAlternative from "@/src/ui/info/ProjectCardAlt/ProjectCardAlternative";
+
+const tag1: Tag = {
+    tag_id: "1",
+    name: "Сосиски",
+    quantity_count: 1  // Кол-во проектов, помеченных данным тегом
+}
+const tag2: Tag = {
+    tag_id: "1",
+    name: "Пельмешки",
+    quantity_count: 1  // Кол-во проектов, помеченных данным тегом
+}
+
+const tag3: Tag = {
+    tag_id: "1",
+    name: "Лезгинка",
+    quantity_count: 1  // Кол-во проектов, помеченных данным тегом
+}
+
+const data: ProjectFull = {
+    // info
+    id: "1",
+    label: "Мы представляем вам совершенно новую, обновлённую систему Линух",
+    creator: "Российский Автопром",
+    short_description: "Мы Делаем Деньги!",
+    description: "Общественно-важный проект “вСрок” — это система, направленная на сокращение пищевых отходов путем создания удобного веб-сайта с информацией о продуктах с истекающим сроком годности, возможностью нахождения подходящего магазина поблизости к пользователю, где можно приобрести пищевые товары со значительной скидкой или получить их бесплатно. Веб-сайт не только информирует о месте, где можно купить продукты, но и позволяет оставить отметку, говорящую о том, что товар интересен пользователю и он желает сохранить информацию о нем в свой профиль. А также интернет-ресурс, разрабатываемый в процессе реализации проекта, дает возможность выбирать интересующий пользователя товар благодаря реализации системы рекомендаций, которая подбирает продукты для пользователя, основываясь на нескольких критериях, таких как местоположение магазина и пользователя, оценка магазина другими пользователями, срок годности товара.",
+    tags: [tag1, tag2, tag3],
+    created_at: new Date(), 
+    updated_at: new Date(),
+    status: ProjectStatusEnum.ACTIVE,
+
+    // statistics
+    tasks_count: 23,
+    participants_count: 17,
+    answers_count: 178
+}
+
+const testProjectData = {
+  label: "Перепись населения в городе Ижевск",
+  short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
+  answers_count: 11
+}
+
+const projects = [testProjectData, testProjectData]
 
 export default async function Page({
   params,
@@ -15,7 +59,9 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const data: ProjectFull = await getProject(id);
+  // const data: ProjectFull = await getProject(id);
+
+  // const projects: ... = await ...
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -64,6 +110,10 @@ export default async function Page({
           </div>
         </div>
       </div>
+        { projects.length > 0 && <div className={styles.projects}>
+          {projects.map((value, index) => <ProjectCardAlternative {...value} key={index} />)}
+          
+        </div>}
     </div>
   );
 }

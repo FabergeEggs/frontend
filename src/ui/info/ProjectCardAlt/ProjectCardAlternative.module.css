@@ -12,6 +12,10 @@
 .label {
   font-weight: 500;
   font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .tags {
@@ -19,40 +23,21 @@
   gap: 7px;
 }
 
-.info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.countInfo {
+.answers {
+  font-size: 14px;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-@media (max-width: 675px) {
-  .info {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 
-  .temporaryVerticalLine {
-    display: none;
-  }
+@media (max-width: 675px) {
+
 }
 
 @media (max-width: 400px) {
   .card {
     padding: 15px 10px;
-  }
-
-  .label {
-    font-size: 14px;
-  }
-
-  .countInfo {
-    font-size: 14px;
   }
   .description {
     font-size: 14px;

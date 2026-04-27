@@ -112,6 +112,12 @@
   }
 }
 
+@media(max-width: 650px) {
+  .tagSegment {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 400px) {
   .container {
     max-width: 304px;

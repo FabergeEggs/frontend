@@ -38,12 +38,14 @@ const testProjectData = {
   };
 
 const myProjects = [testProjectData];
+// const myProjects = [];
 const projectParticipations = [testProjectData, testProjectData];
+// const projectParticipations = [];
 
 export default function ProfilePage() {
   // userData, myProjects, projectParticipations
   const [showMyProjects, setShowMyProjects] = useState(true);
-  const [showParticipatingProjects, setShowParticipatingProjects] = useState(true);
+  const [showProjectParticipations, setShowParticipatingProjects] = useState(true);
 
   const [userData, setUserData] = useState<ProfileDTO>({
     id: "",
@@ -99,28 +101,53 @@ export default function ProfilePage() {
               <h2 className={styles.title}>Мои проекты</h2>
               <Image src={showMyProjects ? ArrowDown : ArrowRight} alt="arrow-right" />
             </div>
-            <Link className={styles.link} href="/feed/create">
+            { myProjects.length > 0 && <Link className={styles.link} href="/feed/create">
               <TextImageButton src={NewImage} text="Создать новый проект"/>
-            </Link>
+            </Link>}
           </div>
-          { showMyProjects && <div className={styles.projects}>
-            {myProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            </div>}
+          { (showMyProjects && myProjects.length > 0) && 
+            <div className={styles.projects}>
+              {myProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
+            </div>
+            
+            }
+
+          {
+            (showMyProjects && myProjects.length == 0) && <div className={styles.noProjects}>
+              <p>У вас пока что нет проектов.</p>
+              <Link className={styles.link} href="/feed/create">
+                <button className={`basic-btn ${styles.noProjectsBtn}`}>
+                  Создать проект
+                </button>
+              </Link>
+            </div>
+          }
         </div>
         <div className={styles.myProjectsContainer}>
           <div className={styles.myProjectsHeader}>
             <div className={styles.headerTitle} onClick={toggleParticipatingProjects}>
               <h2 className={styles.title}>Участие в проектах</h2>
-              <Image src={showParticipatingProjects ? ArrowDown : ArrowRight} alt="arrow-right" />
+              <Image src={showProjectParticipations ? ArrowDown : ArrowRight} alt="arrow-right" />
             </div>
-            <Link className={styles.link} href="/feed">
+            {projectParticipations.length > 0 && <Link className={styles.link} href="/feed">
               <TextImageButton src={FindImage} text="Найти новый проект"/>
-            </Link>
+            </Link>}
           </div>
-          { showParticipatingProjects && <div className={styles.projects}>
+          { (showProjectParticipations && projectParticipations.length > 0) && <div className={styles.projects}>
             {projectParticipations.map((value, index) => <ProjectCard {...value} key={index} />)}
             
           </div>}
+          { (showProjectParticipations && projectParticipations.length == 0) && 
+            <div className={styles.noProjects}>
+              <p>Вы пока не участвуете ни в каких проектах.</p>
+              <Link className={styles.link} href="/feed">
+                <button className={`basic-btn ${styles.noProjectsBtn}`}>
+                  Найти проект
+                </button>
+              </Link>
+            </div>
+            }
+
         </div>
       </div>
     </div>
