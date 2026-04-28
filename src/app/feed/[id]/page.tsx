@@ -8,7 +8,7 @@ import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
-import ProjectCardAlternative from "@/src/ui/info/ProjectCardAlt/ProjectCardAlternative";
+import ProjectCardAlternative from "@/src/ui/info/ProjectCardAlternative/ProjectCardAlternative";
 
 const tag1: Tag = {
     tag_id: "1",
@@ -59,7 +59,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  // const data: ProjectFull = await getProject(id);
+  const data: ProjectFull = await getProject(id);
 
   // const projects: ... = await ...
 
