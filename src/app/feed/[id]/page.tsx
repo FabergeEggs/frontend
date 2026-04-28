@@ -8,7 +8,8 @@ import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
-import ProjectCardAlternative from "@/src/ui/info/ProjectCardAlternative/ProjectCardAlternative";
+import TaskCard from "@/src/ui/info/TaskCard/TaskCard";
+import PostCard from "@/src/ui/info/PostCard/PostCard";
 
 const tag1: Tag = {
     tag_id: "1",
@@ -16,13 +17,13 @@ const tag1: Tag = {
     quantity_count: 1  // Кол-во проектов, помеченных данным тегом
 }
 const tag2: Tag = {
-    tag_id: "1",
+    tag_id: "2",
     name: "Пельмешки",
     quantity_count: 1  // Кол-во проектов, помеченных данным тегом
 }
 
 const tag3: Tag = {
-    tag_id: "1",
+    tag_id: "3",
     name: "Лезгинка",
     quantity_count: 1  // Кол-во проектов, помеченных данным тегом
 }
@@ -45,13 +46,20 @@ const data: ProjectFull = {
     answers_count: 178
 }
 
-const testProjectData = {
+const testTaskData = {
   label: "Перепись населения в городе Ижевск",
   short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
   answers_count: 11
 }
 
-const projects = [testProjectData, testProjectData]
+const testPostData = {
+  label: "Перепись населения в городе Ижевск",
+  short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
+  comments_count: 11
+}
+
+const tasks = [testTaskData]
+const posts = [testPostData]
 
 export default async function Page({
   params,
@@ -59,9 +67,10 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const data: ProjectFull = await getProject(id);
+  // const data: ProjectFull = await getProject(id);
 
-  // const projects: ... = await ...
+  // const tasks: ... = await ...
+  // const posts: ... = await ...
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -110,10 +119,15 @@ export default async function Page({
           </div>
         </div>
       </div>
-        { projects.length > 0 && <div className={styles.projects}>
-          {projects.map((value, index) => <ProjectCardAlternative {...value} key={index} />)}
-          
-        </div>}
+      <div className={styles.projects}>
+        { posts.length > 0 && <>
+          {posts.map((value, index) => <PostCard {...value} key={index} />)}
+        </>}
+          { tasks.length > 0 && <>
+          {tasks.map((value, index) => <TaskCard {...value} key={index} />)}
+        </>}
+      </div>
+        
     </div>
   );
 }

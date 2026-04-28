@@ -1,0 +1,45 @@
+.card {
+  border-color: black;
+  background-color: white;
+  border-radius: 15px;
+  padding: 21px 15px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-weight: 500;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tags {
+  display: flex;
+  gap: 7px;
+}
+
+.answers {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+
+@media (max-width: 675px) {
+
+}
+
+@media (max-width: 400px) {
+  .card {
+    padding: 15px 10px;
+  }
+  .description {
+    font-size: 14px;
+  }
+}

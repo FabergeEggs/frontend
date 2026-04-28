@@ -76,3 +76,26 @@ interface ProjectFull {
     participants_count: number,
     answers_count: number
 }
+
+
+interface Post {
+    post_id: string,
+    project_id: string,
+    label: string,
+    creator: string,
+    short_description: string,
+    description: string,
+    created_at: Date
+}
+
+interface Task {
+    task_id: string,
+    project_id: string,
+    label: string,
+    creator: string,
+    short_description: string,
+    description: string,
+    created_at: Date,
+    status: TaskStatusEnum,
+    answers_count: number
+}
