@@ -1,12 +1,14 @@
-import styles from "./projectpage.module.css";
+import styles from "./taskpage.module.css";
 // import { getTask } from "@/src/lib/api/project";
 import Image from "next/image";
 
-// import { TaskStatusEnum } from "@/src/lib/models/export/project";
+import { TaskStatusEnum } from "@/src/lib/models/export/project";
+import { ResponseStatus } from "@/src/lib/models/export/response"
 
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
+import CommentForm from "@/src/ui/forms/CommentForm/CommentForm"
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 
 
@@ -49,7 +51,7 @@ export default async function Page({
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.taskContainer}>
-        <div className={styles.card}>
+        <div className={`${styles.card} ${styles.cardPadding}`}>
           <h1 className={styles.label}>{data.label}</h1>
           <div className={styles.info}>
             <div className={styles.infoPiece}>
@@ -73,10 +75,11 @@ export default async function Page({
           <p className={styles.description}>{data.description}</p>
         </div>
       </div>
+      <CommentForm className={styles.cardPadding} placeholder="Напишите свой ответ"/>
       
-      { responses.length > 0 && <div className={styles.responses}>
+      {/* { responses.length > 0 && <div className={styles.responses}>
         {responses.map((value, index) => <ResponseCard {...value} key={index} />)}
-      </div>}
+      </div>} */}
       
         
     </div>

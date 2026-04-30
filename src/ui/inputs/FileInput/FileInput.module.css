@@ -1,0 +1,8 @@
+.container {
+    color: var(--active-dark-color);
+    background-color: var(--varity1-color);
+    width: 198px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}

@@ -3,3 +3,9 @@ export enum ProjectStatusEnum {
     FINISHED = "FINISHED",
     DELETED = "DELETED",
 }
+
+export enum TaskStatusEnum {
+    ACTIVE = "ACTIVE",
+    FINISHED = "FINISHED",
+    DELETED = "DELETED",
+}

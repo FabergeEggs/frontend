@@ -1,0 +1,63 @@
+.textareaContainer {
+  margin-top: 5px;
+  /* width: 100%; */
+  background-color: var(--varity2-color);
+  align-items: normal;
+  height: 100px;
+  padding: 15px;
+
+  display: flex;
+}
+
+.textareaContainer:has(.textarea:placeholder-shown) {
+  background-color: var(--varity2-color);
+}
+
+.textarea {
+  font-size: 16px; /*-16-14*/
+
+  background: none;
+  border: none;
+
+  resize: none;
+  padding: 0;
+}
+
+.textarea:focus {
+  outline: none;
+}
+
+.imageContainer {
+
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+
+@media (max-width: 834px) {
+  .textareaContainer {
+    height: 84px;
+  }
+}
+
+@media (max-width: 450px) {
+  .input {
+    font-size: 14px;
+  }
+  .textarea {
+    padding-top: 7px;
+  }
+
+  .imageContainer {
+    width: 36px;
+  }
+
+  .image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .textareaContainer {
+    padding: 10px;
+  }
+}

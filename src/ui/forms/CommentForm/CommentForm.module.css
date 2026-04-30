@@ -1,0 +1,15 @@
+.container {
+    box-sizing: border-box;
+    height: 254px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 15px;
+}
+
+.label {
+    font-weight: 400;
+    font-size: 28px;
+    margin-top: 0;
+}
+
+

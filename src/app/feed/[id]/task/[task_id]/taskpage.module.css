@@ -16,12 +16,16 @@
     border: 0.5px solid var(--active-dark-color);
     border-radius: 15px;
     box-sizing: border-box;
+}
+
+.cardPadding {
     padding: 30px;
 }
 
 .label {
     font-weight: 400;
     font-size: 28px;
+    margin-top: 0;
 }
 
 .info {
@@ -62,12 +66,12 @@
 }
 
 @media(max-width: 550px) {
-    .card {
+    .cardPadding {
         padding: 20px;
     }
 }
 
-@media(max-width: 400px) {
+@media(max-width: 450px) {
 
     .label {
         font-size: 18px;
@@ -78,7 +82,7 @@
         gap: 10px;
     }
 
-    .card {
+    .cardPadding {
         padding: 15px;
     }
 }
