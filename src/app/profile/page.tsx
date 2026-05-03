@@ -4,7 +4,7 @@ import styles from "./profilepage.module.css";
 import ProfilePictureInput from "@/src/ui/inputs/ProfilePictureInput/ProfilePictureInput";
 import ProfileForm from "@/src/ui/forms/ProfileForm/ProfileForm";
 import Image from "next/image";
-import TextImageButton from "@/src/ui/buttons/TextImageButton/TextImageButton";
+import TransparentTextImageButton from "@/src/ui/buttons/TransparentTextImageButton/TransparentTextImageButton";
 import ProjectCard from "@/src/ui/info/ProjectCard/ProjectCard";
 import Link from "next/link";
 
@@ -37,7 +37,7 @@ const testProjectData = {
     answers_count: 128,
   };
 
-const myProjects = [testProjectData];
+const myProjects = [];
 // const myProjects = [];
 const projectParticipations = [testProjectData, testProjectData];
 // const projectParticipations = [];
@@ -83,6 +83,8 @@ export default function ProfilePage() {
 
   if (isLoading || isLoadingProfile) return <div className="centered">Загрузка...</div>
 
+
+  // <!> This page has bad adaptivity in .headerTitle 
   return (
     <div className="pagecontainer">
       <h2 className={styles.title}>Профиль</h2>
@@ -99,10 +101,10 @@ export default function ProfilePage() {
           <div className={styles.myProjectsHeader}>
             <div className={styles.headerTitle} onClick={toggleProjects}>
               <h2 className={styles.title}>Мои проекты</h2>
-              <Image src={showMyProjects ? ArrowDown : ArrowRight} alt="arrow-right" />
+              { myProjects.length > 0 && <Image src={showMyProjects ? ArrowDown : ArrowRight} alt="arrow-right" />}
             </div>
-            { myProjects.length > 0 && <Link className={styles.link} href="/feed/create">
-              <TextImageButton src={NewImage} text="Создать новый проект"/>
+            { myProjects.length > 0 && <Link className="basic-link" href="/feed/create">
+              <TransparentTextImageButton src={NewImage} text="Создать новый проект" color="black"/> {/** <!> color="black" распространяется на все TransparentButton на данной странице за счёт <style> */}
             </Link>}
           </div>
           { (showMyProjects && myProjects.length > 0) && 
@@ -113,9 +115,9 @@ export default function ProfilePage() {
             }
 
           {
-            (showMyProjects && myProjects.length == 0) && <div className={styles.noProjects}>
+            (myProjects.length == 0) && <div className={styles.noProjects}>
               <p>У вас пока что нет проектов.</p>
-              <Link className={styles.link} href="/feed/create">
+              <Link className="basic-link" href="/feed/create">
                 <button className={`basic-btn ${styles.noProjectsBtn}`}>
                   Создать проект
                 </button>
@@ -127,20 +129,20 @@ export default function ProfilePage() {
           <div className={styles.myProjectsHeader}>
             <div className={styles.headerTitle} onClick={toggleParticipatingProjects}>
               <h2 className={styles.title}>Участие в проектах</h2>
-              <Image src={showProjectParticipations ? ArrowDown : ArrowRight} alt="arrow-right" />
+              {projectParticipations.length > 0 && <Image src={showProjectParticipations ? ArrowDown : ArrowRight} alt="arrow-right" />}
             </div>
-            {projectParticipations.length > 0 && <Link className={styles.link} href="/feed">
-              <TextImageButton src={FindImage} text="Найти новый проект"/>
+            {projectParticipations.length > 0 && <Link className="basic-link" href="/feed">
+              <TransparentTextImageButton src={FindImage} text="Найти новый проект" color="black"/>
             </Link>}
           </div>
           { (showProjectParticipations && projectParticipations.length > 0) && <div className={styles.projects}>
             {projectParticipations.map((value, index) => <ProjectCard {...value} key={index} />)}
             
           </div>}
-          { (showProjectParticipations && projectParticipations.length == 0) && 
+          { (projectParticipations.length == 0) && 
             <div className={styles.noProjects}>
               <p>Вы пока не участвуете ни в каких проектах.</p>
-              <Link className={styles.link} href="/feed">
+              <Link className="basic-link" href="/feed">
                 <button className={`basic-btn ${styles.noProjectsBtn}`}>
                   Найти проект
                 </button>

@@ -1,45 +1,47 @@
-.card {
-  border-color: black;
-  background-color: white;
-  border-radius: 15px;
-  padding: 21px 15px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.label {
-  font-weight: 500;
+.header {
+  font-weight: 400;
   font-size: 16px;
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.tags {
-  display: flex;
-  gap: 7px;
-}
-
-.answers {
-  font-size: 14px;
+.user {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 }
 
+.date {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.status {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+
+.attachedFiles {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
 
 @media (max-width: 675px) {
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) { /* CHANGED */
   .card {
     padding: 15px 10px;
   }
-  .description {
+  .text {
     font-size: 14px;
   }
 }

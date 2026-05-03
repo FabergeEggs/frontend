@@ -8,13 +8,13 @@ import Link from 'next/link'
 
 export default function SignupHeader() {
     return (
-        <header className={styles.header}>
+        <header className="basic-header">
             <Logo />
             <div>
                 <Link href="/login">
                     <GreenButton className={styles.loginBtn} text="Войти"/>
                 </Link>
-                <HeaderIcon className={styles.headerIcon}/>
+                <HeaderIcon/>
             </div>
         </header>
     )

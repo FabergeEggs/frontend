@@ -1,6 +1,5 @@
 import styles from "./AuthInput.module.css";
 import InputProps from "../InputProps";
-import { useState } from "react";
 
 export default function AuthInput({
   name,
@@ -25,10 +24,11 @@ export default function AuthInput({
   return (
     <div className={styles.container}>
       <label htmlFor={label}>
-        <span className={styles.text}>
+        {label && <span className="basic-input-label">
           {label}{" "}
           <span style={{ visibility: starVisibility, color: "red" }}>*</span>
-        </span>
+        </span>}
+        
         <div className={`basic-input-container ${styles.inputContainer}`}>
           <input
             name={name}

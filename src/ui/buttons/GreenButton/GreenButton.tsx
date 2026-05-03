@@ -9,21 +9,22 @@ interface GreenButtonProps {
   type?: "button" | "submit" | "reset";
 }
 
+// This button usually plays the role of SUBMIT button
 export default function GreenButton({
   text,
   onClick,
   disabled = false,
   width,
   className,
-  type,
+  type = "button",
 }: GreenButtonProps) {
   return (
     <button
-      className={`${styles.btn} ${disabled ? "basic-btn-disabled" : "basic-btn"} ${disabled ? styles.disabled : ""} ${className ?? ""}`}
+      className={`${styles.btn} basic-btn ${disabled ? styles.disabled : ""} ${className}`}
       onClick={onClick}
       disabled={disabled}
-      type={type ?? "button"}
-      style={width ? { width: `${width}px` } : undefined}
+      type={type}
+      style={{width}}
     >
       {text}
     </button>

@@ -28,7 +28,7 @@ export default function ProfileInput({
   return (
   <div className={styles.container}>
     <label htmlFor={label}>
-      <span className={styles.text}>
+      <span className="basic-input-label">
         {label}{" "}
         <span style={{ visibility: visibility, color: "red" }}>*</span>
       </span>

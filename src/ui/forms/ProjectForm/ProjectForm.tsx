@@ -15,11 +15,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { projectSchema } from "@/src/lib/utils/zodSchemas";
+import { useAuth } from "@/src/lib/providers/AuthProvider";
 
 export default function ProjectForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [currentTagInput, setCurrentTagInput] = useState<string>("");
   const router = useRouter();
+
+  const {userId} = useAuth()
 
   const {
     register: registerField,
@@ -66,14 +69,12 @@ export default function ProjectForm() {
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const formValues = Object.fromEntries(formData.entries());
 
-    // const userData = await me(); <!>
-
     const projectCreateRequestData: ProjectCreateDTO = {
       label: formValues.label as string,
       short_description: formValues.short_description as string,
       description: formValues.description as string,
       tags: getValues("tags") || [],
-      creator: "Аноним", // userData.given_name;
+      creator_id: userId,
       status: ProjectStatusEnum.ACTIVE
     }
 
@@ -83,7 +84,7 @@ export default function ProjectForm() {
       const response = await createProject(projectCreateRequestData);
       console.log("Project creation successful: ", response);
       router.push(
-        `/feed/${response.id}`, // <!> Assuming the response contains the created project's ID in response.data.id
+        `/feed/${response.id}`,
       );
     } catch (error: any) {
       // const status = error.response?.status;
@@ -125,7 +126,7 @@ export default function ProjectForm() {
               value={currentTagInput}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentTagInput(e.target.value)}
               onKeyDown={handleTagInputKeyDown}
-              className={styles.tagInput}
+              // className={styles.tagInput}
             />
             <div className={styles.tags}>
               {watchedTags.map((tag, index) => (

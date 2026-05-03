@@ -1,11 +1,3 @@
-.header {
-    height: 40px;
-    
-    display: flex;
-    justify-content: space-between;
-
-}
-
 .loginBtn {
     width: 149px;
     margin-right: 15px;
@@ -17,10 +9,7 @@
     }
 }
 
-@media (max-width: 400px) {
-    .header {
-        height: 30px;
-    }
+@media (max-width: 450px) { /* CHANGED */
 
     .loginBtn {
         width: 89px;

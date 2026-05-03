@@ -10,7 +10,7 @@ export default function CommentTextarea({placeholder}: CommentTextAreaProps) {
     return (
         <div className={`basic-input-container ${styles.textareaContainer}`}>
             <textarea className={`basic-input ${styles.textarea}`} name="comment" placeholder={placeholder}/>
-            <div className={styles.imageContainer}>
+            <div className={`basic-btn ${styles.imageContainer}`}>
                 <Image className={styles.image} src={CommentSendImage} alt="Comment send image"></Image>
             </div>
         </div>

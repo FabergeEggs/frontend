@@ -16,7 +16,6 @@ export function proxy(request: NextRequest) {
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
   // Не авторизован + закрытая страница -> на логин
   if (!token && !isPublic) {
-    console.log("Вы не авторизованы!");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

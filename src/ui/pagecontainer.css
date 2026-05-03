@@ -2,6 +2,7 @@
   flex: 1; /* takes all remaining space after header */
 
   margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 /* If user shrinks the page vertically, form is getting closer to the header

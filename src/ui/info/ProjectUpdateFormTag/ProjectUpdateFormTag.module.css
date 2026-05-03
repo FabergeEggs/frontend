@@ -1,0 +1,18 @@
+.tag {
+    color: var(--active-dark-color);
+    background-color: var(--varity2-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 10px;
+    height: 40px;
+    padding-left: 15px; 
+    padding-right: 15px;
+}
+
+.img {
+    margin-left: 10px;
+    cursor: pointer;
+}
+

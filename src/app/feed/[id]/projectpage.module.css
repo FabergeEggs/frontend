@@ -10,17 +10,42 @@
 }
 
 .card {
+    flex: 1;
+
     background-color: white;
     border: 0.5px solid var(--active-dark-color);
     border-radius: 15px;
     box-sizing: border-box;
-    height: 480px;
+    min-height: 480px;
     padding: 30px;
 }
 
+/* Edit card properties */
+
+.editCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+/* -------------------- */
+
 .label {
+    margin-top: 0;
+
     font-weight: 400;
     font-size: 28px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
 }
 
 .info {
@@ -33,12 +58,6 @@
     margin-bottom: 10px;        
 }
 
-.infoPiece {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-
 .infoDescription {
     color: var(--active-dark-color)
 }
@@ -46,6 +65,7 @@
 .countInfo {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 15px;
 }
 
@@ -83,6 +103,12 @@
   gap: 15px;
 }
 
+.adminButtons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
 
 @media(max-width: 1000px) {
     .projectContainer {
@@ -118,7 +144,7 @@
     }
 }
 
-@media(max-width: 400px) {
+@media(max-width: 450px) { /* CHANGED */
     .box {
         /* width: 98px; */
         height: 59px;

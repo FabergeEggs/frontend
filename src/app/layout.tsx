@@ -8,7 +8,7 @@ import AuthProvider from "@/src/lib/providers/AuthProvider"
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["100", "300", "400", "500", "600", "700"],
 });
 
 export default function RootLayout({

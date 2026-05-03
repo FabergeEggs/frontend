@@ -1,15 +1,25 @@
 .container {
     box-sizing: border-box;
-    height: 254px;
-    border: 1px solid black;
+    height: 204px;
+    border: 0.5px solid var(--active-dark-color);
     background-color: white;
-    border-radius: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .label {
     font-weight: 400;
     font-size: 28px;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
+
+@media(max-width: 1000px) {
+    .container {
+        height: auto;
+    }
+}
 

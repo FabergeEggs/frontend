@@ -1,31 +1,64 @@
 import styles from "./ResponseCard.module.css";
 import Image from "next/image";
 import ProfilePicturePlug from "@/public/assets/project/profile_picture_plug.svg"
+import StatusActiveImage from "@/public/assets/project/status-active.svg";
+import FileInfo from "../FileInfo/FileInfo";
 
+import { ResponseStatus } from "@/src/lib/models/export/response"
+import ImageTextButton from "../../buttons/ImageTextButton/ImageTextButton";
+
+import CheckImage from "@/public/assets/check.svg"
+import RedCrossImage from "@/public/assets/red-cross.svg"
 
 
 interface ResponseCardProps {
-  label: string
+  className: string,
+  username: string
   user_id: string;
   text: string
   status: ResponseStatus
-  short_description: string // I suppose description should be shorted if needed and then ... needs to be added
   attached_files: string[]
   created_at: string;
+  isAdmin?: boolean;
 }
 
 // Alternative Project Card variant for project page
-export default function ResponseCard({label, short_description, answers_count}: ResponseCardProps) {
+export default function ResponseCard({className, username, user_id, text, status, attached_files, created_at, isAdmin = false}: ResponseCardProps) {
   return (
-    <div className={styles.card}>
-      <div className={styles.label}>
-        <Image src={ProfilePicturePlug} alt="Profile picture"></Image>{label}
+    <div className={`${className} basic-card`}>
+      <div className={styles.header}>
+        <div className="basic-flex">
+          <div className={styles.user}>
+            <Image src={ProfilePicturePlug} alt="Profile picture"/>
+            <div className={styles.username}>
+              {username}
+              <div className={styles.date}>
+                {created_at}
+              </div>
+            </div>
+          </div>
+          <div className={styles.status}>
+            <Image src={StatusActiveImage} alt="active status image"></Image>
+            <span className={styles.infoDescription}>Статус:</span>
+            {status == ResponseStatus.PENDING  && "Ожидание"}
+            {status == ResponseStatus.ACCEPTED && "Одобрено"}
+            {status == ResponseStatus.REJECTED && "Отвергнут"}
+            {status == ResponseStatus.CANCELLED && "Отменён"}
+          </div>  
+        </div>
+        {isAdmin && 
+            <div className="basic-flex">
+                <ImageTextButton text="Одобрить" src={CheckImage} />
+                <ImageTextButton text="Отклонить" src={RedCrossImage} color="var(--danger-color)"/>
+            </div>}
       </div>
-      <div className={styles.description}>
-        {short_description}
+      <div className={styles.text}>
+        {text}
       </div>
       <div className={styles.attachedFiles}>
-        
+        {attached_files && attached_files.map((value, index) => (
+              <FileInfo key={index} name={value} index={index} />
+          ))}
       </div>
     </div>
   );

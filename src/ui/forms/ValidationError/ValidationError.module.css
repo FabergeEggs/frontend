@@ -29,7 +29,7 @@
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) { /* CHANGED */
     /* .error {
         height: 40px;
     } */

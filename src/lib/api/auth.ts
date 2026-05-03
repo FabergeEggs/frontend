@@ -59,8 +59,6 @@ export const resetPassword = async (key: string, new_password: string) => {
   return data;
 };
 
-
-// <!>
 export const changePassword = async (old_password: string, new_password: string) => {
   const { data } = await axiosInstance.post(ApiRoutes.CHANGE_PASSWORD, {
     old_password: old_password,

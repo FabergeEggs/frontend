@@ -31,6 +31,32 @@ button:focus {
   outline: 1px solid black; /* Some browsers make red outline, which is not what our site needs */
 }
 
+.basic-header {
+  height: 40px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .header {
+    height: 30px;
+  }
+}
+
+.basic-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Додумать */
+.basic-column-flex {
+  display: flex;
+  flex-direction: column;
+}
+
 .basic-box {
   display: inline-block;
   font-size: 14px;
@@ -44,10 +70,45 @@ button:focus {
   padding-right: 15px;
 }
 
+.basic-card {
+  background-color: white;
+  border: 0.5px solid var(--active-dark-color);
+  border-radius: 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basic-card-unbordered {
+  background-color: white;
+  border-radius: 15px;
+  /* box-sizing: border-box; */
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basic-info-piece {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 .centered {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.basic-link {
+  text-decoration: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .basic-btn {
@@ -59,7 +120,7 @@ button:focus {
 
   cursor: pointer;
 
-  transition: filter 0.15s;
+  transition: filter 0.15s, opacity 0.05s;
 }
 
 .basic-btn:hover {
@@ -70,13 +131,15 @@ button:focus {
   filter: brightness(65%);
 }
 
-.basic-btn-disabled {
-  font-size: 14px;
+/* .basic-btn-disabled { */
+.basic-btn:disabled {
   border-radius: 10px;
   border: none;
 
-  height: 40px;
   opacity: 0.5;
+  cursor: default;
+
+  filter: none;
 }
 
 /* Separation (basic-input-container & basic-input) is made for comfortable work with inputs with images */
@@ -118,3 +181,21 @@ button:focus {
 .basic-input:active {
     filter: brightness(65%)
 } */
+
+
+.basic-input-label {
+  padding-left: 2px;
+  font-size: 20px;
+}
+
+@media (max-width: 834px) {
+  .basic-input-label {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .basic-input-label {
+    font-size: 16px;
+  }
+}

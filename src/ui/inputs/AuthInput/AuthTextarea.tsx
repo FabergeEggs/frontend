@@ -23,18 +23,20 @@ export default function AuthTextarea({
   return (
     <div className={styles.container}>
       <label htmlFor={label}>
-        <span className={styles.text}>{label}</span>
-        <textarea
+        <span className="basic-input-label">{label}</span>
+        <div className={`basic-input-container ${styles.inputContainer}`}>
+          <textarea
           name={name}
-          className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
-          onChange={(e) => { handleInput(e.target); onChange?.(e); }}
-          id={name}
-          placeholder={placeholder}
-          required={required ?? true}
-          ref={ref}
-          onFocus={onFocus}
-          onBlur={onBlur}
-        />
+            className={`basic-input ${styles.input} ${styles.textarea} ${className}`}
+            onChange={(e) => { handleInput(e.target); onChange?.(e); }}
+            id={name}
+            placeholder={placeholder}
+            required={required ?? true}
+            ref={ref}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          />
+        </div>
       </label>
     </div>
   );

@@ -17,8 +17,8 @@ interface ProjectCardProps {
 
 export default function ProjectCard({children, label, short_description, tags, tasks_count, participants_count}: ProjectCardProps) {
   return (
-    <div className={styles.card}>
-      {/* {children?} Сюда будет помещён никнейм и аватарка для ProjectCard */}
+    <div className={`basic-card-unbordered ${styles.card}`}>
+      {children}
       <div className={styles.label}>{label}</div>
       <div className={styles.info}>
         <div className={styles.tags}>

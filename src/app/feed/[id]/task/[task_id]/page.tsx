@@ -1,20 +1,14 @@
-import styles from "./taskpage.module.css";
-// import { getTask } from "@/src/lib/api/project";
-import Image from "next/image";
+import TaskPageClient from './client'
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import { ResponseStatus } from "@/src/lib/models/export/response"
 
-import AuthorImage from "@/public/assets/project/author.svg";
-import CreationTimeImage from "@/public/assets/project/creation-time.svg";
-import StatusActiveImage from "@/public/assets/project/status-active.svg";
-import CommentForm from "@/src/ui/forms/CommentForm/CommentForm"
-import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 
 
 const data: Task = {
     task_id: "1",
     project_id: "1",
+    creator_id: "asdasdas",
     label: "Перепись населения в Ижевске",
     creator: "Народный фольклор",
     short_description: "",
@@ -43,45 +37,10 @@ export default async function Page({
   params: Promise<{ id: string, task_id: string }>;
 }) {
   const { id, task_id } = await params;
-  // const data: ProjectFull = await getProject(id, task_id);
 
-  // const tasks: ... = await ...
-  // const posts: ... = await ...
+  // const responses: ... = await ...
 
   return (
-    <div className={`pagecontainer ${styles.container}`}>
-      <div className={styles.taskContainer}>
-        <div className={`${styles.card} ${styles.cardPadding}`}>
-          <h1 className={styles.label}>{data.label}</h1>
-          <div className={styles.info}>
-            <div className={styles.infoPiece}>
-              <Image src={AuthorImage} alt="author image"></Image>
-              <span className={styles.infoDescription}>Автор:</span>
-              {data.creator}
-            </div>
-            <div className={styles.infoPiece}>
-              <Image src={CreationTimeImage} alt="creation time image"></Image>
-              <span className={styles.infoDescription}>Создано:</span>
-              {new Date(data.created_at).toLocaleDateString("ru-RU")}
-            </div>
-            <div className={styles.infoPiece}>
-              <Image src={StatusActiveImage} alt="active status image"></Image>
-              <span className={styles.infoDescription}>Статус:</span>
-              {data.status == TaskStatusEnum.ACTIVE && "Активен"}
-              {data.status == TaskStatusEnum.FINISHED && "Завершён"}
-              {data.status == TaskStatusEnum.DELETED && "Удалён"}
-            </div>
-          </div>
-          <p className={styles.description}>{data.description}</p>
-        </div>
-      </div>
-      <CommentForm className={styles.cardPadding} placeholder="Напишите свой ответ"/>
-      
-      {/* { responses.length > 0 && <div className={styles.responses}>
-        {responses.map((value, index) => <ResponseCard {...value} key={index} />)}
-      </div>} */}
-      
-        
-    </div>
+    <TaskPageClient data={data} responses={responses} />
   );
 }

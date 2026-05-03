@@ -20,16 +20,23 @@
   }
 }
 
-/* <!>
-@media (max-width: 520px) {
+
+@media (max-width: 600px) {
   .layout {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
-} */
+}
+
+@media (max-width: 525px) {
+  .layout {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
 
 /* Мобильный */
-@media (max-width: 400px) {
+@media (max-width: 450px) {
   .layout {
     padding-left: 8px;
     padding-right: 8px;

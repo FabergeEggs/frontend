@@ -1,11 +1,3 @@
-.header {
-    height: 40px;
-    
-    display: flex;
-    justify-content: space-between;
-
-}
-
 .signupBtn {
     width: 185px;
     margin-right: 15px;
@@ -17,11 +9,7 @@
     }
 }
 
-@media (max-width: 400px) {
-    .header {
-        height: 30px;
-    }
-
+@media (max-width: 450px) { /* CHANGED */
     .signupBtn {
         width: 148px;
         font-size: 12px;

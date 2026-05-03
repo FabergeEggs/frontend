@@ -26,6 +26,7 @@
     font-weight: 400;
     font-size: 28px;
     margin-top: 0;
+
 }
 
 .info {
@@ -53,6 +54,8 @@
   flex-direction: column;
   gap: 15px;
 }
+
+
 
 
 @media(max-width: 1000px) {
@@ -86,3 +89,18 @@
         padding: 15px;
     }
 }
+
+
+/*
+
+import EditImage from "@/public/assets/edit.svg";
+import NewTaskImage from "@/public/assets/project/task.svg";
+import NewPostImage from "@/public/assets/project/new-post.svg";
+
+
+
+
+
+
+
+*/

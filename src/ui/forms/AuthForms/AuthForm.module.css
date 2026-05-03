@@ -101,7 +101,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) { /* CHANGED */
   .container {
     max-width: 304px;
   }
