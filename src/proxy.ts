@@ -5,7 +5,6 @@ const PUBLIC_ROUTES = [
   "/login",
   "/signup",
   "/reset-password",
-  "/email-confirm",
   "/verify-email",
 ];
 

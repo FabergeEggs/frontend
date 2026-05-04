@@ -72,8 +72,9 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
     const formValues = Object.fromEntries(formData.entries());
 
     if (errors.oldPassword || errors.newPassword || errors.confirmPassword ||
-        !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword)
-      return false
+        !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword) {
+        return false
+      }
 
     
     setValue("oldPassword", "xxxxxxxx")

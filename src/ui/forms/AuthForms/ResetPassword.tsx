@@ -9,15 +9,29 @@ import ValidationError from "../ValidationError/ValidationError";
 import { resetPassword } from "@/src/lib/api/auth";
 import AuthInput from "../../inputs/AuthInput/AuthInput";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { passwordSchema } from "@/src/lib/utils/zodSchemas";
+import { useForm } from "react-hook-form";
+
 export default function ResetPassword({ resetKey }: { resetKey: string }) {
-  const [newPassword, setNewPassword] = useState("");
   const [serverError, setServerError] = useState("");
   const router = useRouter();
 
+  const {
+    register: registerField,
+    trigger,
+    watch,
+    formState: { isValid },
+  } = useForm<z.infer<typeof passwordSchema>>({
+    mode: "onChange",
+    resolver: zodResolver(passwordSchema),
+  });
+
   const handleSend = () => {
       try {
-        console.log("Submitting reset password with data: ", resetKey, newPassword); // DEBUG
-        resetPassword(resetKey, newPassword)
+        console.log("Submitting reset password with data: ", resetKey, watch("password")); // DEBUG
+        resetPassword(resetKey, watch("password"))
           .then((response) => { // <!> .then + try-catch - is it okay?
             router.push("/login") 
             console.log("Reset password response: ", response); // DEBUG
@@ -31,10 +45,8 @@ export default function ResetPassword({ resetKey }: { resetKey: string }) {
         console.error("Reset password failed: ", error.response);
       }
     };
-  
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNewPassword(e.target.value);
-    };
+
+    
 
   return (
     <div className={styles.container}>
@@ -42,16 +54,16 @@ export default function ResetPassword({ resetKey }: { resetKey: string }) {
         <p className={styles.title}>Изменение пароля</p>
         <p className={styles.text}>Для изменения пароля укажите новый пароль. </p>
         <AuthInput
-          name="new_password" 
           type="password"
           label="Новый пароль:"
           placeholder="Введите новый пароль..."
-          onChange={handleChange}
+          {...registerField("password")}
         />
         <GreenButton
           className={styles.submitBtn}
           onClick={handleSend}
           text="Поменять пароль"
+          disabled={!isValid}
         />
       </div>
       {serverError && <ValidationError messages={[serverError]} />}

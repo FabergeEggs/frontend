@@ -47,7 +47,7 @@ export default function SignupForm() {
     try {
       await register(registerRequestData);
       router.push(
-        `/email-confirm?email=${encodeURIComponent(registerRequestData.email)}`,
+        `/verify-email?email=${encodeURIComponent(registerRequestData.email)}`,
       );
     } catch (error: any) {
       const status = error.response?.status;

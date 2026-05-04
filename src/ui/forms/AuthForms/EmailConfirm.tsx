@@ -46,6 +46,8 @@ export default function EmailConfirm({ email }: { email: string }) {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
+  
+
   return (
     <div className={`${styles.container} ${styles.form}`}>
       <p className={styles.title}>Подтверждение почты</p>

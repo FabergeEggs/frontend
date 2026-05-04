@@ -12,10 +12,10 @@ export default function ValidationError({ messages }: ValidationErrorProps) {
 
   return (
     <div className={styles.error}>
-      {messages.map((message: string, i: number) => (
+      {messages.map((value: string, i: number) => (
         <div key={i} className={styles.row}>
           <Image src={DangerImage} alt="Error" width={16} height={14} />
-          <p className={styles.message}>{message}</p>
+          <p className={styles.message}>{value}</p>
         </div>
       ))}
     </div>

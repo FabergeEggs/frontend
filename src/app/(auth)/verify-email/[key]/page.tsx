@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import { verifyEmail } from "@/src/lib/api/auth";
 import { useState } from "react";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+import {use} from "react"
 
 export default function VerifyEmailPage({
   params,
 }: {
-  params: { key: string };
+  params: Promise<{ key: string }>;
 }) {
-  const { key } = params; // <!> does it work?
+  const {key} = use(params); // <!> does it work?
 
   const router = useRouter();
   const [serverError, setServerError] = useState("");
@@ -19,14 +20,14 @@ export default function VerifyEmailPage({
     if (!key) return;
     verifyEmail(key)
       .then(() => router.push("/login?verified=true"))
-      .catch((error) => setServerError(error));
+      .catch((error) => setServerError("Произошла ошибка."));
   }, [key]);
 
   return (
     <div
-      className="centered"
+      className="centered basic-flex-column"
     >
-      Подтверждение email...
+      <p>Подтверждение email...</p>
       {serverError && <ValidationError messages={[serverError]} />}
     </div>
   );

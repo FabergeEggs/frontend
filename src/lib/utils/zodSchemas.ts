@@ -1,19 +1,27 @@
 import { z } from "zod";
 
-const passwordSchema = z.string()
+const password = z.string()
   .min(8, "Пароль должен быть не менее 8 символов")
   .regex(/\d.*\d/, "Пароль должен содержать минимум 2 цифры")
   .regex(/[!@#$%^&*]/, "Пароль должен содержать минимум 1 спецсимвол")
 
-const emailSchema = z
+const email = z
       .string()
       .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Некорректный формат почты")
+
+export const passwordSchema = z.object({
+  password: password
+})
+
+export const emailSchema = z.object({
+  email: email
+})
 
 export const signupSchema = z
   .object({
     first_name: z.string().min(1, "Имя пользователя не может быть пустым"),
-    email: emailSchema,
-    password: passwordSchema,
+    email: email,
+    password: password,
     confirmPassword: z.string(),
     about: z.string().optional(),
   })
@@ -30,13 +38,14 @@ export const loginSchema = z.object({
 export const profileSchema = z
   .object({
     first_name: z.string().min(1, "Имя пользователя не может быть пустым"),
-    email: emailSchema,
-    newPassword: passwordSchema,
+    email: email,
+    oldPassword: z.string().min(1, "Введите старый пароль"),
+    newPassword: password,
     confirmPassword: z.string(),
     about: z.string(), // .optional() - removed for UpdateRequestDTO
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Пароли не совпадают",
+    error: "Пароли не совпадают",
     path: ["confirmPassword"],
   });
 

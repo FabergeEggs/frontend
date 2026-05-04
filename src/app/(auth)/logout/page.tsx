@@ -12,12 +12,12 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     logout()
       .then(() => router.push("/login"))
-      .catch((error) => setServerError(error));
+      .catch((error) => setServerError("Произошла ошибка."));
   }, []);
 
   return (
     <div
-      className="centered"
+      className="centered basic-flex-column"
     >
       Выход из аккаунта...
       {serverError && <ValidationError messages={[serverError]} />}

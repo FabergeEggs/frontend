@@ -1,6 +1,7 @@
 import ProjectPageClient from "./client";
 import { ProjectStatusEnum, TaskStatusEnum } from "@/src/lib/models/export/project";
 import { Suspense } from "react";
+import { getProject } from "@/src/lib/api/project";
 
 
 const tag1: Tag = {
@@ -22,7 +23,7 @@ const tag3: Tag = {
 
 const data: ProjectFull = {
     // info
-    id: "1",
+    project_id: "1",
     label: "Мы представляем вам совершенно новую, обновлённую систему Линух",
     creator: "Российский Автопром",
     creator_id: "1",
@@ -67,7 +68,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  // const data: ProjectFull = await getProject(id);
+  const data: ProjectFull = await getProject(id);
 
   // const tasks: ... = await ...
   // const posts: ... = await ...

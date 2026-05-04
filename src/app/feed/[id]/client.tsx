@@ -101,7 +101,7 @@ export default function ProjectPageClient({data, tasks, posts}: {data: ProjectFu
       const formValues = Object.fromEntries(formData.entries());
   
       const projectUpdateRequestData: ProjectUpdateDTO = {
-        project_id: data.id,
+        project_id: data.project_id,
         label: formValues.label as string,
         short_description: formValues.short_description as string,
         description: formValues.description as string,
@@ -241,10 +241,10 @@ export default function ProjectPageClient({data, tasks, posts}: {data: ProjectFu
       </div>
       {isAdmin && <>
         {isCreatingTask && <div id="taskform">
-          <TaskForm project_id={data.id}/>
+          <TaskForm project_id={data.project_id}/>
         </div>}
         {isPosting && <div id="postform">
-          <PostForm project_id={data.id}/>
+          <PostForm project_id={data.project_id}/>
         </div>}
       </>}
 

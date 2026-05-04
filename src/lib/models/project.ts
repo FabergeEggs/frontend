@@ -22,8 +22,7 @@ interface Tag {
     quantity_count: number // Кол-во проектов, помеченных данным тегом
 }
 
-interface ProjectCreateDTO {
-    creator_id: string,
+interface ProjectCreateDTO { // Also used as Update DTO
     label: string,
     short_description: string,
     description: string,
@@ -31,30 +30,16 @@ interface ProjectCreateDTO {
     status: ProjectStatusEnum
 }
 
-interface ProjectUpdateDTO {
-    project_id: string,
-    label: string,
-    short_description: string,
-    description: string,
-    tags: string[],
-    status: ProjectStatusEnum
-}
 
 interface ProjectInfoDTO {
-    id: string,
+    project_id: string,
+    creator_id: string,
     label: string,
     creator: string,
-    creator_id: string,
     description: string,
     tags: Tag[],
     created_at: Date, 
     status: ProjectStatusEnum
-}
-
-interface ProjectDetailDTO {
-    short_description: string, // Теперь прилетает отсюда
-    activities: (Task | Post)[];
-    // Вместо Task и Post будет сокращённый DTO
 }
 
 interface ProjectStatsDTO {
@@ -66,7 +51,7 @@ interface ProjectStatsDTO {
 
 interface ProjectFull { 
     // info
-    id: string,
+    project_id: string,
     label: string,
     creator: string,
     creator_id: string,
@@ -79,9 +64,6 @@ interface ProjectFull {
     tasks_count: number,
     participants_count: number,
     answers_count: number
-
-    // detail
-    short_description: string,
 }
 
 
@@ -93,12 +75,12 @@ interface Post {
     creator: string,
     short_description: string,
     description: string,
+    comments_count: number,
     created_at: Date
+    updated_at: Date
 }
 
-interface PostCreateDTO {
-    project_id: string,
-    creator_id: string,
+interface PostCreateDTO {   // Also used as PostUpdateDTO
     label: string,
     short_description: string,
     description: string,
@@ -125,35 +107,65 @@ interface Task {
     status: TaskStatusEnum,
 }
 
-interface TaskCreateDTO {
-    project_id: string,
-    creator_id: string,
+interface TaskCreateDTO { 
     label: string,
     short_description: string,
     description: string,
 }
 
 interface TaskUpdateDTO {
-    task_id: string,
-    project_id: string,
     label: string,
     short_description: string,
     description: string,
     status: TaskStatusEnum
 }
 
-interface TaskShortDTO {
-  label: string,
-  short_description: string,
-  answers_count: number,
-  status: TaskStatusEnum
+
+enum PublicationTypeEnum {
+    POST = "post",
+    TASK = "task"
 }
 
-interface PostShortDTO {
-  label: string,
-  short_description: string,
-  comments_count: number,
+interface PublicationDTO {
+   id: string
+   project_id: string
+   label: string
+   short_description: string
+   created_at: Date
+   creator_id: string
+   creator_name: string
+   type: PublicationTypeEnum
+   answers_count: number
+   status: TaskStatusEnum | null // null для постов, статус для задач
 }
+
+interface PublicationsResponse {
+    items: PublicationDTO[]
+    next_cursor: string | null
+    has_more: boolean
+}
+
+// Membership
+
+interface MembershipProjectDTO {
+    project_id: string
+    label: string
+    short_description: string
+    created_at: Date
+    status: TaskStatusEnum
+    creator_name: string
+}
+
+interface MembershipsDTO {
+    scientist: MembershipProjectDTO[]
+    volunteer: MembershipProjectDTO[]
+}
+
+interface AddMemberDTO {
+    id: string
+    role: ProjectRoleEnum
+}
+
 
 /**
  * 

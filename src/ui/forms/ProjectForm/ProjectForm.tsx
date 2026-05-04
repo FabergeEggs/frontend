@@ -15,14 +15,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { projectSchema } from "@/src/lib/utils/zodSchemas";
-import { useAuth } from "@/src/lib/providers/AuthProvider";
 
 export default function ProjectForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [currentTagInput, setCurrentTagInput] = useState<string>("");
   const router = useRouter();
-
-  const {userId} = useAuth()
 
   const {
     register: registerField,
@@ -74,7 +71,6 @@ export default function ProjectForm() {
       short_description: formValues.short_description as string,
       description: formValues.description as string,
       tags: getValues("tags") || [],
-      creator_id: userId,
       status: ProjectStatusEnum.ACTIVE
     }
 
@@ -87,9 +83,14 @@ export default function ProjectForm() {
         `/feed/${response.id}`,
       );
     } catch (error: any) {
-      // const status = error.response?.status;
+      const status = error.response?.status;
       // <!> - Продумать ошибки
-      setServerError("Ошибка создания проекта. Попробуйте позже");
+      if (status === 422) {
+        setServerError("Проверьте правильность заполнения полей");
+      } else {
+        setServerError("Ошибка создания проекта. Попробуйте позже");
+      }
+      
       console.error("Project creation failed: ", error);
     }
   };

@@ -9,15 +9,28 @@ import SubmitSuccess from "../SubmitSuccess/SubmitSuccess";
 import { forgotPassword } from "@/src/lib/api/auth";
 import AuthInput from "../../inputs/AuthInput/AuthInput";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { emailSchema } from "@/src/lib/utils/zodSchemas";
+import { useForm } from "react-hook-form";
+
 export default function ResetPasswordLink() {
-  const [email, setEmail] = useState("");
   const [serverError, setServerError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const {
+          register: registerField,
+          watch,
+          formState: { isValid },
+        } = useForm<z.infer<typeof emailSchema>>({
+          mode: "onChange",
+          resolver: zodResolver(emailSchema),
+        });
+
   const handleSend = async () => {
       try {
-        console.log("Submitting reset password with data: ", email); // DEBUG
-        const response = await forgotPassword(email);
+        console.log("Submitting reset password with data: ", watch("email")); // DEBUG
+        const response = await forgotPassword(watch("email"));
         setSuccess(true);
         console.log("Reset password successful: ", response);
       } catch (error: any) {
@@ -29,14 +42,10 @@ export default function ResetPasswordLink() {
         if (status === 404) {
           setServerError("Пользователя с данной почтой не существует");
         } else {
-          setServerError("Ошибка входа. Попробуйте позже");
+          setServerError("Ошибка. Попробуйте позже");
         }
         console.error("Reset password failed: ", error.response);
       }
-    };
-  
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-      setEmail(e.target.value);
     };
 
   return (
@@ -45,16 +54,16 @@ export default function ResetPasswordLink() {
         <p className={styles.title}>Восстановление пароля</p>
         <p className={styles.text}>Для восстановления пароля укажите почту вашего аккаунта. На неё будет отправлена дальнейшая инструкция. </p>
         <AuthInput
-          name="email" 
           type="email"
           label="Почта:"
           placeholder="example@mail.ru"
-          onChange={handleChange}
+          {...registerField("email")}
         />
         <GreenButton
           className={styles.submitBtn}
           onClick={handleSend}
           text="Отправить"
+          disabled={!isValid}
         />
       </div>
       {serverError && <ValidationError messages={[serverError]} />}
