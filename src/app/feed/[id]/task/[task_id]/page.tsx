@@ -3,6 +3,8 @@ import TaskPageClient from './client'
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import { ResponseStatus } from "@/src/lib/models/export/response"
 
+import { getTask } from '@/src/lib/api/project';
+
 
 
 const data: Task = {
@@ -37,6 +39,8 @@ export default async function Page({
   params: Promise<{ id: string, task_id: string }>;
 }) {
   const { id, task_id } = await params;
+
+  const data = await getTask(id, task_id)
 
   // const responses: ... = await ...
 

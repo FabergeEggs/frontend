@@ -1,5 +1,7 @@
 .card {
-  padding: 21px 15px;  
+  padding: 21px 15px; 
+  
+  cursor: pointer;
 }
 
 .label {

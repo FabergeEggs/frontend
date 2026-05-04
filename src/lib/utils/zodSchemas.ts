@@ -64,16 +64,9 @@ export const projectSchema = z
     tags: z.array(z.string()).min(1),
   })
 
-export const taskSchema = z
+export const publicationSchema = z
   .object({
     label: labelSchema,
     short_description: shortDescriptionSchema,
     description: descriptionSchema,
-  })
-
-export const postSchema = z
-  .object({
-    label: labelSchema,
-    short_description: shortDescriptionSchema,
-    text: descriptionSchema,
   })

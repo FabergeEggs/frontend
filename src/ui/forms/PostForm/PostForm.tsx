@@ -11,19 +11,17 @@ import { createPost } from "@/src/lib/api/project";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { postSchema } from "@/src/lib/utils/zodSchemas";
-import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { publicationSchema } from "@/src/lib/utils/zodSchemas";
 
 export default function PostForm({project_id}: {project_id: string}) {
   const [serverError, setServerError] = useState<string | null>(null);
-  const { userId } = useAuth()
 
   const {
     register: registerField,
     formState: { isValid },
-  } = useForm<z.infer<typeof postSchema>>({
+  } = useForm<z.infer<typeof publicationSchema>>({
     mode: "onChange",
-    resolver: zodResolver(postSchema),
+    resolver: zodResolver(publicationSchema),
   });
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -37,14 +35,12 @@ export default function PostForm({project_id}: {project_id: string}) {
       label: formValues.label as string,
       short_description: formValues.short_description as string,
       description: formValues.description as string,
-      creator_id: userId, 
-      project_id: project_id
     }
 
 
     try {
       console.log("Submitting post creation with data: ", postCreateRequestData); // DEBUG
-      const response = await createPost(postCreateRequestData);
+      const response = await createPost(project_id,postCreateRequestData);
       console.log("Post creation successful: ", response);
       // <!> - Высветить зелёненьким, что всё гуд, якорем вернуть обратно, убрать форму
     } catch (error: any) {
@@ -77,7 +73,7 @@ export default function PostForm({project_id}: {project_id: string}) {
             placeholder="Основной текст поста..."
             required={false}
             height={100}
-            {...registerField("text")}
+            {...registerField("description")}
           />
         </div>
         <GreenButton

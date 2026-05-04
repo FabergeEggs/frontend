@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { getProfile } from "@/src/lib/api/profile";
 import { ProjectStatusEnum } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { getUserMemberships } from "@/src/lib/api/project";
 
 
 
@@ -44,8 +45,8 @@ const projectParticipations = [testProjectData, testProjectData];
 
 export default function ProfilePage() {
   // userData, myProjects, projectParticipations
-  const [showMyProjects, setShowMyProjects] = useState(true);
-  const [showProjectParticipations, setShowParticipatingProjects] = useState(true);
+  const [showScientistProjects, setShowScientistProjects] = useState(true);
+  const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
 
   const [userData, setUserData] = useState<ProfileDTO>({
     id: "",
@@ -59,13 +60,15 @@ export default function ProfilePage() {
     created_at: new Date(),
     is_active: true
   });
+  const [scientistProjects, setScientistProjects] = useState<MembershipProjectDTO[]>([]);
+  const [volunteerProjects, setVolunteerProjects] = useState<MembershipProjectDTO[]>([]);
 
-  const toggleProjects = () => {
-    setShowMyProjects(prev => !prev);
+  const toggleScientistProjects = () => {
+    setShowScientistProjects(prev => !prev);
   };
 
-  const toggleParticipatingProjects = () => { 
-    setShowParticipatingProjects(prev => !prev);
+  const toggleVolunteerProjects = () => { 
+    setShowVolunteerProjects(prev => !prev);
   };
 
   const { userId, isLoading } = useAuth();
@@ -74,8 +77,12 @@ export default function ProfilePage() {
     if (isLoading || !userId) return
     async function loadProfile() {
       const data = await getProfile(userId);
-       setUserData(data)
-       setIsLoadingProfile(false);
+      const memberships = await getUserMemberships(userId);
+      setUserData(data)
+      setIsLoadingProfile(false);
+
+      setScientistProjects(memberships.scientist)
+      setVolunteerProjects(memberships.volunteer)
     }
     
     loadProfile()
@@ -99,23 +106,23 @@ export default function ProfilePage() {
       <div className={styles.projectsContainer}>
         <div className={styles.myProjectsContainer}>
           <div className={styles.myProjectsHeader}>
-            <div className={styles.headerTitle} onClick={toggleProjects}>
+            <div className={styles.headerTitle} onClick={toggleScientistProjects}>
               <h2 className={styles.title}>Мои проекты</h2>
-              { myProjects.length > 0 && <Image src={showMyProjects ? ArrowDown : ArrowRight} alt="arrow-right" />}
+              { scientistProjects.length > 0 && <Image src={showScientistProjects ? ArrowDown : ArrowRight} alt="arrow-right" />}
             </div>
             { myProjects.length > 0 && <Link className="basic-link" href="/feed/create">
               <TransparentTextImageButton src={NewImage} text="Создать новый проект" color="black"/> {/** <!> color="black" распространяется на все TransparentButton на данной странице за счёт <style> */}
             </Link>}
           </div>
-          { (showMyProjects && myProjects.length > 0) && 
+          { (showScientistProjects && scientistProjects.length > 0) && 
             <div className={styles.projects}>
-              {myProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
+              {scientistProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
             </div>
             
             }
 
           {
-            (myProjects.length == 0) && <div className={styles.noProjects}>
+            (scientistProjects.length == 0) && <div className={styles.noProjects}>
               <p>У вас пока что нет проектов.</p>
               <Link className="basic-link" href="/feed/create">
                 <button className={`basic-btn ${styles.noProjectsBtn}`}>
@@ -127,19 +134,19 @@ export default function ProfilePage() {
         </div>
         <div className={styles.myProjectsContainer}>
           <div className={styles.myProjectsHeader}>
-            <div className={styles.headerTitle} onClick={toggleParticipatingProjects}>
+            <div className={styles.headerTitle} onClick={toggleVolunteerProjects}>
               <h2 className={styles.title}>Участие в проектах</h2>
-              {projectParticipations.length > 0 && <Image src={showProjectParticipations ? ArrowDown : ArrowRight} alt="arrow-right" />}
+              {volunteerProjects.length > 0 && <Image src={showVolunteerProjects ? ArrowDown : ArrowRight} alt="arrow-right" />}
             </div>
-            {projectParticipations.length > 0 && <Link className="basic-link" href="/feed">
+            {volunteerProjects.length > 0 && <Link className="basic-link" href="/feed">
               <TransparentTextImageButton src={FindImage} text="Найти новый проект" color="black"/>
             </Link>}
           </div>
-          { (showProjectParticipations && projectParticipations.length > 0) && <div className={styles.projects}>
-            {projectParticipations.map((value, index) => <ProjectCard {...value} key={index} />)}
+          { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
+            {volunteerProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
             
           </div>}
-          { (projectParticipations.length == 0) && 
+          { (volunteerProjects.length == 0) && 
             <div className={styles.noProjects}>
               <p>Вы пока не участвуете ни в каких проектах.</p>
               <Link className="basic-link" href="/feed">

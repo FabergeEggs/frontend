@@ -12,15 +12,17 @@ import RestartImage from '@/public/assets/project/restart.svg'
 
 
 interface TaskCardAdminProps {
-  status: TaskStatusEnum,
+  project_id: string,
+  id: string,
+  status: TaskStatusEnum | null,
   label: string,
   short_description: string, // I suppose description should be shorted if needed and then ... needs to be added
   answers_count: number
 }
 
-export default function TaskCardAdmin({status, label, short_description, answers_count}: TaskCardAdminProps) {
+export default function TaskCardAdmin({project_id, id, status, label, short_description, answers_count}: TaskCardAdminProps) {
   return (
-      <TaskCard label={label} short_description={short_description} answers_count={answers_count}>
+      <TaskCard project_id={project_id} id={id} label={label} short_description={short_description} answers_count={answers_count}>
           <span className={styles.interaction}>
             {status === TaskStatusEnum.ACTIVE && <>
             <TransparentTextImageButton src={FinishImage} text="Завершить" imageFirst={true} />

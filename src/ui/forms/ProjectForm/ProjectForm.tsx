@@ -92,6 +92,10 @@ export default function ProjectForm() {
       }
       
       console.error("Project creation failed: ", error);
+      console.error("Error details: ", {
+        message: error.message,
+        response: error.response,
+      });
     }
   };
 
@@ -112,6 +116,7 @@ export default function ProjectForm() {
             height={100}
             {...registerField("short_description")}
           />
+          {errors.short_description && <ValidationError messages={errors.short_description ? [errors.short_description.message || ""] : []} />}
           <ProjectTextarea
             label="Развёрнутое описание"
             placeholder="Подробно расскажите о своём проекте..."
@@ -119,6 +124,7 @@ export default function ProjectForm() {
             height={200}
             {...registerField("description")}
           />
+          {errors.description && <ValidationError messages={errors.description ? [errors.description.message || ""] : []} />}
           <div className={styles.tagSegment}>
             <AuthInput
               label="Теги"

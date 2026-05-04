@@ -31,11 +31,18 @@ export const getProject = async (id: string): Promise<ProjectFull> => {
   return { ...info, ...statistics};
 };
 
+// Publications (Posts and Tasks)
+
+export const getPublications = async (project_id: string): Promise<PublicationsResponse> => {
+  const { data } = await axiosInstance.get(`${ApiRoutes.PROJECT}/${project_id}/publications`);
+  return data;
+}
+
 
 // Memberships
 
 export const getUserMemberships = async (profile_id: string): Promise<MembershipsDTO> => {
-  const { data } = await axiosInstance.get(`${ApiRoutes.PROFILE}/profile/${profile_id}`);
+  const { data } = await axiosInstance.get(`${ApiRoutes.PROJECT}/profile/${profile_id}`);
   return data;
 }
 
@@ -48,15 +55,6 @@ export const removeMember = async (project_id: string, user_id: string) => {
   const { data } = await axiosInstance.delete(`${ApiRoutes.PROJECT}/${project_id}/member/${user_id}`);
   return data;
 }
-
-// Publications (Posts and Tasks)
-
-export const getPublications = async (project_id: string): Promise<(Task | Post)[]> => {
-  const { data } = await axiosInstance.get(`${ApiRoutes.PROJECT}/${project_id}/publications`);
-  return data;
-}
-
-
 
 // Task CRUD
 

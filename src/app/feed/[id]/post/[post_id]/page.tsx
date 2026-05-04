@@ -1,5 +1,5 @@
 import styles from "./postpage.module.css";
-// import { getPost } from "@/src/lib/api/project";
+import { getPost } from "@/src/lib/api/project";
 import Image from "next/image";
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
@@ -10,15 +10,15 @@ import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
 
 
-const data: Post = {
-    post_id: "1",
-    project_id: "1",
-    label: "Перепись населения в Ижевске",
-    creator: "Народный фольклор",
-    short_description: "",
-    description: `Надо срочно пересчитать жителей Ижевска. Посчитайте сколько народа живёт у вас в подъезде, укажите адрес для точности. Жителей Буммаша не считаем.\nБубубу лалал\nааааааааа`,
-    created_at: new Date(),
-}
+// const data: Post = {
+//     post_id: "1",
+//     project_id: "1",
+//     label: "Перепись населения в Ижевске",
+//     creator: "Народный фольклор",
+//     short_description: "",
+//     description: `Надо срочно пересчитать жителей Ижевска. Посчитайте сколько народа живёт у вас в подъезде, укажите адрес для точности. Жителей Буммаша не считаем.\nБубубу лалал\nааааааааа`,
+//     created_at: new Date(),
+// }
 
 
 const testCommentData = {
@@ -39,10 +39,9 @@ export default async function Page({
   params: Promise<{ id: string, post_id: string }>;
 }) {
   const { id, post_id } = await params;
-  // const data: ProjectFull = await getProject(id, post_id);
+  const data: Post = await getPost(id, post_id);
 
-  // const tasks: ... = await ...
-  // const posts: ... = await ...
+  // const comments: ... = await ...
 
   return (
     <div className={`pagecontainer ${styles.container}`}>

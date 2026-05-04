@@ -11,19 +11,17 @@ import { createTask } from "@/src/lib/api/project";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { taskSchema } from "@/src/lib/utils/zodSchemas";
-import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { publicationSchema } from "@/src/lib/utils/zodSchemas";
 
 export default function TaskForm({project_id}: {project_id: string}) {
   const [serverError, setServerError] = useState<string | null>(null);
-  const { userId } = useAuth()
 
   const {
     register: registerField,
     formState: { isValid },
-  } = useForm<z.infer<typeof taskSchema>>({
+  } = useForm<z.infer<typeof publicationSchema>>({
     mode: "onChange",
-    resolver: zodResolver(taskSchema),
+    resolver: zodResolver(publicationSchema),
   });
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -37,14 +35,12 @@ export default function TaskForm({project_id}: {project_id: string}) {
       label: formValues.label as string,
       short_description: formValues.short_description as string,
       description: formValues.description as string,
-      creator_id: userId, 
-      project_id: project_id
     }
 
 
     try {
       console.log("Submitting task creation with data: ", taskCreateRequestData); // DEBUG
-      const response = await createTask(taskCreateRequestData);
+      const response = await createTask(project_id, taskCreateRequestData);
       console.log("Task creation successful: ", response);
       // <!> - Высветить зелёненьким, что всё гуд, якорем вернуть обратно, убрать форму
     } catch (error: any) {
