@@ -34,9 +34,4 @@ COPY --from=builder /frontend/package.json ./package.json
 COPY --from=builder /frontend/node_modules ./node_modules
 
 EXPOSE 3000
-<<<<<<< HEAD
 CMD ["yarn", "start"]
-
-=======
-CMD ["yarn", "start"]
->>>>>>> 7f4d649 (feat(api+FeedCard): Fixing API connection + feedcard)

@@ -1,6 +1,5 @@
 import auth_instance from './instances/auth_instance';
 import { api } from './instances/base';
-import auth_instance from './instances/auth_instance';
 import { ApiRoutes } from './constants';
 import { setAccessToken, clearAccessToken } from './tokenStore';
 
@@ -68,28 +67,6 @@ export const logoutAll = async () => {
   }
 };
 
-export const verifyEmail = async (key: string) => {
-  const { data } = await api.post(ApiRoutes.AUTH.VERIFY_EMAIL, { key });
-  return data;
-};
-
-export const emailResendVerification = async (email: string) => {
-  const { data } = await api.post(ApiRoutes.AUTH.EMAIL_RESEND_VERIFICATION, { email });
-  return data;
-};
-
-export const forgotPassword = async (email: string) => {
-  const { data } = await api.post(ApiRoutes.AUTH.FORGOT_PASSWORD, { email });
-  return data;
-};
-
-export const resetPassword = async (key: string, new_password: string) => {
-  const { data } = await api.post(ApiRoutes.AUTH.RESET_PASSWORD, {
-    key,
-    new_password,
-  });
-  return data;
-};
 
 export const changePassword = async (old_password: string, new_password: string) => {
   const { data } = await api.post(ApiRoutes.AUTH.CHANGE_PASSWORD, {
