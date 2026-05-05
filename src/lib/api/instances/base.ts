@@ -30,7 +30,7 @@ export const createInstance = (): AxiosInstance => {
 
         try {
           const { data } = await axios.post(
-            `${BASE_URL}${ApiRoutes.REFRESH_TOKEN}`,
+            `${BASE_URL}${ApiRoutes.AUTH.REFRESH}`,
             {},
             { withCredentials: true }
           );

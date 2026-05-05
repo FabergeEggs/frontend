@@ -1,0 +1,45 @@
+# Зависимости
+node_modules
+.next
+.yarn
+*.log
+
+# Кэш и временные файлы
+.cache
+.tmp
+temp
+tmp
+
+# Система контроля версий
+.git
+.gitignore
+.gitattributes
+
+# IDE и редакторы
+.idea
+.vscode
+*.swp
+*.swo
+
+# Файлы окружения (можно оставить, если нужно)
+.env
+.env.local
+.env.*.local
+
+# Документация
+README.md
+LICENSE
+docs
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnp.*

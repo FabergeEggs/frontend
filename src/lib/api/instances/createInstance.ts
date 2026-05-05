@@ -6,7 +6,7 @@ import {
 } from "../tokenStore";
 import { ApiRoutes } from "../constants";
 
-const refreshUrl = `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.REFRESH_TOKEN}`
+const refreshUrl = `${process.env.NEXT_PUBLIC_AUTH_API_URL}${ApiRoutes.AUTH.REFRESH}`
 
 export function createInstance(baseURL: string | undefined): AxiosInstance {
   /** Type of baseURL is "string | undefined" because in .env file variables are of this type */

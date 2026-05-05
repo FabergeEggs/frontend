@@ -9,5 +9,4 @@ function createInstance(baseURL: string | undefined): AxiosInstance {
   return instance;
 }
 
-
-export default createInstance(process.env.NEXT_PUBLIC_AUTH_API_URL)
+export default createInstance(process.env.NEXT_PUBLIC_API_URL)
