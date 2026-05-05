@@ -4,14 +4,13 @@ import EmailConfirm from "@/src/ui/forms/AuthForms/EmailConfirm";
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { email?: string };
+  searchParams: Promise<{ email?: string }>;
 }) {
-  console.log(await searchParams);
-  const email = searchParams.email ?? "";
+  const { email } = await searchParams;
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
-      <EmailConfirm email={email} />
+      <EmailConfirm email={email ?? ""} />
     </div>
   );
 }

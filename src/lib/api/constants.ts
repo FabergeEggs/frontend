@@ -1,21 +1,51 @@
-export enum ApiRoutes {
-  // AUTH
-  LOGIN = "/api/v1/auth/login",
-  REGISTER = "/api/v1/auth/register",
-  REFRESH_TOKEN = "/api/v1/auth/refresh",
-  LOGOUT = "/api/v1/auth/logout",
-  ME = "/api/v1/auth/me",
-  VERIFY_EMAIL = "/api/v1/auth/verify-email", // Email confirmation by link from email message
+export const ApiRoutes = {
+  // Auth
+  AUTH: {
+    REGISTER: '/api/v1/auth/register',
+    LOGIN: '/api/v1/auth/login',
+    FORGOT_PASSWORD: '/api/v1/auth/forgot-password',
+    RESET_PASSWORD: '/api/v1/auth/reset-password',
+    REFRESH: '/api/v1/auth/refresh',
+    LOGOUT: '/api/v1/auth/logout',
+    LOGOUT_ALL: '/api/v1/auth/logout-all',
+    VERIFY_EMAIL: '/api/v1/auth/verify-email',
+    EMAIL_RESEND_VERIFICATION: '/api/v1/auth/verify-email',
+    CHANGE_PASSWORD: '/api/v1/auth/change-password',
+  },
 
-  EMAIL_RESEND_VERIFICATION = "/auth/resend-verification-public",
-  FORGOT_PASSWORD = "/api/v1/auth/forgot-password",
-  RESET_PASSWORD = "/api/v1/auth/reset-password",
-  CHANGE_PASSWORD = "/api/v1/auth/password-change",
+  // Profile
+  PROFILE: {
+    GET: (userId: string) => `/profile/${userId}`,
+    UPDATE: (userId: string) => `/profile/${userId}`,
+    DELETE: (userId: string) => `/profile/${userId}`,
+  },
 
-  // PROFILE
-  PROFILE = "/profile",
+  // Project
+  PROJECT: {
+    HEALTH: '/project/health',
+    CREATE: '/project',
+    BATCH: '/project/batch',
+    GET_INFO: (projectId: string) => `/project/${projectId}/info`,
+    GET_STATS: (projectId: string) => `/project/${projectId}/statistics`,
+    UPDATE: (projectId: string) => `/project/${projectId}`,
 
-  // PROJECT
-  PROJECT = "/project", // Create, /[id] - Update
-  
-}
+    // Tasks
+    CREATE_TASK: (projectId: string) => `/project/${projectId}/task`,
+    GET_TASK: (projectId: string, taskId: string) => `/project/${projectId}/task/${taskId}`,
+    UPDATE_TASK: (projectId: string, taskId: string) => `/project/${projectId}/task/${taskId}`,
+
+    // Posts
+    CREATE_POST: (projectId: string) => `/project/${projectId}/post`,
+    GET_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
+    UPDATE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
+    DELETE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
+
+    // Members
+    ADD_MEMBER: (projectId: string) => `/project/${projectId}/member`,
+    REMOVE_MEMBER: (projectId: string, userId: string) => `/project/${projectId}/member/${userId}`,
+
+    // Publications & Memberships
+    GET_PUBLICATIONS: (projectId: string) => `/project/${projectId}/publications`,
+    GET_MEMBERSHIPS: (profileId: string) => `/project/profile/${profileId}`,
+  },
+} as const;

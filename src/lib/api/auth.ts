@@ -1,17 +1,22 @@
-import { ApiRoutes } from "./constants";
-import axiosInstance from "./instances/auth_instance";
-import { setAccessToken, clearAccessToken } from "./tokenStore";
+import { api } from './instances/base';
+import { ApiRoutes } from './constants';
+import { setAccessToken, clearAccessToken } from './tokenStore';
 
 export const login = async (request: LoginRequestDTO) => {
-  const { data } = await axiosInstance.post(ApiRoutes.LOGIN, request);
+  const { data } = await api.post(ApiRoutes.AUTH.LOGIN, request);
   if (data.access_token) {
     setAccessToken(data.access_token);
   }
   return data;
 };
 
+export const register = async (request: RegisterRequestDTO) => {
+  const { data } = await api.post(ApiRoutes.AUTH.REGISTER, request);
+  return data;
+};
+
 export const refreshToken = async () => {
-  const { data } = await axiosInstance.post(ApiRoutes.REFRESH_TOKEN);
+  const { data } = await api.post(ApiRoutes.AUTH.REFRESH);
   if (data.access_token) {
     setAccessToken(data.access_token);
   }
@@ -19,50 +24,48 @@ export const refreshToken = async () => {
 };
 
 export const logout = async () => {
-  await axiosInstance.post(ApiRoutes.LOGOUT);
-  clearAccessToken();
+  try {
+    await api.post(ApiRoutes.AUTH.LOGOUT);
+  } finally {
+    clearAccessToken();
+  }
 };
 
-export const register = async (request: RegisterRequestDTO) => {
-  const { data } = await axiosInstance.post(ApiRoutes.REGISTER, request);
-  return data;
+export const logoutAll = async () => {
+  try {
+    await api.post(ApiRoutes.AUTH.LOGOUT_ALL);
+  } finally {
+    clearAccessToken();
+  }
 };
 
 export const verifyEmail = async (key: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.VERIFY_EMAIL, { key });
+  const { data } = await api.post(ApiRoutes.AUTH.VERIFY_EMAIL, { key });
   return data;
 };
 
 export const emailResendVerification = async (email: string) => {
-  const { data } = await axiosInstance.post(
-    ApiRoutes.EMAIL_RESEND_VERIFICATION,
-    { email },
-  );
+  const { data } = await api.post(ApiRoutes.AUTH.EMAIL_RESEND_VERIFICATION, { email });
   return data;
 };
 
 export const forgotPassword = async (email: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.FORGOT_PASSWORD, {
-    "email": email,
-  });
+  const { data } = await api.post(ApiRoutes.AUTH.FORGOT_PASSWORD, { email });
   return data;
 };
 
-
-// Key from email
 export const resetPassword = async (key: string, new_password: string) => {
-  console.log(`RESETTING PASS, key: ${key}\nPASS: ${new_password}`);
-  const { data } = await axiosInstance.post(ApiRoutes.RESET_PASSWORD, {
-    key: key,
-    new_password: new_password,
+  const { data } = await api.post(ApiRoutes.AUTH.RESET_PASSWORD, {
+    key,
+    new_password,
   });
   return data;
 };
 
 export const changePassword = async (old_password: string, new_password: string) => {
-  const { data } = await axiosInstance.post(ApiRoutes.CHANGE_PASSWORD, {
-    old_password: old_password,
-    new_password: new_password,
+  const { data } = await api.post(ApiRoutes.AUTH.CHANGE_PASSWORD, {
+    old_password,
+    new_password,
   });
   return data;
 };

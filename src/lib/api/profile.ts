@@ -1,17 +1,16 @@
-import { ApiRoutes } from "./constants";
-import axiosInstance from "./instances/profile_instance";
+import { api } from './instances/base';
+import { ApiRoutes } from './constants';
 
 export const getProfile = async (id: string): Promise<ProfileDTO> => {
-  const { data } = await axiosInstance.get(`${ApiRoutes.PROFILE}/${id}`);
+  const { data } = await api.get(ApiRoutes.PROFILE.GET(id));
   return data;
 };
 
 export const updateProfile = async (id: string, request: UpdateProfileRequestDTO): Promise<ProfileDTO> => {
-  const { data } = await axiosInstance.put(`${ApiRoutes.PROFILE}/${id}`, request );
+  const { data } = await api.put(ApiRoutes.PROFILE.UPDATE(id), request);
   return data;
 };
 
-export const getProfiles = async (skip: number = 0, limit: number = 10) => {
-  const { data } = await axiosInstance.get(`${ApiRoutes.PROFILE}/?skip=${skip}&limit=${limit}`);
-  return data;
+export const deleteProfile = async (id: string): Promise<void> => {
+  await api.delete(ApiRoutes.PROFILE.DELETE(id));
 };
