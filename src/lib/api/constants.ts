@@ -48,4 +48,8 @@ export const ApiRoutes = {
     GET_PUBLICATIONS: (projectId: string) => `/project/${projectId}/publications`,
     GET_MEMBERSHIPS: (profileId: string) => `/project/profile/${profileId}`,
   },
+
+  FEED: {
+    GET: '/feed',
+  },
 } as const;

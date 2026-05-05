@@ -29,11 +29,16 @@ export default function AuthProvider({
   useEffect(() => {
     const isAuthPage = AUTH_ROUTES.some(route => pathname.startsWith(route))
     
-    if (isAuthPage) {
+    console.log("CURRENT USER ID: ", userId)
+
+    if (isAuthPage || userId) {
       setIsLoading(false)
       return
     }
 
+
+    // setUserId("ff3008ba-095e-41a9-acef-e8395c0ed598") // DEBUG
+    setIsLoading(false)
     refreshToken()
       .then((data) => {
         console.log("REFRESH RETURNS: ", data)

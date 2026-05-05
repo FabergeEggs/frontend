@@ -45,6 +45,7 @@ export default function LoginForm() {
     try {
       const response = await login(loginData);
       setUserId(response.user_id)
+      console.log("USER ID SET TO: ", response.user_id)
       router.push("/profile");
     } catch (error: any) {
       const status = error.response?.status;

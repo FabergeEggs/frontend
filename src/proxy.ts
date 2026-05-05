@@ -13,6 +13,12 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("refresh_token")?.value;
 
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+
+  if (token) {
+    console.log("You are authorized! Your token is: ", token)
+  } else {
+    console.log("You are not authorized! Redirecting to login...")
+  }
   // Не авторизован + закрытая страница -> на логин
   if (!token && !isPublic) {
     return NextResponse.redirect(new URL("/login", request.url));

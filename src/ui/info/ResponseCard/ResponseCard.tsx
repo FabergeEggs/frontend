@@ -1,6 +1,5 @@
 import styles from "./ResponseCard.module.css";
 import Image from "next/image";
-import ProfilePicturePlug from "@/public/assets/project/profile_picture_plug.svg"
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
 import FileInfo from "../FileInfo/FileInfo";
 
@@ -10,6 +9,7 @@ import ImageTextButton from "../../buttons/ImageTextButton/ImageTextButton";
 import CheckImage from "@/public/assets/check.svg"
 import RedCrossImage from "@/public/assets/red-cross.svg"
 
+import UserInfo from "../UserInfo/UserInfo";
 
 interface ResponseCardProps {
   className: string,
@@ -28,15 +28,7 @@ export default function ResponseCard({className, username, user_id, text, status
     <div className={`${className} basic-card`}>
       <div className={styles.header}>
         <div className="basic-flex">
-          <div className={styles.user}>
-            <Image src={ProfilePicturePlug} alt="Profile picture"/>
-            <div className={styles.username}>
-              {username}
-              <div className={styles.date}>
-                {created_at}
-              </div>
-            </div>
-          </div>
+          <UserInfo username={username} created_at={created_at} />
           <div className={styles.status}>
             <Image src={StatusActiveImage} alt="active status image"></Image>
             <span className={styles.infoDescription}>Статус:</span>

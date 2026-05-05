@@ -1,12 +1,8 @@
 import auth_instance from './instances/auth_instance';
 import { api } from './instances/base';
+import auth_instance from './instances/auth_instance';
 import { ApiRoutes } from './constants';
 import { setAccessToken, clearAccessToken } from './tokenStore';
-
-// api is used for authorized requests - withCredentials = true
-// auth_instance is used for non-authorized requests, they doesn't need to send cookies and redirect user to auth pages (as user is already on auth page)
-
-// Non-authorized requests:
 
 export const login = async (request: LoginRequestDTO) => {
   const { data } = await auth_instance.post(ApiRoutes.AUTH.LOGIN, request);
@@ -17,7 +13,17 @@ export const login = async (request: LoginRequestDTO) => {
 };
 
 export const register = async (request: RegisterRequestDTO) => {
-  const { data } = await auth_instance.post(ApiRoutes.AUTH.REGISTER, request);
+  const { data } = await api.post(ApiRoutes.AUTH.REGISTER, request);
+  return data;
+};
+
+// Authorized requests:
+
+export const refreshToken = async () => {
+  const { data } = await auth_instance.post(ApiRoutes.AUTH.REFRESH);
+  if (data.access_token) {
+    setAccessToken(data.access_token);
+  }
   return data;
 };
 
@@ -44,15 +50,7 @@ export const resetPassword = async (key: string, new_password: string) => {
   return data;
 };
 
-// Authorized requests:
-
-export const refreshToken = async () => {
-  const { data } = await api.post(ApiRoutes.AUTH.REFRESH);
-  if (data.access_token) {
-    setAccessToken(data.access_token);
-  }
-  return data;
-};
+// Authorized handlers:
 
 export const logout = async () => {
   try {
@@ -70,7 +68,28 @@ export const logoutAll = async () => {
   }
 };
 
+export const verifyEmail = async (key: string) => {
+  const { data } = await api.post(ApiRoutes.AUTH.VERIFY_EMAIL, { key });
+  return data;
+};
 
+export const emailResendVerification = async (email: string) => {
+  const { data } = await api.post(ApiRoutes.AUTH.EMAIL_RESEND_VERIFICATION, { email });
+  return data;
+};
+
+export const forgotPassword = async (email: string) => {
+  const { data } = await api.post(ApiRoutes.AUTH.FORGOT_PASSWORD, { email });
+  return data;
+};
+
+export const resetPassword = async (key: string, new_password: string) => {
+  const { data } = await api.post(ApiRoutes.AUTH.RESET_PASSWORD, {
+    key,
+    new_password,
+  });
+  return data;
+};
 
 export const changePassword = async (old_password: string, new_password: string) => {
   const { data } = await api.post(ApiRoutes.AUTH.CHANGE_PASSWORD, {

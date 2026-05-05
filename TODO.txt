@@ -32,5 +32,5 @@ try {
 - next-intl
 - Понакидать user-select: none; где надо, чтобы нельзя было выделять текст
 
-
+asdasd
 
