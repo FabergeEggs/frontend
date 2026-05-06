@@ -60,7 +60,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       first_name: formValues.first_name as string,
       last_name: "",
       bio: formValues.about as string,
-      avatar_url: ""
+      avatar_url: data.avatar_url || ""
     })
   }
 
