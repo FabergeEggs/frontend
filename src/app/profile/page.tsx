@@ -100,7 +100,7 @@ export default function ProfilePage() {
           <ProfileForm data={userData}/>
         </div>
         <div className={styles.pictureInputContainer}>
-          <ProfilePictureInput  />
+          <ProfilePictureInput initialAvatarUrl={userData.avatar_url} userId={userId} />
         </div>
       </div>
       <div className={styles.projectsContainer}>

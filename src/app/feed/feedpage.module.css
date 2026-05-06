@@ -1,0 +1,44 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 24px;
+  margin: 0 0 20px 0;
+  color: var(--active-dark-color);
+}
+
+.list {
+  gap: 15px;
+}
+
+.empty {
+  background-color: var(--main-color);
+  border: 0.5px solid var(--active-dark-color);
+  border-radius: 15px;
+  padding: 30px 20px;
+  text-align: center;
+  color: var(--placeholder-color);
+}
+
+.empty p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.error {
+  background-color: var(--bg-danger-color);
+  color: var(--danger-color);
+  border-radius: 10px;
+  padding: 15px;
+  font-size: 14px;
+}
+
+@media (max-width: 450px) {
+  .title {
+    font-size: 20px;
+  }
+}
