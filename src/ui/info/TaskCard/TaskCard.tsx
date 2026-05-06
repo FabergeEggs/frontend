@@ -4,7 +4,7 @@ import Image from "next/image";
 import Task from "@/public/assets/project/task_black.svg"
 import Comment from "@/public/assets/project/comment.svg"
 
-import { useRouter } from "next/router";
+import { redirect } from "next/navigation";
 
 interface TaskCardProps {
   children?: React.ReactNode,
@@ -17,10 +17,8 @@ interface TaskCardProps {
 
 // Alternative Project Card variant for project page
 export default function TaskCard({children, project_id, id, label, short_description, answers_count}: TaskCardProps) {
-  const router = useRouter();
-
   const handleCardClick = () => {
-    router.push(`/projects/${project_id}/tasks/${id}`);
+    redirect(`/feed/${project_id}/task/${id}`) 
   };
 
   return (

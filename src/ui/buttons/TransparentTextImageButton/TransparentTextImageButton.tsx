@@ -4,7 +4,7 @@ import Image from "next/image";
 interface TransparentTextImageButtonProps {
   text: string;
   src: string;
-  onClick?: () => void;
+  onClick?: (() => void) | ((e: any) => void);
   imageFirst?: boolean;
   className?: string;
   hideText?: boolean;

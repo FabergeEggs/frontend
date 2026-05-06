@@ -42,10 +42,52 @@ import { updateProject, getPublications, deletePost } from "@/src/lib/api/projec
 
 import { useEffect } from "react";
 
+import { PublicationTypeEnum, TaskStatusEnum } from "@/src/lib/models/export/project";
+
+const testTaskData = {
+  id: "1",
+  project_id: "1",
+  created_at: new Date(),
+  creator_id: "1",
+  creator_name: "Privet",
+  type: PublicationTypeEnum.TASK,
+  label: "Перепись населения в городе Ижевск",
+  short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
+  answers_count: 11,
+  status: TaskStatusEnum.ACTIVE
+}
+const testTaskData1 = {
+  id: "2",
+  project_id: "1",
+  created_at: new Date(),
+  creator_id: "1",
+  creator_name: "Privet",
+  type: PublicationTypeEnum.TASK,
+  label: "Перепись населения в городе Ижевск",
+  short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
+  answers_count: 11,
+  status: TaskStatusEnum.FINISHED
+}
+
+const testPostData = {
+  id: "3",
+  project_id: "1",
+  created_at: new Date(),
+  creator_id: "1",
+  creator_name: "Privet",
+  label: "Перепись населения в городе Ижевск",
+  short_description: "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...", 
+  answers_count: 11,
+  type: PublicationTypeEnum.POST,
+  status: null
+}
+
+const publications: PublicationDTO[] = [testTaskData, testTaskData1, testPostData]
+
 export default function ProjectPageClient({data}: {data: ProjectFull }) {
   const { userId } = useAuth()
-  const isAdmin = userId === data.creator_id;
-  // const isAdmin = true;
+  // const isAdmin = userId === data.creator_id;
+  const isAdmin = true; // <!> Plugging!
 
   const [isEditing, setEditing] = useState(false)
   const [isCreatingTask, setCreatingTask] = useState(false)
@@ -55,25 +97,26 @@ export default function ProjectPageClient({data}: {data: ProjectFull }) {
   const [currentTagInput, setCurrentTagInput] = useState<string>("");
 
   // DEBUG <!>
-  const [publications, setPublications] = useState<PublicationDTO[]>([]);
+  // const [publications, setPublications] = useState<PublicationDTO[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
   const posts = publications.filter((publication) => publication.type === "post");
   const tasks = publications.filter((publication) => publication.type === "task");
 
-  const publicationsResponse: Promise<PublicationsResponse> = getPublications(data.project_id)
-  useEffect(() => {
-    publicationsResponse.then((data) => {
-      console.log("PUBLICATIONS: ", data)
-      setPublications(data.items)
-      setNextCursor(data.next_cursor)
-      setHasMore(data.has_more)
-    }).catch((error) => {
-      console.error("Failed to fetch publications: ", error)
-    })
+  // <!> Plugging
+  // const publicationsResponse: Promise<PublicationsResponse> = getPublications(data.project_id)
+  // useEffect(() => {
+  //   publicationsResponse.then((data) => {
+  //     console.log("PUBLICATIONS: ", data)
+  //     setPublications(data.items)
+  //     setNextCursor(data.next_cursor)
+  //     setHasMore(data.has_more)
+  //   }).catch((error) => {
+  //     console.error("Failed to fetch publications: ", error)
+  //   })
 
-  }, [])
+  // }, [])
 
   const {
     register: registerField,

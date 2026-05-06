@@ -22,6 +22,12 @@ export const getProjectStatistics = async (id: string): Promise<ProjectStatsDTO>
   return data;
 };
 
+export const getProject = async (id: string): Promise<ProjectFull> => {
+  const info = await getProjectInfo(id)
+  const stats = await getProjectStatistics(id)
+  return { ...info, ...stats };
+};
+
 export const getProjectsBatch = async (projectIds: string[]) => {
   const { data } = await api.post(ApiRoutes.PROJECT.BATCH, projectIds);
   return data;

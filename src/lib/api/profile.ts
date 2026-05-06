@@ -1,8 +1,12 @@
 import { api } from './instances/base';
 import { ApiRoutes } from './constants';
+import { setUsername } from './userStore';
 
 export const getProfile = async (id: string): Promise<ProfileDTO> => {
   const { data } = await api.get(ApiRoutes.PROFILE.GET(id));
+  if (data.username) {
+    setUsername(data.username);
+  }
   return data;
 };
 

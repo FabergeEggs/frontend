@@ -4,7 +4,7 @@ import Image from "next/image";
 import Post from "@/public/assets/project/post.svg"
 import Comment from "@/public/assets/project/comment.svg"
 
-import { useRouter } from "next/router";
+import { redirect } from "next/navigation";
 
 interface PostCardProps {
   children?: React.ReactNode,
@@ -19,10 +19,8 @@ interface PostCardProps {
 export default function PostCard({children, project_id, id, label, short_description, comments_count}: PostCardProps) {
 
   // DRY ? <!> TaskCard
-  const router = useRouter();
-  
   const handleCardClick = () => {
-    router.push(`/projects/${project_id}/posts/${id}`);
+    redirect(`/feed/${project_id}/post/${id}`);
   };
   
   return (

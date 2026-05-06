@@ -9,3 +9,8 @@ export enum TaskStatusEnum {
     FINISHED = "FINISHED",
     DELETED = "DELETED",
 }
+
+export enum PublicationTypeEnum {
+    POST = "post",
+    TASK = "task"
+}

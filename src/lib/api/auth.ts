@@ -2,11 +2,15 @@ import auth_instance from './instances/auth_instance';
 import { api } from './instances/base';
 import { ApiRoutes } from './constants';
 import { setAccessToken, clearAccessToken } from './tokenStore';
+import { setUserId } from './userStore';
 
 export const login = async (request: LoginRequestDTO) => {
   const { data } = await auth_instance.post(ApiRoutes.AUTH.LOGIN, request);
   if (data.access_token) {
     setAccessToken(data.access_token);
+  }
+  if (data.user_id) {
+    setUserId(data.user_id);
   }
   return data;
 };

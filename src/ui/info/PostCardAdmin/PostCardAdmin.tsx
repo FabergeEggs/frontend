@@ -5,7 +5,6 @@ import ConfirmationModal from "../../modals/ConfirmationModal";
 import TransparentTextImageButton from "../../buttons/TransparentTextImageButton/TransparentTextImageButton";
 
 /* Images: */
-import Image from "next/image";
 import TrashImage from '@/public/assets/project/trash.svg'
 
 interface PostCardAdminProps {
@@ -23,13 +22,16 @@ export default function PostCardAdmin({project_id, id, label, short_description,
 
   return (
       <PostCard project_id={project_id} id={id} label={label} short_description={short_description} comments_count={comments_count}>
-          <TransparentTextImageButton onClick={() => setConfirmationModalOpen(true)} className={styles.interaction} src={TrashImage} text="Удалить" imageFirst={true} />
+          <TransparentTextImageButton onClick={(e: any) => {e.stopPropagation(); e.preventDefault();setConfirmationModalOpen(true)}} className={styles.interaction} src={TrashImage} text="Удалить" imageFirst={true} />
 
           {/* <div onClick={() => setConfirmationModalOpen(true)} className={styles.interaction}>
               <Image src={TrashImage} alt="Delete post button image" />
               Удалить
           </div> */}
-          {confirmationModalOpen && <ConfirmationModal isOpen={confirmationModalOpen} label="Вы уверены, что хотите удалить данный пост?" text="После удаления все данные и комментарии пользователей будут безвозвратно удалены." action={deleteAction} actionText="Удалить"  handleClose={() => setConfirmationModalOpen(false)}/>}
+          {confirmationModalOpen && 
+          // <!> Чутка плохого кода
+              <ConfirmationModal isOpen={confirmationModalOpen} label="Вы уверены, что хотите удалить данный пост?" text="После удаления все данные и комментарии пользователей будут безвозвратно удалены." action={deleteAction} actionText="Удалить"  handleClose={(e: any) => { e.stopPropagation();setConfirmationModalOpen(false)}}/>
+}
       </PostCard>
   );
 }

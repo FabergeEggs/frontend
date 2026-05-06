@@ -76,13 +76,22 @@ export default function ProfilePage() {
   useEffect(() => {
     if (isLoading || !userId) return
     async function loadProfile() {
-      const data = await getProfile(userId);
-      const memberships = await getUserMemberships(userId);
-      setUserData(data)
-      setIsLoadingProfile(false);
+      try {
+          console.log("KARABMA!!!")
+          const data = await getProfile(userId);
+          const memberships = await getUserMemberships(userId);
+          setUserData(data)
+          setIsLoadingProfile(false);
 
-      setScientistProjects(memberships.scientist)
-      setVolunteerProjects(memberships.volunteer)
+          setScientistProjects(memberships.scientist)
+          setVolunteerProjects(memberships.volunteer)
+      }
+      catch (error: any) { 
+        console.error("Error details: ", {
+          message: error.message,
+          response: error.response,
+        });
+      }
     }
     
     loadProfile()

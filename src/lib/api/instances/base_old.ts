@@ -1,48 +1,34 @@
-import axios, { AxiosInstance } from "axios";
-import { getAccessToken, setAccessToken, clearAccessToken } from "../tokenStore";
-import { ApiRoutes } from "../constants";
-import { getUserId, getUsername, getUserRoles } from "../userStore";
+import axios, { AxiosInstance } from 'axios';
+import { getAccessToken, setAccessToken, clearAccessToken } from '../tokenStore';
+import { ApiRoutes } from '../constants';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
 export const createInstance = (): AxiosInstance => {
   const instance = axios.create({
     baseURL: BASE_URL,
-    withCredentials: true,
+    withCredentials: true, // Для httpOnly cookie с refresh token
   });
 
+  // Attach access token to every request
   instance.interceptors.request.use((config) => {
     const token = getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    } else {
+      console.warn("GOT NO TOKEN! No access token found for request to ", config.url);
     }
-
-    const userId = getUserId();
-    const username = getUsername();
-    const roles = getUserRoles();
-
-    // if (userId) {
-    //   config.headers["X-User-Id"] = userId;
-    // }
-
-    // if (username) {
-    //   config.headers["X-Username"] = username;
-    // }
-
-    // if (roles?.length) {
-    //   config.headers["X-User-Roles"] = roles.join(",");
-    // }
-
     return config;
   });
 
+  // Refresh on 401
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-
       if (error.response?.status === 401 && !originalRequest._isRetry) {
         originalRequest._isRetry = true;
+        
 
         try {
           const { data } = await axios.post(
@@ -57,8 +43,8 @@ export const createInstance = (): AxiosInstance => {
           return instance(originalRequest);
         } catch {
           clearAccessToken();
-          if (typeof window !== "undefined") {
-            window.location.href = "/login";
+          if (typeof window !== 'undefined') {
+            window.location.href = '/login';
           }
         }
       }
@@ -70,5 +56,5 @@ export const createInstance = (): AxiosInstance => {
   return instance;
 };
 
+// Экспортируем готовый инстанс
 export const api = createInstance();
-

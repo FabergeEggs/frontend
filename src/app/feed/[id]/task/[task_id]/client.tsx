@@ -27,7 +27,7 @@ export default function TaskPageClient({
 }) {
   const { userId } = useAuth()
   // const isAdmin = userId === data.creator_id;
-  const isAdmin = true;
+  const isAdmin = true; // <!> Plugging!
 
   const [editing, setEditing] = useState(false);
 
