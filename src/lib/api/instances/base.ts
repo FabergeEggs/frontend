@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
-import { getAccessToken, setAccessToken, clearAccessToken } from "../tokenStore";
+import { getAccessToken, setAccessToken, clearAccessToken } from "../../store/tokenStore";
 import { ApiRoutes } from "../constants";
-import { getUserId, getUsername, getUserRoles } from "../userStore";
+// import { getUserId, getUsername, getUserRoles } from "../../store/userStore";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
@@ -17,9 +17,9 @@ export const createInstance = (): AxiosInstance => {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    const userId = getUserId();
-    const username = getUsername();
-    const roles = getUserRoles();
+    // const userId = getUserId();
+    // const username = getUsername();
+    // const roles = getUserRoles();
 
     // if (userId) {
     //   config.headers["X-User-Id"] = userId;

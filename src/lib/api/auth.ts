@@ -1,8 +1,8 @@
 import auth_instance from './instances/auth_instance';
 import { api } from './instances/base';
 import { ApiRoutes } from './constants';
-import { setAccessToken, clearAccessToken } from './tokenStore';
-import { setUserId } from './userStore';
+import { setAccessToken, clearAccessToken } from '../store/tokenStore';
+import { setUserId } from '../store/userStore';
 
 export const login = async (request: LoginRequestDTO) => {
   const { data } = await auth_instance.post(ApiRoutes.AUTH.LOGIN, request);
