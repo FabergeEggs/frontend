@@ -15,7 +15,7 @@ const AuthContext = createContext<AuthContextType>({
   setUserId: () => {},
 });
 
-const AUTH_ROUTES = ["/login", "/signup", "/reset-password", "/verify-email"]
+const AUTH_ROUTES = ["/login", "/logout", "/signup", "/reset-password", "/verify-email"]
 
 export default function AuthProvider({
   children,

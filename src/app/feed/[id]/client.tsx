@@ -86,8 +86,8 @@ const publications: PublicationDTO[] = [testTaskData, testTaskData1, testPostDat
 
 export default function ProjectPageClient({data}: {data: ProjectFull }) {
   const { userId } = useAuth()
-  // const isAdmin = userId === data.creator_id;
-  const isAdmin = true; // <!> Plugging!
+  const isAdmin = userId === data.creator_id;
+  // const isAdmin = true; // <!> Plugging!
 
   const [isEditing, setEditing] = useState(false)
   const [isCreatingTask, setCreatingTask] = useState(false)
@@ -97,7 +97,7 @@ export default function ProjectPageClient({data}: {data: ProjectFull }) {
   const [currentTagInput, setCurrentTagInput] = useState<string>("");
 
   // DEBUG <!>
-  // const [publications, setPublications] = useState<PublicationDTO[]>([]);
+  const [publications, setPublications] = useState<PublicationDTO[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true);
 
@@ -105,18 +105,18 @@ export default function ProjectPageClient({data}: {data: ProjectFull }) {
   const tasks = publications.filter((publication) => publication.type === "task");
 
   // <!> Plugging
-  // const publicationsResponse: Promise<PublicationsResponse> = getPublications(data.project_id)
-  // useEffect(() => {
-  //   publicationsResponse.then((data) => {
-  //     console.log("PUBLICATIONS: ", data)
-  //     setPublications(data.items)
-  //     setNextCursor(data.next_cursor)
-  //     setHasMore(data.has_more)
-  //   }).catch((error) => {
-  //     console.error("Failed to fetch publications: ", error)
-  //   })
+  const publicationsResponse: Promise<PublicationsResponse> = getPublications(data.project_id)
+  useEffect(() => {
+    publicationsResponse.then((data) => {
+      console.log("PUBLICATIONS: ", data)
+      setPublications(data.items)
+      setNextCursor(data.next_cursor)
+      setHasMore(data.has_more)
+    }).catch((error) => {
+      console.error("Failed to fetch publications: ", error)
+    })
 
-  // }, [])
+  }, [])
 
   const {
     register: registerField,

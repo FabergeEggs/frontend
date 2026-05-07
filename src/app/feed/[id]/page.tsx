@@ -45,7 +45,7 @@ export default async function Page({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  // const data: ProjectFull = await getProject(id);
+  const data: ProjectFull = await getProject(id);
 
   return (
       <ProjectPageClient data={data}/>

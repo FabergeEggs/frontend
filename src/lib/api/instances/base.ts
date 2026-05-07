@@ -1,3 +1,5 @@
+"use client"
+
 import axios, { AxiosInstance } from "axios";
 import { getAccessToken, setAccessToken, clearAccessToken } from "../../store/tokenStore";
 import { ApiRoutes } from "../constants";

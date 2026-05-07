@@ -40,7 +40,7 @@ export default async function Page({
 }) {
   const { id, task_id } = await params;
 
-  // const data = await getTask(id, task_id) <!> Plugging
+  const data = await getTask(id, task_id) // <!> Plugging
 
   // const responses: ... = await ...
 

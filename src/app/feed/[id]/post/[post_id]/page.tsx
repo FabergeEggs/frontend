@@ -42,7 +42,7 @@ export default async function Page({
   params: Promise<{ id: string, post_id: string }>;
 }) {
   const { id, post_id } = await params;
-  // const data: Post = await getPost(id, post_id); <!> Plugging
+  const data: Post = await getPost(id, post_id); // <!> Plugging
 
   // const comments: ... = await ...
 
