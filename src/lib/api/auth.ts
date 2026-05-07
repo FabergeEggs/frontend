@@ -4,6 +4,8 @@ import { ApiRoutes } from './constants';
 import { setAccessToken, clearAccessToken } from '../store/tokenStore';
 import { setUserId } from '../store/userStore';
 
+// Non-authorized requests:
+
 export const login = async (request: LoginRequestDTO) => {
   const { data } = await auth_instance.post(ApiRoutes.AUTH.LOGIN, request);
   if (data.access_token) {
@@ -16,17 +18,7 @@ export const login = async (request: LoginRequestDTO) => {
 };
 
 export const register = async (request: RegisterRequestDTO) => {
-  const { data } = await api.post(ApiRoutes.AUTH.REGISTER, request);
-  return data;
-};
-
-// Authorized requests:
-
-export const refreshToken = async () => {
-  const { data } = await auth_instance.post(ApiRoutes.AUTH.REFRESH);
-  if (data.access_token) {
-    setAccessToken(data.access_token);
-  }
+  const { data } = await auth_instance.post(ApiRoutes.AUTH.REGISTER, request);
   return data;
 };
 
@@ -53,7 +45,15 @@ export const resetPassword = async (key: string, new_password: string) => {
   return data;
 };
 
-// Authorized handlers:
+// Authorized requests:
+
+export const refreshToken = async () => {
+  const { data } = await api.post(ApiRoutes.AUTH.REFRESH);
+  if (data.access_token) {
+    setAccessToken(data.access_token);
+  }
+  return data;
+};
 
 export const logout = async () => {
   try {

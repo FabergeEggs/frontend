@@ -33,6 +33,9 @@ export const createInstance = (): AxiosInstance => {
     //   config.headers["X-User-Roles"] = roles.join(",");
     // }
 
+    console.log("--- REQUEST START ---")
+    console.log("Headers: ", config.headers)
+
     return config;
   });
 
