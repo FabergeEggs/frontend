@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { getAccessToken, setAccessToken, clearAccessToken } from "../../store/tokenStore";
 import { ApiRoutes } from "../constants";
+import { config } from "@/src/proxy";
 // import { getUserId, getUsername, getUserRoles } from "../../store/userStore";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
@@ -33,14 +34,36 @@ export const createInstance = (): AxiosInstance => {
     //   config.headers["X-User-Roles"] = roles.join(",");
     // }
 
-    console.log("--- REQUEST START ---")
-    console.log("Headers: ", config.headers)
+    // console.log("--- REQUEST START ---");
+    // console.log("Method:", config.method?.toUpperCase());
+    // console.log("URL:", config.baseURL, config.url);
+    // // Use .toJSON() or spread to flatten the headers for the console
+    // console.log("Headers:", config.headers.toJSON());
+    // console.log("Data:", config.data);
+    
+    console.log("--- REQUEST START ---", {
+      method: config.method?.toUpperCase(),
+      url: `${config.baseURL}${config.url}`,
+      headers: config.headers.toJSON(),
+      data: config.data,
+    });
 
     return config;
   });
 
   instance.interceptors.response.use(
-    (response) => response,
+    (response) => {
+      console.log("--- RESPONSE RETURNED ---", {
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+        headers: response.headers,
+        config: response.config,
+        request: response.request,
+      });
+      console.log("--- REQUEST END ---");
+      return response;
+    },
     async (error) => {
       const originalRequest = error.config;
 
