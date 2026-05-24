@@ -21,7 +21,7 @@ export default function VerifyEmailPage({
     verifyEmail(key)
       .then(() => router.push("/login?verified=true"))
       .catch((error) => setServerError("Произошла ошибка."));
-  }, [key]);
+  }, [key, router]);
 
   return (
     <div

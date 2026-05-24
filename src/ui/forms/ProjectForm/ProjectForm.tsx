@@ -6,25 +6,32 @@ import ProjectTextarea from "../../inputs/ProjectInput/ProjectTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
 import ProjectFormTag from "../../info/ProjectFormTag/ProjectFormTag";
-import { ProjectStatusEnum } from "@/src/lib/models/export/project";
+import {
+  ProjectStatusEnum,
+  type ProjectCreateDTO,
+} from "@/src/lib/models/export/project";
 
 import { useState } from "react";
-import { createProject } from "@/src/lib/api/project";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { projectSchema } from "@/src/lib/utils/zodSchemas";
+import {
+  useCreateProject,
+  getApiErrorMessage,
+} from "@/src/lib/query/project";
+import { getMutationStatus } from "@/src/lib/query/status";
 
 export default function ProjectForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
-  const [currentTagInput, setCurrentTagInput] = useState<string>("");
+  const [currentTagInput, setCurrentTagInput] = useState("");
   const router = useRouter();
+  const createProject = useCreateProject();
+  const { isSubmitting, errorMessage } = getMutationStatus(createProject);
 
   const {
     register: registerField,
-    trigger,
-    formState: { errors, dirtyFields, isValid },
+    formState: { errors, isValid },
     setValue,
     getValues,
     watch,
@@ -39,17 +46,23 @@ export default function ProjectForm() {
   const watchedTags = watch("tags");
 
   const handleAddTag = () => {
-    if (currentTagInput.trim()) {
-      const currentTags = getValues("tags") || [];
-      if (!currentTags.includes(currentTagInput.trim()))
-        setValue("tags", [...currentTags, currentTagInput.trim()], { shouldValidate: true });
-      setCurrentTagInput("");
+    if (!currentTagInput.trim()) return;
+    const currentTags = getValues("tags") || [];
+    if (!currentTags.includes(currentTagInput.trim())) {
+      setValue("tags", [...currentTags, currentTagInput.trim()], {
+        shouldValidate: true,
+      });
     }
+    setCurrentTagInput("");
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
     const currentTags = getValues("tags") || [];
-    setValue("tags", currentTags.filter(tag => tag !== tagToRemove), { shouldValidate: true });
+    setValue(
+      "tags",
+      currentTags.filter((tag) => tag !== tagToRemove),
+      { shouldValidate: true },
+    );
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -59,45 +72,33 @@ export default function ProjectForm() {
     }
   };
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setServerError(null);
 
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const formValues = Object.fromEntries(formData.entries());
 
-    const projectCreateRequestData: ProjectCreateDTO = {
+    const payload: ProjectCreateDTO = {
       label: formValues.label as string,
       short_description: formValues.short_description as string,
       description: formValues.description as string,
       tags: getValues("tags") || [],
-      status: ProjectStatusEnum.ACTIVE
-    }
-
+      status: ProjectStatusEnum.ACTIVE,
+    };
 
     try {
-      console.log("Submitting project creation with data: ", projectCreateRequestData); // DEBUG
-      const response = await createProject(projectCreateRequestData);
-      console.log("Project creation successful: ", response);
-      router.push(
-        `/feed/${response.id}`,
-      );
-    } catch (error: any) {
-      const status = error.response?.status;
-      // <!> - Продумать ошибки
-      if (status === 422) {
-        setServerError("Проверьте правильность заполнения полей");
-      } else {
-        setServerError("Ошибка создания проекта. Попробуйте позже");
-      }
-      
-      console.error("Project creation failed: ", error);
-      console.error("Error details: ", {
-        message: error.message,
-        response: error.response,
-      });
+      const response = await createProject.mutateAsync(payload);
+      router.push(`/feed/${response.id}`);
+    } catch {
+      // ошибка отображается через errorMessage
     }
   };
+
+  const displayError =
+    errorMessage ??
+    (createProject.isError
+      ? getApiErrorMessage(createProject.error, "Ошибка создания проекта")
+      : null);
 
   return (
     <div className={styles.container}>
@@ -116,7 +117,11 @@ export default function ProjectForm() {
             height={100}
             {...registerField("short_description")}
           />
-          {errors.short_description && <ValidationError messages={errors.short_description ? [errors.short_description.message || ""] : []} />}
+          {errors.short_description && (
+            <ValidationError
+              messages={[errors.short_description.message || ""]}
+            />
+          )}
           <ProjectTextarea
             label="Развёрнутое описание"
             placeholder="Подробно расскажите о своём проекте..."
@@ -124,16 +129,21 @@ export default function ProjectForm() {
             height={200}
             {...registerField("description")}
           />
-          {errors.description && <ValidationError messages={errors.description ? [errors.description.message || ""] : []} />}
+          {errors.description && (
+            <ValidationError
+              messages={[errors.description.message || ""]}
+            />
+          )}
           <div className={styles.tagSegment}>
             <AuthInput
               label="Теги"
               placeholder="Введите тег..."
               required={false}
               value={currentTagInput}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentTagInput(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setCurrentTagInput(e.target.value)
+              }
               onKeyDown={handleTagInputKeyDown}
-              // className={styles.tagInput}
             />
             <div className={styles.tags}>
               {watchedTags.map((tag, index) => (
@@ -146,12 +156,12 @@ export default function ProjectForm() {
         </div>
         <GreenButton
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
           className={styles.submitBtn}
-          text="Создать проект"
+          text={isSubmitting ? "Создание…" : "Создать проект"}
         />
       </form>
-      {serverError && <ValidationError messages={[serverError]} />}
+      {displayError && <ValidationError messages={[displayError]} />}
     </div>
   );
 }

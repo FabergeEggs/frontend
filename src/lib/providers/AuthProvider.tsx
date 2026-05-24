@@ -1,12 +1,14 @@
 "use client";
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { refreshToken } from "@/src/lib/api/auth";
-import { usePathname } from "next/navigation"
+import { getUserId as readUserId, setUserId as persistUserId } from "@/src/lib/store/userStore";
+import { usePathname } from "next/navigation";
 
 interface AuthContextType {
-  userId: string
-  isLoading: boolean
-  setUserId: (id: string) => void
+  userId: string;
+  isLoading: boolean;
+  setUserId: (id: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -15,39 +17,58 @@ const AuthContext = createContext<AuthContextType>({
   setUserId: () => {},
 });
 
-const AUTH_ROUTES = ["/login", "/logout", "/signup", "/reset-password", "/verify-email"]
+const AUTH_ROUTES = [
+  "/login",
+  "/logout",
+  "/signup",
+  "/reset-password",
+  "/verify-email",
+  "/testcli",
+  "/testsrv",
+];
+
+function isAuthRoute(pathname: string) {
+  return AUTH_ROUTES.some((route) => pathname.startsWith(route));
+}
 
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [userId, setUserId] = useState<string>("");
+  const pathname = usePathname();
+  const [userId, setUserIdState] = useState(() => readUserId() ?? "");
   const [isLoading, setIsLoading] = useState(true);
-  const pathname = usePathname()
 
+  const setUserId = (id: string) => {
+    setUserIdState(id);
+    persistUserId(id);
+  };
+
+  // Сессию восстанавливаем один раз при загрузке приложения, не при каждом переходе
   useEffect(() => {
-    const isAuthPage = AUTH_ROUTES.some(route => pathname.startsWith(route))
-    
-    console.log("CURRENT USER ID: ", userId)
-
-    if (isAuthPage || userId) {
-      setIsLoading(false)
-      return
+    if (isAuthRoute(pathname)) {
+      setIsLoading(false);
+      return;
     }
 
+    const storedUserId = readUserId();
+    if (storedUserId) {
+      setUserIdState(storedUserId);
+      setIsLoading(false);
+      return;
+    }
 
-    // setUserId("ff3008ba-095e-41a9-acef-e8395c0ed598") // DEBUG
-    setIsLoading(false)
     refreshToken()
       .then((data) => {
-        console.log("REFRESH RETURNS: ", data)
-        setUserId(data.user_id)
-        // setUserId("1e1ccc01-f31d-4cee-8c6a-b60dede271ac")
-        // setUserId("08bbe2d4-824d-4eac-8984-001ff1954429") // DEBUG
+        if (data.user_id) {
+          setUserId(data.user_id);
+        }
       })
       .catch(() => {})
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoading(false));
+    // pathname намеренно не в deps — нужен только снимок при первом mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

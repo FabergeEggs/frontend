@@ -4,7 +4,8 @@ import "@/src/ui/variables.css";
 import styles from "./layout.module.css";
 import { Inter } from "next/font/google";
 
-import AuthProvider from "@/src/lib/providers/AuthProvider"
+import AuthProvider from "@/src/lib/providers/AuthProvider";
+import QueryProvider from "@/src/lib/providers/QueryProvider";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -19,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
-         <div className={styles.layout}>{children}</div>
-        </AuthProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <div className={styles.layout}>{children}</div>
+          </AuthProvider>
+        </QueryProvider>
       </body>
     </html>
   );

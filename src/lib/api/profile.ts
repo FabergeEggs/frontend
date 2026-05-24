@@ -1,6 +1,6 @@
-import { api } from './instances/base';
-import { ApiRoutes } from './constants';
-import { setUsername } from '../store/userStore';
+import { api } from "./instances/base";
+import { ApiRoutes } from "./constants";
+import { setUsername } from "../store/userStore";
 
 export const getProfile = async (id: string): Promise<ProfileDTO> => {
   const { data } = await api.get(ApiRoutes.PROFILE.GET(id));
@@ -10,7 +10,10 @@ export const getProfile = async (id: string): Promise<ProfileDTO> => {
   return data;
 };
 
-export const updateProfile = async (id: string, request: UpdateProfileRequestDTO): Promise<ProfileDTO> => {
+export const updateProfile = async (
+  id: string,
+  request: UpdateProfileRequestDTO,
+): Promise<ProfileDTO> => {
   const { data } = await api.put(ApiRoutes.PROFILE.UPDATE(id), request);
   return data;
 };

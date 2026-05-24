@@ -49,7 +49,7 @@ const ConfirmationModal = ({
                 <div className={styles.content}>
                     <h1 className={styles.label}>{label}</h1>
                     <p className={styles.text}>{text}</p>
-                    <button className={`basic-btn ${styles.actionBtn}`} onClick={() => { action(); handleClose(null)}}>{actionText}</button>
+                    <button className={`basic-btn ${styles.actionBtn}`} onClick={(e) => { action(); handleClose(e)}}>{actionText}</button>
                     <button className={`basic-btn ${styles.closeBtn}`} onClick={handleClose}>{closeText}</button>
                 </div>
             </>

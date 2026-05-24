@@ -39,6 +39,10 @@ export const ApiRoutes = {
     GET_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
     UPDATE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
     DELETE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
+    GET_POST_COMMENTS: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}/comments`,
+
+    // Responses (for tasks)
+    GET_TASK_RESPONSES: (projectId: string, taskId: string) => `/project/${projectId}/task/${taskId}/responses`,
 
     // Members
     ADD_MEMBER: (projectId: string) => `/project/${projectId}/member`,
