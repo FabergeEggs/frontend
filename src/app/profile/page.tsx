@@ -15,7 +15,10 @@ import FindImage from "@/public/assets/profile/find.svg"
 
 import { useState, useEffect } from "react";
 import { getProfile } from "@/src/lib/api/profile";
-import { ProjectStatusEnum } from "@/src/lib/models/export/project";
+import {
+  ProjectStatusEnum,
+  type MembershipProjectDTO,
+} from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { getUserMemberships } from "@/src/lib/api/project";
 
@@ -77,9 +80,10 @@ export default function ProfilePage() {
     if (isLoading || !userId) return
     async function loadProfile() {
       try {
-          console.log("KARABMA!!!")
+          // console.log("KARABMA!!!") Покойся с миром, лог забавный.
           const data = await getProfile(userId);
           const memberships = await getUserMemberships(userId);
+          console.log("MEMBERSHIPS: ", memberships)
           setUserData(data)
           setIsLoadingProfile(false);
 
@@ -119,9 +123,15 @@ export default function ProfilePage() {
               <h2 className={styles.title}>Мои проекты</h2>
               { scientistProjects.length > 0 && <Image src={showScientistProjects ? ArrowDown : ArrowRight} alt="arrow-right" />}
             </div>
-            { myProjects.length > 0 && <Link className="basic-link" href="/feed/create">
-              <TransparentTextImageButton src={NewImage} text="Создать новый проект" color="black"/> {/** <!> color="black" распространяется на все TransparentButton на данной странице за счёт <style> */}
-            </Link>}
+            { scientistProjects.length > 0 && (
+              <Link className="basic-link" href="/feed/create">
+                <TransparentTextImageButton
+                  src={NewImage}
+                  text="Создать новый проект"
+                  color="black"
+                />
+              </Link>
+            )}
           </div>
           { (showScientistProjects && scientistProjects.length > 0) && 
             <div className={styles.projects}>
@@ -133,10 +143,11 @@ export default function ProfilePage() {
           {
             (scientistProjects.length == 0) && <div className={styles.noProjects}>
               <p>У вас пока что нет проектов.</p>
-              <Link className="basic-link" href="/feed/create">
-                <button className={`basic-btn ${styles.noProjectsBtn}`}>
-                  Создать проект
-                </button>
+              <Link
+                href="/feed/create"
+                className={`basic-link basic-btn ${styles.noProjectsBtn}`}
+              >
+                Создать проект
               </Link>
             </div>
           }

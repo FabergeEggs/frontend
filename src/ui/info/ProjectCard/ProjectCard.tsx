@@ -6,7 +6,8 @@ import VerticalLine from "@/public/assets/project/vertical-line.svg";
 import UserImage from "@/public/assets/project/user.svg";
 import TaskImage from "@/public/assets/project/task.svg";
 
-import { useRouter } from "next/router";
+
+import { redirect } from "next/navigation";
 
 interface ProjectCardProps {
   children?: React.ReactNode
@@ -32,10 +33,9 @@ interface ProjectCardProps {
 // }
 
 export default function ProjectCard({children, project_id, label, short_description, tags = ["Урбанистика", "Кириешки"], tasks_count = 5, participants_count = 17}: ProjectCardProps) {
-  const router = useRouter();
   
   return (
-    <div onClick={() => router.push(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card}`}>
+    <div onClick={() => redirect(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card}`}>
       {children}
       <div className={styles.label}>{label}</div>
       <div className={styles.info}>

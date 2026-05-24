@@ -6,48 +6,51 @@ import ProjectTextarea from "../../inputs/ProjectInput/ProjectTextarea";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import ValidationError from "../ValidationError/ValidationError";
 
-import { useState } from "react";
-import { createPost } from "@/src/lib/api/project";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { publicationSchema } from "@/src/lib/utils/zodSchemas";
+import type { PostCreateDTO } from "@/src/lib/models/export/project";
+import { useCreatePost } from "@/src/lib/query/project";
+import { getMutationStatus } from "@/src/lib/query/status";
 
-export default function PostForm({project_id}: {project_id: string}) {
-  const [serverError, setServerError] = useState<string | null>(null);
+export default function PostForm({
+  project_id,
+  onSuccess,
+}: {
+  project_id: string;
+  onSuccess?: () => void;
+}) {
+  const createPost = useCreatePost(project_id);
+  const { isSubmitting, errorMessage } = getMutationStatus(createPost);
 
   const {
     register: registerField,
     formState: { isValid },
+    reset,
   } = useForm<z.infer<typeof publicationSchema>>({
     mode: "onChange",
     resolver: zodResolver(publicationSchema),
   });
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setServerError(null);
 
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const formValues = Object.fromEntries(formData.entries());
 
-    const postCreateRequestData: PostCreateDTO = {
+    const payload: PostCreateDTO = {
       label: formValues.label as string,
       short_description: formValues.short_description as string,
       description: formValues.description as string,
-    }
-
+    };
 
     try {
-      console.log("Submitting post creation with data: ", postCreateRequestData); // DEBUG
-      const response = await createPost(project_id,postCreateRequestData);
-      console.log("Post creation successful: ", response);
-      // <!> - Высветить зелёненьким, что всё гуд, якорем вернуть обратно, убрать форму
-    } catch (error: any) {
-      // const status = error.response?.status;
-      // <!> - Продумать ошибки
-      setServerError("Ошибка создания поста. Попробуйте позже");
-      console.error("Post creation failed: ", error);
+      await createPost.mutateAsync(payload);
+      reset();
+      onSuccess?.();
+    } catch {
+      // ошибка в errorMessage
     }
   };
 
@@ -78,12 +81,12 @@ export default function PostForm({project_id}: {project_id: string}) {
         </div>
         <GreenButton
           type="submit"
-          disabled={!isValid}
+          disabled={!isValid || isSubmitting}
           className={styles.submitBtn}
-          text="Опубликовать"
+          text={isSubmitting ? "Публикация…" : "Опубликовать"}
         />
       </form>
-      {serverError && <ValidationError messages={[serverError]} />}
+      {errorMessage && <ValidationError messages={[errorMessage]} />}
     </div>
   );
 }

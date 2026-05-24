@@ -30,7 +30,7 @@ export default function TransparentTextImageButton({
                     }
 
                 }`}</style>}
-    <div className={`${styles.container} ${className}`} onClick={onClick}>
+    <span className={`${styles.container} ${className}`} onClick={onClick} role={onClick ? "button" : undefined}>
         {!imageFirst && <>
           <span className="transparentButtonText" style={{color}}>{text}</span>
           <Image className={styles.image} src={src} alt={text} />
@@ -39,7 +39,7 @@ export default function TransparentTextImageButton({
           <Image className={styles.image} src={src} alt={text} />
           <span className="transparentButtonText" style={{color}}>{text}</span>
         </>}
-    </div>
+    </span>
     </>
   );
 }
