@@ -13,7 +13,7 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ProjectStatusEnum,
   type MembershipProjectDTO,
@@ -47,12 +47,20 @@ const projectParticipations = [testProjectData, testProjectData];
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState("");
 
   const { userId, isLoading } = useAuth();
-  
+
   const profileQuery = useProfileInfo(userId || "");
   const profileStatus = getQueryStatus(profileQuery);
   const profileData = profileQuery.data;
+
+  // Sync avatar URL from loaded profile data
+  useEffect(() => {
+    if (profileData?.avatar_url !== undefined) {
+      setAvatarUrl(profileData.avatar_url);
+    }
+  }, [profileData?.avatar_url]);
 
   const membershipsQuery = useUserMemberships(userId || "");
   const membershipsStatus = getQueryStatus(membershipsQuery);
@@ -93,10 +101,10 @@ export default function ProfilePage() {
       <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <ProfileForm data={profileData}/>
+          <ProfileForm data={profileData} avatarUrl={avatarUrl} />
         </div>
         <div className={styles.pictureInputContainer}>
-          <ProfilePictureInput  />
+          <ProfilePictureInput value={avatarUrl} onChange={setAvatarUrl} />
         </div>
       </div>
       <div className={styles.projectsContainer}>

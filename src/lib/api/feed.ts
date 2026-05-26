@@ -1,5 +1,4 @@
 import { api } from './instances/base';
-import { ApiRoutes } from './constants';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -68,7 +67,7 @@ export const getFeed = async (
 ): Promise<FeedPage> => {
   const params: Record<string, string | number> = { limit };
   if (cursor) params.cursor = cursor;
-  const { data } = await api.get("/api/v1/feed", { params });
+  const { data } = await api.get("/api/v1/feed/global", { params });
   return data;
 };
 

@@ -12,7 +12,7 @@ import { updateProfile } from "@/src/lib/api/profile";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useRef, useState } from "react"
 
-export default function ProfileForm({ data } : {data : ProfileDTO}) {
+export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, avatarUrl: string}) {
   const { register: registerField, setValue, trigger, formState: { errors, dirtyFields }, } = useForm<z.infer<typeof profileSchema>>({
     mode: "onChange",
     resolver: zodResolver(profileSchema),
@@ -60,7 +60,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       first_name: formValues.first_name as string,
       last_name: "",
       bio: formValues.about as string,
-      avatar_url: ""
+      avatar_url: avatarUrl
     })
   }
 
