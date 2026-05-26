@@ -7,58 +7,38 @@ import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";
 
-import { useState } from "react";
-import { register } from "@/src/lib/api/auth";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signupSchema } from "@/src/lib/utils/zodSchemas";
+import { useRegisterMutation } from "@/src/lib/query/auth";
+import { getMutationStatus } from "@/src/lib/query/status";
 
 export default function SignupForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
-  const router = useRouter();
+  const registerMutation = useRegisterMutation();
+  const mutationStatus = getMutationStatus(registerMutation);
 
   const {
     register: registerField,
     trigger,
-    formState: { errors, dirtyFields, isValid },
+    formState: { errors, isValid },
+    handleSubmit: handleSubmitHook,
   } = useForm<z.infer<typeof signupSchema>>({
     mode: "onChange",
     resolver: zodResolver(signupSchema),
   });
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-    setServerError(null);
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const formValues = Object.fromEntries(formData.entries());
-
+  const handleSubmit = handleSubmitHook((formValues) => {
     const registerRequestData: RegisterRequestDTO = {
-      email: formValues.email as string,
-      password: formValues.password as string,
-      first_name: formValues.first_name as string,
+      email: formValues.email,
+      password: formValues.password,
+      first_name: formValues.first_name,
       last_name: "",
-      about: formValues.about as string,
+      about: formValues.about,
       phone: "",
     };
-
-    try {
-      await register(registerRequestData);
-      router.push(
-        `/verify-email?email=${encodeURIComponent(registerRequestData.email)}`,
-      );
-    } catch (error: any) {
-      const status = error.response?.status;
-      if (status === 409) {
-        setServerError("Пользователь с такой почтой уже существует");
-      } else {
-        setServerError("Ошибка регистрации. Попробуйте позже");
-      }
-      console.error("Registration failed: ", error.response);
-    }
-  };
+    registerMutation.mutate(registerRequestData);
+  });
 
   return (
     <div className={styles.container}>
@@ -98,28 +78,30 @@ export default function SignupForm() {
           )}
           <AuthInput
             type="password"
-            label="Повтор пароля"
+            label="Повторите пароль"
             placeholder="Введите пароль ещё раз..."
             {...registerField("confirmPassword")}
           />
-          {dirtyFields.confirmPassword && errors.confirmPassword && (
+          {errors.confirmPassword && (
             <p className={styles.error}>{errors.confirmPassword.message}</p>
           )}
         </div>
         <GreenButton
           type="submit"
-          disabled={!isValid}
           className={styles.submitBtn}
+          disabled={!isValid || mutationStatus.isSubmitting}
           text="Зарегистрироваться"
         />
         <p className={styles.authRef}>
-          У вас уже есть аккаунт?{" "}
+          Уже есть аккаунт?{" "}
           <TextLink className={styles.authRef} href="/login">
             Войдите тут
           </TextLink>
         </p>
       </form>
-      {serverError && <ValidationError messages={[serverError]} />}
+      {mutationStatus.isError && (
+        <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка регистрации"]} />
+      )}
     </div>
   );
 }

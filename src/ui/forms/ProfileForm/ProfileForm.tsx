@@ -126,6 +126,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
         label="Новый пароль"
         placeholder="Введите новый пароль..."
         hasEditButton={false}
+        hasConfirmButton={false}
         {...registerField("newPassword", {
               onChange: () => trigger("confirmPassword"),
             })}
@@ -138,6 +139,7 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
         label="Пароль"
         placeholder="Подтвердите новый пароль..."
         hasEditButton={false}
+        hasConfirmButton={false}
         {...registerField("confirmPassword")}
       />
       {dirtyFields.confirmPassword && errors.confirmPassword && (

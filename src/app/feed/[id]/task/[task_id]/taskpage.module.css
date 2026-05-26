@@ -46,7 +46,7 @@
 }
 
 .infoDescription {
-    color: var(--active-dark-color)
+    color: var(--active-dark-color);
 }
 
 .responses {
@@ -55,7 +55,9 @@
   gap: 15px;
 }
 
-
+.description {
+    word-wrap: break-word; 
+}
 
 
 @media(max-width: 1000px) {
@@ -89,18 +91,3 @@
         padding: 15px;
     }
 }
-
-
-/*
-
-import EditImage from "@/public/assets/edit.svg";
-import NewTaskImage from "@/public/assets/project/task.svg";
-import NewPostImage from "@/public/assets/project/new-post.svg";
-
-
-
-
-
-
-
-*/

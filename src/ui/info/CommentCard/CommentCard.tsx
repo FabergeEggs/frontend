@@ -7,7 +7,7 @@ interface CommentCardProps {
   username: string
   user_id: string;
   content: string
-  created_at: string;
+  created_at?: string;
 }
 
 export default function CommentCard({className, username, user_id, content, created_at}: CommentCardProps) {
@@ -18,7 +18,7 @@ export default function CommentCard({className, username, user_id, content, crea
         <div className={styles.username}>
           {username}
           <div className={styles.date}>
-            {created_at}
+            {created_at ?? "Дата неизвестна"}
           </div>
         </div>
       </div>

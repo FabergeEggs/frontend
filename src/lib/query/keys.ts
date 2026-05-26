@@ -16,8 +16,17 @@ export const projectKeys = {
     [...projectKeys.all, "task", projectId, taskId] as const,
   post: (projectId: string, postId: string) =>
     [...projectKeys.all, "post", projectId, postId] as const,
-  postComments: (projectId: string, postId: string) =>
-    [...projectKeys.all, "postComments", projectId, postId] as const,
-  taskResponses: (projectId: string, taskId: string) =>
-    [...projectKeys.all, "taskResponses", projectId, taskId] as const,
 };
+
+export const responseKeys = {
+  all: ["response"] as const,
+  postComments: (projectId: string, postId: string) =>
+    [...responseKeys.all, "postComments", projectId, postId] as const,
+  taskResponses: (projectId: string, taskId: string) =>
+    [...responseKeys.all, "taskResponses", projectId, taskId] as const,
+};
+
+export const profileKeys = {
+  all: ["profile"] as const,
+  info: (profileId: string) => [...profileKeys.all, "profile", profileId] as const
+}

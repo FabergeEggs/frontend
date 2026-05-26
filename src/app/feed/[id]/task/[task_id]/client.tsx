@@ -2,10 +2,12 @@
 
 import styles from "./taskpage.module.css";
 import Image from "next/image";
+import { useMemo } from "react";
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useTask } from "@/src/lib/query/project";
+import { useProfiles } from "@/src/lib/query/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
@@ -33,6 +35,15 @@ export default function TaskPageClient({
   const taskStatus = getQueryStatus(taskQuery);
   const { userId } = useAuth();
   const [editing, setEditing] = useState(false);
+
+  // Extract unique user IDs from responses
+  const userIds = useMemo(() => {
+    return Array.from(new Set(responses.map((r) => r.user_id)));
+  }, [responses]);
+
+  // Load profiles for all users
+  const profilesQuery = useProfiles(userIds);
+  const profiles = profilesQuery.data ?? {};
 
   if (taskStatus.isLoading) {
     return <div className="centered">Загрузка задачи…</div>;
@@ -93,6 +104,8 @@ export default function TaskPageClient({
       <ResponseForm
         className={styles.cardPadding}
         placeholder="Напишите свой ответ"
+        projectId={projectId}
+        taskId={taskId}
       />
 
       {responses.length > 0 && (
@@ -101,8 +114,8 @@ export default function TaskPageClient({
             <ResponseCard
               className={styles.cardPadding}
               {...value}
+              username={profiles[value.user_id]?.username ?? "Загрузка..."}
               key={index}
-              username="максЧерпак"
               isAdmin={isAdmin}
             />
           ))}

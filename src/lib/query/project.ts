@@ -25,7 +25,7 @@ import {
   getPostComments,
   getTaskResponses,
 } from "@/src/lib/api/project";
-import { projectKeys } from "./keys";
+import { projectKeys, responseKeys } from "./keys";
 import { getApiErrorMessage } from "@/src/lib/api/errors";
 import type {
   ProjectCreateDTO,
@@ -187,7 +187,7 @@ export function useDeletePost(projectId: string) {
 
 export function usePostComments(projectId: string, postId: string) {
   return useQuery({
-    queryKey: projectKeys.postComments(projectId, postId),
+    queryKey: responseKeys.postComments(projectId, postId),
     queryFn: () => getPostComments(projectId, postId),
     enabled: Boolean(projectId && postId),
   });
@@ -195,11 +195,13 @@ export function usePostComments(projectId: string, postId: string) {
 
 export function useTaskResponses(projectId: string, taskId: string) {
   return useQuery({
-    queryKey: projectKeys.taskResponses(projectId, taskId),
+    queryKey: responseKeys.taskResponses(projectId, taskId),
     queryFn: () => getTaskResponses(projectId, taskId),
     enabled: Boolean(projectId && taskId),
   });
 }
+
+
 
 /** Сообщение об ошибке из query/mutation для UI */
 export { getApiErrorMessage };

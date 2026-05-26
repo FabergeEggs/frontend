@@ -22,7 +22,15 @@
 
 /* Edit card properties */
 
+.top {
+
+    display: flex;
+    /* flex-direction: column; */
+    gap: 10px;
+}
+
 .editCard {
+    
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -56,6 +64,12 @@
 
     font-size: 16px;
     margin-bottom: 10px;        
+}
+
+.infoPiece {
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }
 
 .infoDescription {

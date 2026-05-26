@@ -1,36 +1,24 @@
 <!> - moments that need better solution
 DEBUG - debug moments that should be deleted on production
 
+Make:
+- feed/{project_id} - should be public page
+- logout button
+- avatar
+
 ui/images/HeaderIcon:
 - Replace stub by image
 
 PROBLEMS:
+- logout, reset-password/key verify-email/key TWICE - wHY?
 - Fix adaptive /login - "Registration" button width is too big
-- No "eye" on login inputs
-- Форма создания проекта: 1. Теги не проработаны, 2. У названия есть красная *, у остальных полей - нет
-- React-Query (сохранение загруженных с бэка данных - например, профиль)
 
-- Идея: сделать общий обработчик ошибок запроса с setServerError, по типу
 
-try {
-    const response = await login(loginData);
-    setUserId(response.user_id)
-    router.push("/profile");
-} catch (error: any) {
-    const status = error.response?.status;
-    if (status === 401) {
-    setServerError("Неверный логин или пароль");
-    } else {
-    setServerError("Ошибка входа. Попробуйте позже");
-    }
-
-    console.error("Login failed: ", error.response);
-}
 
 Отложенное не-MVP:
+- ProfileInput tag in Project Editor color
+- No "eye" on login inputs
 - Почта введена неправильно — почта меняется и повторно отправляется письмо (USE CASE)
 - next-intl
 - Понакидать user-select: none; где надо, чтобы нельзя было выделять текст
-
-asdasd
-
+- Форма создания проекта: 1. Теги не по дизайну, 2. У названия есть красная *, у остальных полей - нет (то же самое в форме поста и таски)

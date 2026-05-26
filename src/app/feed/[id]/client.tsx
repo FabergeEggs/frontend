@@ -32,6 +32,7 @@ import NewPostImage from "@/public/assets/project/new-post.svg";
 import CheckImage from "@/public/assets/check.svg";
 
 import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import ProfileInput from "@/src/ui/inputs/ProfileInput/ProfileInput";
 import ProjectTextarea from "@/src/ui/inputs/ProjectInput/ProjectTextarea";
 import ProjectUpdateFormTag from "@/src/ui/info/ProjectUpdateFormTag/ProjectUpdateFormTag";
 
@@ -258,7 +259,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             onSubmit={handleSubmit}
             className={`${styles.card} ${styles.editCard}`}
           >
-            <div className={styles.infoPiece}>
+            <div className={styles.top}>
               <AuthInput
                 label="Название проекта"
                 placeholder="Введите новое название проекта..."
@@ -281,7 +282,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                   {tag}
                 </ProjectUpdateFormTag>
               ))}
-              <AuthInput
+              <ProfileInput
                 label=""
                 placeholder="Добавьте тег..."
                 required={false}
@@ -290,6 +291,9 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                   setCurrentTagInput(e.target.value)
                 }
                 onKeyDown={handleTagInputKeyDown}
+                onConfirm={handleAddTag}
+                hasEditButton={false}
+                className={styles.tagInput}
               />
             </div>
             <div className={styles.info}>

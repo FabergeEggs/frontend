@@ -13,16 +13,16 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState, useEffect } from "react";
-import { getProfile } from "@/src/lib/api/profile";
+import { useState } from "react";
 import {
   ProjectStatusEnum,
   type MembershipProjectDTO,
 } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-import { getUserMemberships } from "@/src/lib/api/project";
-
-
+import { useUserMemberships } from "@/src/lib/query/project";
+import { useProfileInfo } from "@/src/lib/query/profile";
+import { getQueryStatus } from "@/src/lib/query/status";
+import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
 const testProjectData = {
     id: "kek",
@@ -42,29 +42,21 @@ const testProjectData = {
   };
 
 const myProjects = [];
-// const myProjects = [];
 const projectParticipations = [testProjectData, testProjectData];
-// const projectParticipations = [];
 
 export default function ProfilePage() {
-  // userData, myProjects, projectParticipations
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
 
-  const [userData, setUserData] = useState<ProfileDTO>({
-    id: "",
-    user_id: "",
-    username: "",
-    email: "",
-    first_name: "",
-    last_name: "",
-    bio: "",
-    avatar_url: "",
-    created_at: new Date(),
-    is_active: true
-  });
-  const [scientistProjects, setScientistProjects] = useState<MembershipProjectDTO[]>([]);
-  const [volunteerProjects, setVolunteerProjects] = useState<MembershipProjectDTO[]>([]);
+  const { userId, isLoading } = useAuth();
+  
+  const profileQuery = useProfileInfo(userId || "");
+  const profileStatus = getQueryStatus(profileQuery);
+  const profileData = profileQuery.data;
+
+  const membershipsQuery = useUserMemberships(userId || "");
+  const membershipsStatus = getQueryStatus(membershipsQuery);
+  const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
 
   const toggleScientistProjects = () => {
     setShowScientistProjects(prev => !prev);
@@ -74,35 +66,26 @@ export default function ProfilePage() {
     setShowVolunteerProjects(prev => !prev);
   };
 
-  const { userId, isLoading } = useAuth();
-  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
-  useEffect(() => {
-    if (isLoading || !userId) return
-    async function loadProfile() {
-      try {
-          // console.log("KARABMA!!!") Покойся с миром, лог забавный.
-          const data = await getProfile(userId);
-          const memberships = await getUserMemberships(userId);
-          console.log("MEMBERSHIPS: ", memberships)
-          setUserData(data)
-          setIsLoadingProfile(false);
+  if (isLoading) {
+    return <div className="centered">Загрузка…</div>;
+  }
 
-          setScientistProjects(memberships.scientist)
-          setVolunteerProjects(memberships.volunteer)
-      }
-      catch (error: any) { 
-        console.error("Error details: ", {
-          message: error.message,
-          response: error.response,
-        });
-      }
-    }
-    
-    loadProfile()
-  }, [userId, isLoading])
+  if (profileStatus.isLoading) {
+    return <div className="centered">Загрузка профиля…</div>;
+  }
 
-  if (isLoading || isLoadingProfile) return <div className="centered">Загрузка...</div>
+  if (profileStatus.isError || !profileData) {
+    return (
+      <div className="centered">
+        <ValidationError
+          messages={[profileStatus.errorMessage ?? "Не удалось загрузить профиль"]}
+        />
+      </div>
+    );
+  }
 
+  const scientistProjects = memberships.scientist ?? [];
+  const volunteerProjects = memberships.volunteer ?? [];
 
   // <!> This page has bad adaptivity in .headerTitle 
   return (
@@ -110,7 +93,7 @@ export default function ProfilePage() {
       <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <ProfileForm data={userData}/>
+          <ProfileForm data={profileData}/>
         </div>
         <div className={styles.pictureInputContainer}>
           <ProfilePictureInput  />
@@ -145,9 +128,11 @@ export default function ProfilePage() {
               <p>У вас пока что нет проектов.</p>
               <Link
                 href="/feed/create"
-                className={`basic-link basic-btn ${styles.noProjectsBtn}`}
+                className="basic-link"
               >
-                Создать проект
+                <button className={`basic-btn ${styles.noProjectsBtn}`}>
+                  Создать проект
+                </button>
               </Link>
             </div>
           }

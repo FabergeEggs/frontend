@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import styles from "./AuthForm.module.css";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
-
-import { emailResendVerification } from "@/src/lib/api/auth";
+import ValidationError from "../ValidationError/ValidationError";
+import { useEmailResendMutation } from "@/src/lib/query/auth";
+import { getMutationStatus } from "@/src/lib/query/status";
 
 const COOLDOWN_SECONDS = 300; // 5 минут
 
 export default function EmailConfirm({ email }: { email: string }) {
   const [cooldown, setCooldown] = useState(COOLDOWN_SECONDS);
-  const [error, setError] = useState<string | null>(null);
+  const emailResendMutation = useEmailResendMutation();
+  const mutationStatus = getMutationStatus(emailResendMutation);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -20,24 +22,14 @@ export default function EmailConfirm({ email }: { email: string }) {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  const handleSend = async () => {
-    setError(null);
-    try {
-      console.log("Resending email confirm to:", email); // DEBUG
-      const response = await emailResendVerification(email);
-      setCooldown(COOLDOWN_SECONDS); // сбрасываем таймер
-      console.log("Email resend successful: ", response);
-    } catch (error: any) {
-      const status = error.response?.status;
-      if (status === 404) {
-        setError("Пользователя с данной почтой не существует");
-      } else if (status === 429) {
-        setError("Слишком много запросов. Подождите немного");
-      } else {
-        setError("Не удалось отправить письмо. Попробуйте позже");
-      }
-      console.error("Email confirm failed:", error.response);
+  useEffect(() => {
+    if (emailResendMutation.isSuccess) {
+      setCooldown(COOLDOWN_SECONDS);
     }
+  }, [emailResendMutation.isSuccess]);
+
+  const handleSend = () => {
+    emailResendMutation.mutate(email);
   };
 
   const formatCooldown = (seconds: number) => {
@@ -46,8 +38,6 @@ export default function EmailConfirm({ email }: { email: string }) {
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
-  
-
   return (
     <div className={`${styles.container} ${styles.form}`}>
       <p className={styles.title}>Подтверждение почты</p>
@@ -55,8 +45,8 @@ export default function EmailConfirm({ email }: { email: string }) {
         На указанный вами адрес электронной почты <strong>{email}</strong> было
         отправлено письмо для её подтверждения.{" "}
       </p>
-      {error && (
-        <p style={{ color: "var(--danger-color)", margin: 0 }}>{error}</p>
+      {mutationStatus.isError && (
+        <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка отправки"]} />
       )}
       <p className={styles.subtitle}>Письмо не пришло?</p>
       <p className={styles.text}>
@@ -70,7 +60,7 @@ export default function EmailConfirm({ email }: { email: string }) {
             ? `Отправить ещё раз (${formatCooldown(cooldown)})`
             : "Отправить ещё раз"
         }
-        disabled={cooldown > 0}
+        disabled={cooldown > 0 || mutationStatus.isSubmitting}
       />
     </div>
   );

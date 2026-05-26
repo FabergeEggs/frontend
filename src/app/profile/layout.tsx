@@ -1,9 +1,9 @@
-import BasicHeader from "@/src/ui/headers/BasicHeader/BasicHeader";
+import ProfileHeader from "@/src/ui/headers/ProfileHeader/ProfileHeader";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <BasicHeader />
+      <ProfileHeader />
       {children}
     </>
   );

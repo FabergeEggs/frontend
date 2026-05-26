@@ -29,6 +29,10 @@
   gap: 5px;
 }
 
+.description {
+  word-wrap: break-word;
+}
+
 
 @media (max-width: 675px) {
 

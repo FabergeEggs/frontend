@@ -3,12 +3,14 @@
 import styles from "./postpage.module.css";
 import Image from "next/image";
 import { usePost, usePostComments } from "@/src/lib/query/project";
+import { useProfiles } from "@/src/lib/query/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
+import { useMemo } from "react";
 
 export default function PostPageClient({
   projectId,
@@ -22,6 +24,15 @@ export default function PostPageClient({
   const commentsQuery = usePostComments(projectId, postId);
   const commentsStatus = getQueryStatus(commentsQuery);
   const comments = commentsQuery.data ?? [];
+
+  // Extract unique user IDs from comments
+  const userIds = useMemo(() => {
+    return Array.from(new Set(comments.map((c) => c.user_id)));
+  }, [comments]);
+
+  // Load profiles for all users
+  const profilesQuery = useProfiles(userIds);
+  const profiles = profilesQuery.data ?? {};
 
   if (postStatus.isLoading) {
     return <div className="centered">Загрузка поста…</div>;
@@ -62,6 +73,8 @@ export default function PostPageClient({
       <CommentForm
         className={styles.cardPadding}
         placeholder="Напишите свой комментарий"
+        projectId={projectId}
+        postId={postId}
       />
 
       {commentsStatus.isLoading && (
@@ -71,7 +84,7 @@ export default function PostPageClient({
       {commentsStatus.isError && (
         <div className="centered">
           <ValidationError
-            messages={[commentsStatus.errorMessage]}
+            messages={[String(commentsStatus.errorMessage)]}
           />
         </div>
       )}
@@ -82,6 +95,7 @@ export default function PostPageClient({
             <CommentCard
               className={styles.cardPadding}
               {...value}
+              username={profiles[value.user_id]?.username ?? "Загрузка..."}
               key={value.id ?? index}
             />
           ))}

@@ -21,18 +21,19 @@ export default function ProfileInput({
     ref,
     onEditSwitch,
     hasEditButton = true,
+    hasConfirmButton = true,
   }: ProfileInputProps) {
 
-  const [disabled, setDisabled] = useState(hasEditButton);
+  const [disabled, setDisabled] = useState(hasEditButton && !hasConfirmButton);
   const visibility = required === true && !value ? "visible" : "hidden";
   return (
-  <div className={styles.container}>
+  <div className={`${styles.container}`}>
     <label htmlFor={label}>
       <span className="basic-input-label">
         {label}{" "}
         <span style={{ visibility: visibility, color: "red" }}>*</span>
       </span>
-      <div className={`basic-input-container ${styles.inputContainer}`}>
+      <div className={`basic-input-container ${styles.inputContainer}`}> {/** ${className} style={{backgroundColor: backgroundColor}} */}
         <input
           className={`basic-input ${styles.input}`}
           onChange={(e) => onChange?.(e)}
@@ -64,6 +65,11 @@ export default function ProfileInput({
           </div>}
         </>
         } 
+        {!hasEditButton && hasConfirmButton && <>
+          <div onClick={() => {onConfirm?.()}} className={styles.imageContainer}> 
+            <Image src={ConfirmImage} alt="Confirm" />
+          </div>
+        </>}
 
         
       </div>

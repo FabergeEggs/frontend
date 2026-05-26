@@ -1,34 +1,39 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { verifyEmail } from "@/src/lib/api/auth";
-import { useState } from "react";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
-import {use} from "react"
+import { useVerifyEmailMutation } from "@/src/lib/query/auth";
+import { getMutationStatus } from "@/src/lib/query/status";
+import { use } from "react";
 
 export default function VerifyEmailPage({
   params,
 }: {
   params: Promise<{ key: string }>;
 }) {
-  const {key} = use(params); // <!> does it work?
-
-  const router = useRouter();
-  const [serverError, setServerError] = useState("");
+  const {key} = use(params);
+  const verifyMutation = useVerifyEmailMutation();
+  const mutationStatus = getMutationStatus(verifyMutation);
 
   useEffect(() => {
     if (!key) return;
-    verifyEmail(key)
-      .then(() => router.push("/login?verified=true"))
-      .catch((error) => setServerError("Произошла ошибка."));
-  }, [key, router]);
+    verifyMutation.mutate(key);
+  }, [key]);
 
-  return (
-    <div
-      className="centered basic-flex-column"
-    >
-      <p>Подтверждение email...</p>
-      {serverError && <ValidationError messages={[serverError]} />}
-    </div>
-  );
+  if (mutationStatus.isSubmitting) {
+    return (
+      <div className="centered basic-flex-column">
+        <p>Подтверждение email...</p>
+      </div>
+    );
+  }
+
+  if (mutationStatus.isError) {
+    return (
+      <div className="centered basic-flex-column">
+        <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка подтверждения"]} />
+      </div>
+    );
+  }
+
+  return null;
 }

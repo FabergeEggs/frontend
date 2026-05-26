@@ -6,58 +6,30 @@ import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import TextLink from "@/src/ui/links/TextLink/TextLink";
 import ValidationError from "../ValidationError/ValidationError";
 
-import { useState } from "react";
-import { login } from "@/src/lib/api/auth";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { loginSchema } from "@/src/lib/utils/zodSchemas";
-
-import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { useLoginMutation } from "@/src/lib/query/auth";
+import { getMutationStatus } from "@/src/lib/query/status";
+import { getApiErrorMessage } from "@/src/lib/api/errors";
 
 export default function LoginForm() {
-  const [serverError, setServerError] = useState<string | null>(null);
-  const router = useRouter();
-
-  const { setUserId } = useAuth()
+  const loginMutation = useLoginMutation();
+  const mutationStatus = getMutationStatus(loginMutation);
 
   const {
     register: registerField,
     formState: { isValid },
-    watch
+    handleSubmit: handleSubmitHook,
   } = useForm<z.infer<typeof loginSchema>>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
   });
 
-  const handleSubmit = async (e: React.SubmitEvent) => {
-    e.preventDefault();
-    setServerError(null);
-
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const formValues = Object.fromEntries(formData.entries());
-    const loginData: LoginRequestDTO = {
-      login: formValues.login as string,
-      password: formValues.password as string,
-    };
-
-    try {
-      const response = await login(loginData);
-      setUserId(response.user_id)
-      console.log("USER ID SET TO: ", response.user_id)
-      router.push("/profile");
-    } catch (error: any) {
-      const status = error.response?.status;
-      if (status === 401) {
-        setServerError("Неверный логин или пароль");
-      } else {
-        setServerError("Ошибка входа. Попробуйте позже");
-      }
-
-      console.error("Login failed: ", error.response);
-    }
-  };
+  const handleSubmit = handleSubmitHook((data) => {
+    loginMutation.mutate(data as LoginRequestDTO);
+  });
 
   return (
     <div className={styles.container}>
@@ -85,7 +57,7 @@ export default function LoginForm() {
         <GreenButton
           type="submit"
           className={styles.submitBtn}
-          disabled={!isValid}
+          disabled={!isValid || mutationStatus.isSubmitting}
           text="Войти"
         />
         <p className={styles.authRef}>
@@ -95,7 +67,9 @@ export default function LoginForm() {
           </TextLink>
         </p>
       </form>
-      {serverError && <ValidationError messages={[serverError]} />}
+      {mutationStatus.isError && (
+        <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка входа"]} />
+      )}
     </div>
   );
 }

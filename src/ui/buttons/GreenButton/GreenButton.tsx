@@ -7,6 +7,7 @@ interface GreenButtonProps {
   width?: string;
   className?: string;
   type?: "button" | "submit" | "reset";
+  style?: React.CSSProperties;
 }
 
 // This button usually plays the role of SUBMIT button
@@ -17,6 +18,7 @@ export default function GreenButton({
   width,
   className,
   type = "button",
+  style,
 }: GreenButtonProps) {
   return (
     <button
@@ -24,7 +26,7 @@ export default function GreenButton({
       onClick={onClick}
       disabled={disabled}
       type={type}
-      style={{width}}
+      style={{width, ...style}}
     >
       {text}
     </button>

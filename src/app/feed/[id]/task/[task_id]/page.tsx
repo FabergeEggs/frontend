@@ -2,6 +2,7 @@ import TaskPageClient from './client'
 
 // Import the API function - this will run on server
 import { getTaskResponses } from "@/src/lib/api/project";
+import type { ResponseDTO } from "@/src/lib/models/export/response";
 
 export default async function Page({
   params,

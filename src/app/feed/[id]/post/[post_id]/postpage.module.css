@@ -41,7 +41,11 @@
 
 
 .infoDescription {
-    color: var(--active-dark-color)
+    color: var(--active-dark-color);
+}
+
+.description {
+    word-wrap: break-word; 
 }
 
 .responses {

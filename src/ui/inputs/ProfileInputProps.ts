@@ -15,6 +15,8 @@ export default interface ProfileInputProps {
   onConfirm?: () => void;
   onEditSwitch?: () => void;
   hasEditButton?: boolean;
+  hasConfirmButton?: boolean;
   ref?: RefCallBack;
   className?: string;
+  backgroundColor?: string;
 }
