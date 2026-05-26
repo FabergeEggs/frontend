@@ -13,7 +13,7 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ProjectStatusEnum,
   type MembershipProjectDTO,
@@ -21,18 +21,28 @@ import {
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useUserMemberships } from "@/src/lib/query/project";
 import { useProfileInfo } from "@/src/lib/query/profile";
+import { useCurrentAvatarUrl } from "@/src/lib/query/media";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const { userId, isLoading } = useAuth();
-  
+
   const profileQuery = useProfileInfo(userId || "");
   const profileStatus = getQueryStatus(profileQuery);
   const profileData = profileQuery.data;
+
+  const avatarQuery = useCurrentAvatarUrl();
+
+  useEffect(() => {
+    if (avatarUrl === null && avatarQuery.data) {
+      setAvatarUrl(avatarQuery.data);
+    }
+  }, [avatarQuery.data, avatarUrl]);
 
   const membershipsQuery = useUserMemberships(userId || "");
   const membershipsStatus = getQueryStatus(membershipsQuery);
@@ -73,10 +83,10 @@ export default function ProfilePage() {
       <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <ProfileForm data={profileData}/>
+          <ProfileForm data={profileData} />
         </div>
         <div className={styles.pictureInputContainer}>
-          <ProfilePictureInput  />
+          <ProfilePictureInput value={avatarUrl ?? ""} onChange={setAvatarUrl} />
         </div>
       </div>
       <div className={styles.projectsContainer}>

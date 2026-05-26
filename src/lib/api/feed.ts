@@ -1,5 +1,4 @@
 import { api } from './instances/base';
-import { ApiRoutes } from './constants';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -62,13 +61,17 @@ import { ApiRoutes } from './constants';
 
 // ─── Feed ────────────────────────────────────────────────────────────────────
 
+export type FeedFilter = "mine";
+
 export const getFeed = async (
   limit: number = 20,
   cursor?: string,
+  filter?: FeedFilter,
 ): Promise<FeedPage> => {
   const params: Record<string, string | number> = { limit };
   if (cursor) params.cursor = cursor;
-  const { data } = await api.get("/api/v1/feed", { params });
+  if (filter) params.filter = filter;
+  const { data } = await api.get("/api/v1/feed/global", { params });
   return data;
 };
 

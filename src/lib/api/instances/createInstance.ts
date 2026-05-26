@@ -10,26 +10,43 @@ import { parseAxiosError } from "../errors";
 const refreshUrl = `${process.env.NEXT_PUBLIC_API_URL}${ApiRoutes.AUTH.REFRESH}`;
 
 export function createInstance(baseURL: string | undefined = process.env.NEXT_PUBLIC_API_URL): AxiosInstance {
-  /** Type of baseURL is "string | undefined" because in .env file variables are of this type */
+  /**
+   * Resolve baseURL for client-side usage. If `process.env.NEXT_PUBLIC_API_URL` was
+   * not provided at build time, fall back to the developer default
+   * (protocol + hostname + :8080) so requests don't go to the page origin.
+   */
+  // Prefer configured baseURL; otherwise assume local dev API on HTTP port 8080.
+  // Use explicit "http" here because the page may be served over https and
+  // we want the dev API to use plain HTTP on :8080.
+  const resolvedBaseURL = baseURL ?? (typeof window !== "undefined"
+    ? `http://${window.location.hostname}:8080`
+    : undefined);
+
   const instance = axios.create({
-    baseURL,
+    baseURL: resolvedBaseURL,
     withCredentials: true,
   });
 
-  // Attach access token to every request
-  instance.interceptors.request.use((config) => {
+    // Attach access token to every request
+    instance.interceptors.request.use((config) => {
     const token = getAccessToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // DEBUG
-    console.log("📤 REQUEST:", {
-      url: config.url,
-      method: config.method,
-      headers: config.headers,
-      data: config.data
-    });
+      // DEBUG: show resolved baseURL so we can diagnose wrong-origin requests
+      if (typeof window !== "undefined") {
+        // eslint-disable-next-line no-console
+        console.log("Axios baseURL:", resolvedBaseURL);
+      }
+
+      // DEBUG
+      console.log("📤 REQUEST:", {
+        url: config.url,
+        method: config.method,
+        headers: config.headers,
+        data: config.data
+      });
 
     return config;
   });
@@ -43,6 +60,7 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
     },
     async (error) => {
       const origin = error.config;
+      console.log("📥 ERROR:", {status: error.response?.status, data: error.response?.data, config: origin});
 
       if (
         isAxiosError(error) &&

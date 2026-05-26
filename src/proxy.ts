@@ -15,8 +15,8 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("refresh_token")?.value;
 
   // DEBUG
-  // const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
-  const isPublic = true;
+  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+  // const isPublic = true;
 
   // Не авторизован + закрытая страница -> на логин
   if (!token && !isPublic) {

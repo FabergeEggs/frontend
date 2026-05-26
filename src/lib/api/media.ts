@@ -1,15 +1,28 @@
 import { api } from './instances/base';
 import { ApiRoutes } from './constants';
 
-type UploadInitRequest = {
+export type UploadInitRequest = {
   filename: string;
   content_type: string;
   size_bytes: number;
   visibility?: "owner_only" | "public";
 };
 
-type UploadInitResponse = {
-  asset: { id: string; status: "pending"; [key: string]: unknown };
+export type AssetBase = {
+  id: string;
+  owner_kind: "user";
+  owner_id: string;
+  original_filename: string;
+  declared_mime: string;
+  size_bytes: number;
+  status: "pending" | "scanning" | "ready" | "rejected";
+  visibility: "owner_only" | "public";
+  inserted_at: string;
+  updated_at: string;
+};
+
+export type UploadInitResponse = {
+  asset: AssetBase;
   upload: {
     url: string;
     expires_in: number;
@@ -68,6 +81,26 @@ export const uploadFile = async (file: File): Promise<string> => {
   await completeUpload(asset.id);
 
   return asset.id;
+};
+
+export type AssetDetail = {
+  id: string;
+  kind: "image" | "video" | "audio" | "file";
+  mime: string;
+  size_bytes: number;
+  status: "pending" | "scanning" | "ready" | "rejected";
+  preview_url: null;
+  download_url: string | null;
+  download_expires_in: number | null;
+};
+
+export type AssetListItem = {
+  id: string;
+  kind: string;
+  mime: string;
+  size_bytes: number;
+  original_filename: string;
+  inserted_at: string;
 };
 
 export const getAsset = async (id: string): Promise<AssetDetail> => {
