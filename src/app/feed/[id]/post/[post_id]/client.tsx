@@ -2,7 +2,7 @@
 
 import styles from "./postpage.module.css";
 import Image from "next/image";
-import { usePost, usePostComments } from "@/src/lib/query/project";
+import { usePost } from "@/src/lib/query/project";
 import { useProfiles } from "@/src/lib/query/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
@@ -11,6 +11,8 @@ import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
 import { useMemo } from "react";
+import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { useDeletePostComment, useResponseComments } from "@/src/lib/query/response";
 
 export default function PostPageClient({
   projectId,
@@ -21,9 +23,11 @@ export default function PostPageClient({
 }) {
   const postQuery = usePost(projectId, postId);
   const postStatus = getQueryStatus(postQuery);
-  const commentsQuery = usePostComments(projectId, postId);
+  const commentsQuery = useResponseComments(postId);
   const commentsStatus = getQueryStatus(commentsQuery);
   const comments = commentsQuery.data ?? [];
+  const { userId } = useAuth();
+  const deleteCommentMutation = useDeletePostComment(projectId, postId);
 
   // Extract unique user IDs from comments
   const userIds = useMemo(() => {
@@ -97,6 +101,8 @@ export default function PostPageClient({
               {...value}
               username={profiles[value.user_id]?.username ?? "Загрузка..."}
               key={value.id ?? index}
+              canDelete={Boolean(value.id) && (value.user_id === userId || data.creator_id === userId)}
+              onDelete={() => value.id && deleteCommentMutation.mutate(value.id)}
             />
           ))}
         </div>

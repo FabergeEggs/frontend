@@ -5,8 +5,14 @@ import Image from "next/image";
 import { useMemo } from "react";
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
+import { ResponseStatus } from "@/src/lib/models/export/response";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useTask } from "@/src/lib/query/project";
+import {
+  useChangeTaskResponseStatus,
+  useDeleteTaskResponse,
+  useTaskResponses,
+} from "@/src/lib/query/response";
 import { useProfiles } from "@/src/lib/query/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
@@ -20,21 +26,21 @@ import EditImage from "@/public/assets/edit.svg";
 import FinishImage from "@/public/assets/project/finish.svg";
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
-import { useState } from "react";
 
 export default function TaskPageClient({
   projectId,
   taskId,
-  responses,
 }: {
   projectId: string;
   taskId: string;
-  responses: ResponseDTO[];
 }) {
   const taskQuery = useTask(projectId, taskId);
   const taskStatus = getQueryStatus(taskQuery);
   const { userId } = useAuth();
-  const [editing, setEditing] = useState(false);
+  const responsesQuery = useTaskResponses(taskId);
+  const responses = responsesQuery.data ?? [];
+  const deleteResponseMutation = useDeleteTaskResponse(projectId, taskId);
+  const changeStatusMutation = useChangeTaskResponseStatus(projectId, taskId);
 
   // Extract unique user IDs from responses
   const userIds = useMemo(() => {
@@ -73,7 +79,6 @@ export default function TaskPageClient({
                 <ImageTextButton
                   text="Редактировать"
                   src={EditImage}
-                  onClick={() => setEditing(true)}
                 />
                 <ImageTextButton text="Завершить" src={FinishImage} />
               </div>
@@ -117,6 +122,20 @@ export default function TaskPageClient({
               username={profiles[value.user_id]?.username ?? "Загрузка..."}
               key={index}
               isAdmin={isAdmin}
+              canDelete={userId === value.user_id || isAdmin}
+              onDelete={() => deleteResponseMutation.mutate(value.id)}
+              onAccept={() =>
+                changeStatusMutation.mutate({
+                  responseId: value.id,
+                  status: ResponseStatus.ACCEPTED,
+                })
+              }
+              onDecline={() =>
+                changeStatusMutation.mutate({
+                  responseId: value.id,
+                  status: ResponseStatus.REJECTED,
+                })
+              }
             />
           ))}
         </div>

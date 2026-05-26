@@ -22,11 +22,10 @@ import {
   getTask,
   getPost,
   projectHealthCheck,
-  getPostComments,
-  getTaskResponses,
 } from "@/src/lib/api/project";
-import { projectKeys, responseKeys } from "./keys";
+import { projectKeys } from "./keys";
 import { getApiErrorMessage } from "@/src/lib/api/errors";
+import { useResponseComments, useTaskResponses as useTaskResponsesFromService } from "./response";
 import type {
   ProjectCreateDTO,
   ProjectUpdateDTO,
@@ -186,19 +185,13 @@ export function useDeletePost(projectId: string) {
 }
 
 export function usePostComments(projectId: string, postId: string) {
-  return useQuery({
-    queryKey: responseKeys.postComments(projectId, postId),
-    queryFn: () => getPostComments(projectId, postId),
-    enabled: Boolean(projectId && postId),
-  });
+  void projectId;
+  return useResponseComments(postId);
 }
 
 export function useTaskResponses(projectId: string, taskId: string) {
-  return useQuery({
-    queryKey: responseKeys.taskResponses(projectId, taskId),
-    queryFn: () => getTaskResponses(projectId, taskId),
-    enabled: Boolean(projectId && taskId),
-  });
+  void projectId;
+  return useTaskResponsesFromService(taskId);
 }
 
 

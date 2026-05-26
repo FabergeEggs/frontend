@@ -13,6 +13,7 @@ import UserInfo from "../UserInfo/UserInfo";
 
 interface ResponseCardProps {
   className: string,
+  id: string;
   username: string
   user_id: string;
   text: string
@@ -20,10 +21,26 @@ interface ResponseCardProps {
   attached_files: string[]
   created_at: string;
   isAdmin?: boolean;
+  canDelete?: boolean;
+  onAccept?: () => void;
+  onDecline?: () => void;
+  onDelete?: () => void;
 }
 
 // Alternative Project Card variant for project page
-export default function ResponseCard({className, username, user_id, text, status, attached_files, created_at, isAdmin = false}: ResponseCardProps) {
+export default function ResponseCard({
+  className,
+  username,
+  text,
+  status,
+  attached_files,
+  created_at,
+  isAdmin = false,
+  canDelete = false,
+  onAccept,
+  onDecline,
+  onDelete,
+}: ResponseCardProps) {
   return (
     <div className={`${className} basic-card`}>
       <div className={styles.header}>
@@ -38,10 +55,11 @@ export default function ResponseCard({className, username, user_id, text, status
             {status == ResponseStatus.CANCELLED && "Отменён"}
           </div>  
         </div>
-        {isAdmin && 
+        {(isAdmin || canDelete) &&
             <div className="basic-flex">
-                <ImageTextButton text="Одобрить" src={CheckImage} />
-                <ImageTextButton text="Отклонить" src={RedCrossImage} color="var(--danger-color)"/>
+                {isAdmin && <ImageTextButton text="Одобрить" src={CheckImage} onClick={onAccept} />}
+                {isAdmin && <ImageTextButton text="Отклонить" src={RedCrossImage} color="var(--danger-color)" onClick={onDecline} />}
+                {canDelete && <ImageTextButton text="Удалить" src={RedCrossImage} color="var(--danger-color)" onClick={onDelete} />}
             </div>}
       </div>
       <div className={styles.text}>

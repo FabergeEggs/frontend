@@ -70,3 +70,17 @@ export const publicationSchema = z
     short_description: shortDescriptionSchema,
     description: descriptionSchema,
   })
+
+export const responseSchema = z.object({
+  text: z
+    .string()
+    .min(1, "Ответ не может быть пустым")
+    .max(5000, "Ответ должен быть не более 5000 символов"),
+});
+
+export const commentSchema = z.object({
+  content: z
+    .string()
+    .min(1, "Комментарий не может быть пустым")
+    .max(2000, "Комментарий должен быть не более 2000 символов"),
+});
