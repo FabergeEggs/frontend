@@ -32,7 +32,7 @@ interface ProjectCardProps {
 //     creator_name: string
 // }
 
-export default function ProjectCard({children, project_id, label, short_description, tags = ["Урбанистика", "Кириешки"], tasks_count = 5, participants_count = 17}: ProjectCardProps) {
+export default function ProjectCard({children, project_id, label, short_description, tags = ["Урбанистика", "Кириешки"], tasks_count, participants_count}: ProjectCardProps) {
   
   return (
     <div onClick={() => redirect(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card}`}>

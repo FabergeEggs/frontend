@@ -33,20 +33,13 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
-      // DEBUG: show resolved baseURL so we can diagnose wrong-origin requests
-      if (typeof window !== "undefined") {
-        // eslint-disable-next-line no-console
-        console.log("Axios baseURL:", resolvedBaseURL);
-      }
-
-      // DEBUG
-      console.log("📤 REQUEST:", {
-        url: config.url,
-        method: config.method,
-        headers: config.headers,
-        data: config.data
-      });
+    // DEBUG
+    console.log("📤 REQUEST:", {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      data: config.data
+    });
 
     return config;
   });

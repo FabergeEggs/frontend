@@ -31,7 +31,9 @@ export default function FeedHeader() {
                 "Мой проект", если проект есть и он один, "Мои проекты" с якорной ссылкой на профиль на список проектов */}
           <GreenButton text="Создать проект" className={`${styles.projectBtn}`}/>
         </Link>
-        <HeaderIcon />
+        <Link className="basic-link" href="/profile">
+          <HeaderIcon />
+        </Link>
       </div>
     </header>
   );
