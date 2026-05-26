@@ -23,15 +23,13 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // ONLY log on server 
-    if (typeof window === "undefined") {
-      console.log("📤 REQUEST:", {
-        url: config.url,
-        method: config.method,
-        headers: config.headers,
-        data: config.data
-      });
-    }
+    // DEBUG
+    console.log("📤 REQUEST:", {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      data: config.data
+    });
 
     return config;
   });
@@ -39,9 +37,8 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
   // Refresh on 401
   instance.interceptors.response.use(
     (response) => {
-      if (typeof window === "undefined") {
-        console.log("📥 RESPONSE:", response.status, response.data);
-      }
+      // DEBUG
+      console.log("📥 RESPONSE:", response.status, response.data);
       return response;
     },
     async (error) => {

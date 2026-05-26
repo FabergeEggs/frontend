@@ -6,7 +6,6 @@ interface ProfileDTO {
     first_name: string
     last_name: string
     bio: string
-    avatar_url: string
     created_at: Date
     is_active: boolean
 }
@@ -19,7 +18,6 @@ const emptyProfile = (): ProfileDTO => ({
   first_name: "",
   last_name: "",
   bio: "",
-  avatar_url: "",
   created_at: new Date(),
   is_active: false,
 })
@@ -30,5 +28,4 @@ interface UpdateProfileRequestDTO {
   first_name: string
   last_name: string
   bio: string
-  avatar_url: string
 }

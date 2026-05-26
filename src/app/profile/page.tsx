@@ -24,26 +24,6 @@ import { useProfileInfo } from "@/src/lib/query/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-const testProjectData = {
-    id: "kek",
-    label: "Перепись населения в городе Ижевск",
-    creator: "Somewho",
-    short_description:
-      "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...",
-    description: "kek",
-    tags: ["Урбанистика", "Кириешки"],
-    created_at: new Date(2026, 3, 16), // April 16, 2026 (months are 0-based)
-    updated_at: new Date(),
-    status: ProjectStatusEnum.ACTIVE,
-
-    tasks_count: 16,
-    participants_count: 17,
-    answers_count: 128,
-  };
-
-const myProjects = [];
-const projectParticipations = [testProjectData, testProjectData];
-
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);

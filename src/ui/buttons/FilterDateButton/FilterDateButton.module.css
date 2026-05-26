@@ -1,0 +1,18 @@
+.btn {
+  color: var(--active-dark-color);
+  background-color: var(--varity1-color);
+  border: 1px solid var(--active-dark-color);
+
+  vertical-align: top;
+
+  display: flex;
+  align-items: center;
+  /* width: 100%; */
+}
+
+
+.chosen {
+  background-color: var(--active-dark-color);
+  border: none;
+  color: white;
+}

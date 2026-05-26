@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pageContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left {
+    width: 100%;
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.feed {
+    width: 100%;
+}

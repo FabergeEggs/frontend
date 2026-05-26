@@ -28,7 +28,7 @@ export default function ProfileTextarea({
             placeholder={placeholder}
             required={required ?? true}
             autoComplete="new-password"
-            disabled={disabled}
+            readOnly={disabled}
             name={name}
             ref={ref}
           />

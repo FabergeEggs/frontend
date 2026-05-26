@@ -19,7 +19,7 @@ export default function FeedHeader() {
   }
 
   return (
-    <header className="basic-header basic-flex">
+    <header className={`basic-header ${styles.header}`}>
       <Logo />
       <SearchInput onChange={handleSearchChange} />
       <div className="basic-flex">

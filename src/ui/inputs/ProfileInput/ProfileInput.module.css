@@ -48,6 +48,12 @@
   cursor: pointer;
 }
 
+.input[readonly],
+.textarea[readonly] {
+  color: #808080;
+  cursor: default;
+}
+
 @media (max-width: 834px) {
   .inputContainer {
     height: 40px;
