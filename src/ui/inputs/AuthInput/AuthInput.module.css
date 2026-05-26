@@ -27,6 +27,7 @@
 .inputContainer:has(.input:placeholder-shown) {
   background-color: var(--varity2-color);
 }
+
 @media (max-width: 834px) {
   .textarea {
     padding-top: 25px;

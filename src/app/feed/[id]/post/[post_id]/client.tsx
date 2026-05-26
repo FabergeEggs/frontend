@@ -3,14 +3,20 @@
 import styles from "./postpage.module.css";
 import Image from "next/image";
 import { usePost, usePostComments } from "@/src/lib/query/project";
+<<<<<<< HEAD
 import { useProfiles } from "@/src/lib/query/profile";
+=======
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
+<<<<<<< HEAD
 import { useMemo } from "react";
+=======
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
 
 export default function PostPageClient({
   projectId,
@@ -25,6 +31,7 @@ export default function PostPageClient({
   const commentsStatus = getQueryStatus(commentsQuery);
   const comments = commentsQuery.data ?? [];
 
+<<<<<<< HEAD
   // Extract unique user IDs from comments
   const userIds = useMemo(() => {
     return Array.from(new Set(comments.map((c) => c.user_id)));
@@ -34,6 +41,8 @@ export default function PostPageClient({
   const profilesQuery = useProfiles(userIds);
   const profiles = profilesQuery.data ?? {};
 
+=======
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
   if (postStatus.isLoading) {
     return <div className="centered">Загрузка поста…</div>;
   }
@@ -73,8 +82,11 @@ export default function PostPageClient({
       <CommentForm
         className={styles.cardPadding}
         placeholder="Напишите свой комментарий"
+<<<<<<< HEAD
         projectId={projectId}
         postId={postId}
+=======
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
       />
 
       {commentsStatus.isLoading && (
@@ -84,7 +96,11 @@ export default function PostPageClient({
       {commentsStatus.isError && (
         <div className="centered">
           <ValidationError
+<<<<<<< HEAD
             messages={[String(commentsStatus.errorMessage)]}
+=======
+            messages={[commentsStatus.errorMessage]}
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
           />
         </div>
       )}
@@ -95,7 +111,10 @@ export default function PostPageClient({
             <CommentCard
               className={styles.cardPadding}
               {...value}
+<<<<<<< HEAD
               username={profiles[value.user_id]?.username ?? "Загрузка..."}
+=======
+>>>>>>> 52e3f551ab10ef734dcbc026dc9defb00ba764b3
               key={value.id ?? index}
             />
           ))}
