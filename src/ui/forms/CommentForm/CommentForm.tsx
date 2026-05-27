@@ -59,26 +59,22 @@ export default function CommentForm({
     <div className={`${styles.container} ${className}`}>
       <h2 className={styles.label}>Комментарий</h2>
       <CommentTextarea
-        placeholder={placeholder}
-        value={content}
-        onChange={(e) =>
-          setValue("content", e.target.value, {
-            shouldValidate: true,
-            shouldDirty: true,
-          })
-        }
-      />
+              placeholder={placeholder}
+              value={content}
+              onChange={(e) =>
+                setValue("content", e.target.value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }
+              disabledSubmit={!isValid || !userId || mutationStatus.isSubmitting}
+              onSubmit={handleSubmit}
+            />
       {errors.content?.message && <ValidationError messages={[errors.content.message]} />}
       {mutationStatus.isError && (
         <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка создания комментария"]} />
       )}
       {!userId && <ValidationError messages={["Не удалось определить пользователя."]} />}
-      <GreenButton
-        text="Отправить"
-        disabled={!isValid || !userId || mutationStatus.isSubmitting}
-        onClick={handleSubmit}
-        style={{ marginTop: "10px" }}
-      />
     </div>
   );
 }

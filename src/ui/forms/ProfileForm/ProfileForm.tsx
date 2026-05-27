@@ -11,6 +11,8 @@ import { profileSchema } from "@/src/lib/utils/zodSchemas";
 import { updateProfile } from "@/src/lib/api/profile";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useRef, useState } from "react"
+import { changePassword } from "@/src/lib/api/auth";
+import ConfirmationModal from "../../modals/ConfirmationModal";
 
 export default function ProfileForm({ data } : {data : ProfileDTO}) {
   const { register: registerField, setValue, trigger, formState: { errors, dirtyFields }, } = useForm<z.infer<typeof profileSchema>>({
@@ -34,6 +36,8 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
     newPassword: false,
     confirmPassword: false
   })
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false)
 
   function confirm(field: "first_name" | "about") {
     if (errors[field]) {
@@ -108,14 +112,25 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       {/* {failedConfirm.about && (
         <p className={styles.error}>Введено пустое описание</p>
       )} */}
-      <ProfileInput
+      
+      {/* <!> Temporarily removed password input as password can be changed in forgot password from /login page <ProfileInput
         type="password"
         label="Пароль"
         placeholder="Введите старый пароль..."
-        onEditSwitch={() => { if(!isEditingPassword) setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
+        onEditSwitch={async () => {
+          const response = await changePassword();
+          if (response.success) { 
+            setConfirmationModalOpen(true);
+          }
+        }}
+        // onEditSwitch={() => { if(!isEditingPassword) setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
         onConfirm={updatePassword}
         {...registerField("oldPassword")}
-      />
+        hasEditSwitchLogic={false}
+      />  */}
+      {/* {confirmationModalOpen && 
+              <ConfirmationModal isOpen={confirmationModalOpen} label="Ссылка на изменение пароля была выслана вам на почту." text="" action={() => {}} actionText="Ок"  handleClose={(e: any) => { e.stopPropagation();setConfirmationModalOpen(false)}}/>
+      }  */}
       {errors.oldPassword && (
             <p className={styles.error}>{errors.oldPassword.message}</p>
           )}

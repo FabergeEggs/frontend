@@ -10,7 +10,7 @@ export const ApiRoutes = {
     LOGOUT_ALL: '/api/v1/auth/logout-all',
     VERIFY_EMAIL: '/api/v1/auth/verify-email',
     EMAIL_RESEND_VERIFICATION: '/api/v1/auth/verify-email',
-    CHANGE_PASSWORD: '/api/v1/auth/change-password',
+    PASSWORD_CHANGE: '/api/v1/auth/password-change',
   },
 
   // Profile

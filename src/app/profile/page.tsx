@@ -25,6 +25,18 @@ import { useCurrentAvatarUrl } from "@/src/lib/query/media";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
+import {useProjectStatistics} from "@/src/lib/query/project"
+
+const ProjectCardWithStats = ({ project }: { project: MembershipProjectDTO }) => {
+  const statsQuery = useProjectStatistics(project.project_id);
+  
+  if (statsQuery.isLoading) {
+    return <div>Загрузка...</div>;
+  }
+  
+  return <ProjectCard {...project} {...statsQuery.data} />;
+};
+
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
@@ -47,6 +59,9 @@ export default function ProfilePage() {
   const membershipsQuery = useUserMemberships(userId || "");
   const membershipsStatus = getQueryStatus(membershipsQuery);
   const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
+
+  const scientistProjects = memberships.scientist ?? [];
+  const volunteerProjects = memberships.volunteer ?? [];
 
   const toggleScientistProjects = () => {
     setShowScientistProjects(prev => !prev);
@@ -73,9 +88,6 @@ export default function ProfilePage() {
       </div>
     );
   }
-
-  const scientistProjects = memberships.scientist ?? [];
-  const volunteerProjects = memberships.volunteer ?? [];
 
   // <!> This page has bad adaptivity in .headerTitle 
   return (
@@ -106,12 +118,13 @@ export default function ProfilePage() {
               </Link>
             )}
           </div>
-          { (showScientistProjects && scientistProjects.length > 0) && 
-            <div className={styles.projects}>
-              {scientistProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            </div>
-            
-            }
+          {showScientistProjects && scientistProjects.length > 0 && (
+  <div className={styles.projects}>
+    {scientistProjects.map((value, index) => 
+      <ProjectCardWithStats project={value} key={index} />
+    )}
+  </div>
+)}
 
           {
             (scientistProjects.length == 0) && <div className={styles.noProjects}>
@@ -137,10 +150,13 @@ export default function ProfilePage() {
               <TransparentTextImageButton src={FindImage} text="Найти новый проект" color="black"/>
             </Link>}
           </div>
-          { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
-            {volunteerProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            
-          </div>}
+          {showVolunteerProjects && volunteerProjects.length > 0 && (
+  <div className={styles.projects}>
+    {volunteerProjects.map((value, index) => 
+      <ProjectCardWithStats project={value} key={index} />
+    )}
+  </div>
+)}
           { (volunteerProjects.length == 0) && 
             <div className={styles.noProjects}>
               <p>Вы пока не участвуете ни в каких проектах.</p>

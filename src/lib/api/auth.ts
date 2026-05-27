@@ -72,10 +72,15 @@ export const logoutAll = async () => {
 };
 
 
-export const changePassword = async (old_password: string, new_password: string) => {
-  const { data } = await api.post(ApiRoutes.AUTH.CHANGE_PASSWORD, {
-    old_password,
-    new_password,
-  });
+// export const changePassword = async (old_password: string, new_password: string) => {
+//   const { data } = await api.post(ApiRoutes.AUTH.PASSWORD_CHANGE, {
+//     old_password,
+//     new_password,
+//   });
+//   return data;
+// };
+
+export const changePassword = async () => {
+  const { data } = await api.post(ApiRoutes.AUTH.PASSWORD_CHANGE);
   return data;
 };

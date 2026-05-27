@@ -22,9 +22,10 @@ export default function ProfileInput({
     onEditSwitch,
     hasEditButton = true,
     hasConfirmButton = true,
+    hasEditSwitchLogic = true
   }: ProfileInputProps) {
 
-  const [disabled, setDisabled] = useState(hasEditButton || (!hasEditButton && hasConfirmButton));
+  const [disabled, setDisabled] = useState(hasEditButton);
   const visibility = required === true && !value ? "visible" : "hidden";
   return (
   <div className={`${styles.container}`}>
@@ -50,7 +51,7 @@ export default function ProfileInput({
           readOnly={disabled}
         />
         {hasEditButton && <>
-          { disabled && <div onClick={() => { setDisabled(false); onEditSwitch?.()}} className={styles.imageContainer}>
+          { disabled && <div onClick={() => { if(hasEditSwitchLogic) { setDisabled(false); } onEditSwitch?.()}} className={styles.imageContainer}>
           <Image src={EditImage} alt="Edit" />
         </div>}
         {!disabled && <div onClick={() => { 
