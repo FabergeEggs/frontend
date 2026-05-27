@@ -12,18 +12,21 @@ import RedCrossImage from "@/public/assets/red-cross.svg"
 import UserInfo from "../UserInfo/UserInfo";
 
 interface ResponseCardProps {
-  className: string,
-  username: string
+  className: string;
+  id: string;
+  username: string;
   user_id: string;
-  text: string
-  status: ResponseStatus
-  attached_files: string[]
+  text: string;
+  status: ResponseStatus;
+  attached_files: string[];
   created_at: string;
   isAdmin?: boolean;
+  onApprove?: () => void;
+  onReject?: () => void;
 }
 
 // Alternative Project Card variant for project page
-export default function ResponseCard({className, username, user_id, text, status, attached_files, created_at, isAdmin = false}: ResponseCardProps) {
+export default function ResponseCard({className, id: _id, username, user_id: _user_id, text, status, attached_files, created_at, isAdmin = false, onApprove, onReject}: ResponseCardProps) {
   return (
     <div className={`${className} basic-card`}>
       <div className={styles.header}>
@@ -38,10 +41,10 @@ export default function ResponseCard({className, username, user_id, text, status
             {status == ResponseStatus.CANCELLED && "Отменён"}
           </div>  
         </div>
-        {isAdmin && 
+        {isAdmin &&
             <div className="basic-flex">
-                <ImageTextButton text="Одобрить" src={CheckImage} />
-                <ImageTextButton text="Отклонить" src={RedCrossImage} color="var(--danger-color)"/>
+                <ImageTextButton text="Одобрить" src={CheckImage} onClick={onApprove} />
+                <ImageTextButton text="Отклонить" src={RedCrossImage} color="var(--danger-color)" onClick={onReject} />
             </div>}
       </div>
       <div className={styles.text}>

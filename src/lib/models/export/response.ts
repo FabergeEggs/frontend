@@ -18,6 +18,7 @@ export interface ResponseDTO {
     id: string;
     task_id: string;
     user_id: string;
+    user_name?: string;  // denormalized by response-service; may be empty until Kafka propagates
     text: string;
     status: ResponseStatus;
     attached_files: string[];

@@ -17,6 +17,7 @@ import {
   getPublications,
   getUserMemberships,
   createTask,
+  updateTask,
   createPost,
   deletePost as deletePostApi,
   getTask,
@@ -32,6 +33,7 @@ import type {
   ProjectUpdateDTO,
   ProjectFull,
   TaskCreateDTO,
+  TaskUpdateDTO,
   PostCreateDTO,
 } from "@/src/lib/models/export/project";
 
@@ -198,6 +200,16 @@ export function useTaskResponses(projectId: string, taskId: string) {
     queryKey: responseKeys.taskResponses(projectId, taskId),
     queryFn: () => getTaskResponses(projectId, taskId),
     enabled: Boolean(projectId && taskId),
+  });
+}
+
+export function useUpdateTask(projectId: string, taskId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: TaskUpdateDTO) => updateTask(projectId, taskId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.task(projectId, taskId) });
+    },
   });
 }
 

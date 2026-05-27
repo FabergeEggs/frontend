@@ -30,19 +30,12 @@ export default function ResetPassword({ resetKey }: { resetKey: string }) {
 
   const handleSend = () => {
       try {
-        console.log("Submitting reset password with data: ", resetKey, watch("password")); // DEBUG
         resetPassword(resetKey, watch("password"))
-          .then((response) => { // <!> .then + try-catch - is it okay?
-            router.push("/login") 
-            console.log("Reset password response: ", response); // DEBUG
+          .then(() => {
+            router.push("/login");
           })
       } catch (error: any) {
-        const msg = error.response?.data.error;
-        console.error("Reset password failed: ", msg);
-
-        // const status = error.response?.status;
         setServerError("Ошибка входа. Попробуйте позже");
-        console.error("Reset password failed: ", error.response);
       }
     };
 

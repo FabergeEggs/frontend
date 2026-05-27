@@ -40,7 +40,7 @@ export default function SearchInput({
           ref={ref}
           name={name}
         />
-        <div onClick={() => { console.log("Searching...")}} className={styles.imageContainer}>
+        <div className={styles.imageContainer}>
           <Image src={SearchImage} alt="Search" />
         </div>
   </div>)

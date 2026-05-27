@@ -43,6 +43,8 @@ export const ApiRoutes = {
 
     // Responses (for tasks)
     GET_TASK_RESPONSES: (projectId: string, taskId: string) => `/project/${projectId}/task/${taskId}/responses`,
+    CHANGE_RESPONSE_STATUS: (projectId: string, taskId: string, responseId: string) =>
+      `/project/${projectId}/task/${taskId}/responses/${responseId}/status`,
 
     // Members
     ADD_MEMBER: (projectId: string) => `/project/${projectId}/member`,

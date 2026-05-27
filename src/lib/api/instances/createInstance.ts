@@ -23,8 +23,8 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // ONLY log on server 
-    if (typeof window === "undefined") {
+    // ONLY log on server (dev only)
+    if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
       console.log("📤 REQUEST:", {
         url: config.url,
         method: config.method,
@@ -39,7 +39,7 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
   // Refresh on 401
   instance.interceptors.response.use(
     (response) => {
-      if (typeof window === "undefined") {
+      if (typeof window === "undefined" && process.env.NODE_ENV === "development") {
         console.log("📥 RESPONSE:", response.status, response.data);
       }
       return response;

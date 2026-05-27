@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { profileSchema } from "@/src/lib/utils/zodSchemas";
 import { updateProfile } from "@/src/lib/api/profile";
+import { changePassword } from "@/src/lib/api/auth";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useRef, useState } from "react"
 
@@ -26,6 +27,8 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     },
   });
   const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [failedConfirm, setFailedConfirm] = useState({
     first_name: false,
     email: false,
@@ -64,25 +67,35 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     })
   }
 
-  function updatePassword() {
-    trigger(["oldPassword", "newPassword", "confirmPassword"])
+  async function updatePassword() {
+    trigger(["oldPassword", "newPassword", "confirmPassword"]);
+    setPasswordError(null);
+    setPasswordSuccess(false);
 
-    if (!formRef.current) return
+    if (!formRef.current) return;
     const formData = new FormData(formRef.current);
     const formValues = Object.fromEntries(formData.entries());
 
-    if (errors.oldPassword || errors.newPassword || errors.confirmPassword ||
-        !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword) {
-        return false
-      }
+    if (
+      errors.oldPassword || errors.newPassword || errors.confirmPassword ||
+      !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword
+    ) {
+      return;
+    }
 
-    
-    setValue("oldPassword", "xxxxxxxx")
-    setValue("newPassword", "")
-    setValue("confirmPassword", "") // , {shouldDirty: false}
-
-    return true;
-    // ... Request
+    try {
+      await changePassword(
+        formValues.oldPassword as string,
+        formValues.newPassword as string,
+      );
+      setValue("oldPassword", "xxxxxxxxxxx");
+      setValue("newPassword", "");
+      setValue("confirmPassword", "");
+      setIsEditingPassword(false);
+      setPasswordSuccess(true);
+    } catch {
+      setPasswordError("Не удалось сменить пароль. Проверьте старый пароль.");
+    }
   }
 
   return (
@@ -147,6 +160,15 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
           )}
 
       </>}
+
+      {passwordError && (
+        <p className={styles.error}>{passwordError}</p>
+      )}
+      {passwordSuccess && (
+        <p style={{ color: "var(--success-color, green)", marginTop: "4px" }}>
+          Пароль успешно изменён
+        </p>
+      )}
 
     </form>
   );

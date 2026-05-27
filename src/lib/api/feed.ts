@@ -143,11 +143,23 @@ export const uploadFileDirect = async (
   contentType: string,
   headers: Record<string, string> = {},
 ): Promise<void> => {
-  await fetch(url, {
+  // content-length is a forbidden header in the Fetch API — browsers set it
+  // automatically. Passing it explicitly is silently ignored, but filtering it
+  // here makes the intent clear and avoids confusion if the presigned URL
+  // ever starts signing it again.
+  const safeHeaders = Object.fromEntries(
+    Object.entries(headers).filter(([k]) => k.toLowerCase() !== "content-length"),
+  );
+
+  const res = await fetch(url, {
     method: "PUT",
-    headers: { "Content-Type": contentType, ...headers },
+    headers: { "Content-Type": contentType, ...safeHeaders },
     body: file,
   });
+
+  if (!res.ok) {
+    throw new Error(`MinIO upload failed: ${res.status} ${res.statusText}`);
+  }
 };
 
 /** Step 3: confirm upload is complete */

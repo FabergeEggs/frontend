@@ -1,5 +1,6 @@
 import { api } from "./instances/base";
 import { ApiRoutes } from "./constants";
+import type { ResponseStatus } from "@/src/lib/models/export/response";
 
 // ──── Create Comments & Responses ────
 export const createPostComment = async (
@@ -23,6 +24,19 @@ export const createTaskResponse = async (
   const { data } = await api.post(
     ApiRoutes.PROJECT.GET_TASK_RESPONSES(projectId, taskId),
     { text, attached_files: attached_files || [] },
+  );
+  return data;
+};
+
+export const changeResponseStatus = async (
+  projectId: string,
+  taskId: string,
+  responseId: string,
+  status: ResponseStatus,
+) => {
+  const { data } = await api.patch(
+    ApiRoutes.PROJECT.CHANGE_RESPONSE_STATUS(projectId, taskId, responseId),
+    { status },
   );
   return data;
 };

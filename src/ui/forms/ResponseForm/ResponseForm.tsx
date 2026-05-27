@@ -35,7 +35,7 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
                 onChange={(e) => setText(e.target.value)}
             />
             <div className={styles.fileForm}>
-                <FileInput />
+                <FileInput onAdd={(id) => setFiles(prev => [...prev, id])} />
                 {files && files.map((value, index) => (
                     <File key={index} name={value} index={index} />
                 ))}
