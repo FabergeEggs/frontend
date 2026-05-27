@@ -83,8 +83,6 @@ export default function ResponseForm({
             shouldDirty: true,
           })
         }
-        disabledSubmit={!isValid || !userId || mutationStatus.isSubmitting}
-        onSubmit={handleSubmit}
       />
       <div className={styles.fileForm}>
         <FileInput onClick={() => fileInputRef.current?.click()} />
@@ -109,6 +107,12 @@ export default function ResponseForm({
         <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка создания ответа"]} />
       )}
       {!userId && <ValidationError messages={["Не удалось определить пользователя."]} />}
+      <GreenButton
+        text="Отправить ответ"
+        disabled={!isValid || !userId || mutationStatus.isSubmitting}
+        onClick={handleSubmit}
+        style={{ marginTop: "10px" }}
+      />
     </div>
   );
 }

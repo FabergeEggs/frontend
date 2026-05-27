@@ -56,6 +56,19 @@
   gap: 15px;
 }
 
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+ 
+.editTop {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+ 
 
 @media(max-width: 1000px) {
     /* .taskContainer {
