@@ -147,8 +147,16 @@ export const uploadFileDirect = async (
   // automatically. Passing it explicitly is silently ignored, but filtering it
   // here makes the intent clear and avoids confusion if the presigned URL
   // ever starts signing it again.
+  //
+  // content-type is also filtered from safeHeaders to prevent duplicate values:
+  // safeHeaders may contain "content-type" (lowercase) from the presigned URL,
+  // and we also set "Content-Type" explicitly below. The Fetch API treats these
+  // as the same header and combines them → "image/jpeg, image/jpeg" → MinIO
+  // stores that combined value → scan_job rejects the file due to mime mismatch.
   const safeHeaders = Object.fromEntries(
-    Object.entries(headers).filter(([k]) => k.toLowerCase() !== "content-length"),
+    Object.entries(headers).filter(
+      ([k]) => k.toLowerCase() !== "content-length" && k.toLowerCase() !== "content-type",
+    ),
   );
 
   const res = await fetch(url, {
@@ -188,6 +196,31 @@ export const uploadFile = async (file: File): Promise<string> => {
   await completeUpload(asset.id);
 
   return asset.id;
+};
+
+/**
+ * Upload file as public + poll until scan completes → returns presigned download URL.
+ * Use for response attachments so any user (including task admin) can download them.
+ * URL is valid for 7 days (MinIO presigned GET TTL).
+ */
+export const uploadFilePublic = async (file: File): Promise<string> => {
+  const { asset, upload } = await initUpload({
+    filename: file.name,
+    content_type: file.type,
+    size_bytes: file.size,
+    visibility: "public",
+  });
+
+  await uploadFileDirect(upload.url, file, file.type, upload.headers);
+  await completeUpload(asset.id);
+
+  for (let i = 0; i < 15; i++) {
+    await new Promise((r) => setTimeout(r, 2000));
+    const info = await getAsset(asset.id);
+    if (info.status === "ready" && info.download_url) return info.download_url;
+    if (info.status === "rejected") throw new Error("Файл отклонён сервером");
+  }
+  throw new Error("Таймаут сканирования файла");
 };
 
 export const getAsset = async (id: string): Promise<AssetDetail> => {

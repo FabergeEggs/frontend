@@ -7,21 +7,23 @@ import HeaderIcon from "../../images/HeaderIcon/HeaderIcon";
 import GreenButton from "../../buttons/GreenButton/GreenButton";
 
 import SearchInput from "../../inputs/SearchInput/SearchInput";
-import { useState } from "react";
 
 import Link from "next/link";
 
-export default function FeedHeader() {
-  const [search, setSearch] = useState("");
+interface FeedHeaderProps {
+  search?: string;
+  onSearchChange?: (value: string) => void;
+}
 
-  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setSearch(e.target.value);
-  }
-
+export default function FeedHeader({ search = "", onSearchChange }: FeedHeaderProps) {
   return (
     <header className="basic-header basic-flex">
       <Logo />
-      <SearchInput onChange={handleSearchChange} />
+      <SearchInput
+        value={search}
+        onChange={(e) => onSearchChange?.((e as { target: { value: string } }).target.value)}
+        placeholder="Поиск по ленте..."
+      />
       <div className="basic-flex">
         <Link
           href="/feed/create"
@@ -31,7 +33,9 @@ export default function FeedHeader() {
                 "Мой проект", если проект есть и он один, "Мои проекты" с якорной ссылкой на профиль на список проектов */}
           <GreenButton text="Создать проект" className={`${styles.projectBtn}`}/>
         </Link>
-        <HeaderIcon />
+        <Link href="/profile" className="basic-link">
+          <HeaderIcon />
+        </Link>
       </div>
     </header>
   );

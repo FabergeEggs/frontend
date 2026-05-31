@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./FileInput.module.css";
 import FileImage from "@/public/assets/response/file.svg";
-import { uploadFile } from "@/src/lib/api/feed";
+import { uploadFilePublic } from "@/src/lib/api/feed";
 
 interface FileInputProps {
   /** Called with the asset_id once the file is uploaded and ready */
@@ -24,12 +24,12 @@ export default function FileInput({ onAdd, accept }: FileInputProps) {
     setState("uploading");
     setErrorMsg(null);
     try {
-      const assetId = await uploadFile(file);
-      onAdd?.(assetId);
+      const downloadUrl = await uploadFilePublic(file);
+      onAdd?.(downloadUrl);
       setState("idle");
-    } catch {
+    } catch (e) {
       setState("error");
-      setErrorMsg("Ошибка загрузки");
+      setErrorMsg(e instanceof Error ? e.message : "Ошибка загрузки");
     }
   }
 

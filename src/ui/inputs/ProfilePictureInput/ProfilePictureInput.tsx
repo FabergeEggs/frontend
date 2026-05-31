@@ -1,27 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import styles from "./ProfilePictureInput.module.css";
-import { uploadFile, getAsset } from "@/src/lib/api/feed";
+import { uploadFilePublic } from "@/src/lib/api/feed";
+const DEFAULT_AVATAR = "/assets/project/example.png";
 
 interface ProfilePictureInputProps {
   value?: string;
   onChange?: (url: string) => void;
-}
-
-async function pollUntilReady(assetId: string, maxAttempts = 15): Promise<string> {
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise((r) => setTimeout(r, 2000));
-    const asset = await getAsset(assetId);
-    if (asset.status === "ready" && asset.download_url) {
-      return asset.download_url;
-    }
-    if (asset.status === "rejected") {
-      throw new Error("Файл отклонён");
-    }
-  }
-  throw new Error("Таймаут сканирования");
 }
 
 export default function ProfilePictureInput({ value, onChange }: ProfilePictureInputProps) {
@@ -33,8 +19,7 @@ export default function ProfilePictureInput({ value, onChange }: ProfilePictureI
     setIsLoading(true);
     setError(null);
     try {
-      const assetId = await uploadFile(file);
-      const downloadUrl = await pollUntilReady(assetId);
+      const downloadUrl = await uploadFilePublic(file);
       onChange?.(downloadUrl);
     } catch {
       setError("Ошибка загрузки. Попробуйте снова.");
@@ -47,9 +32,12 @@ export default function ProfilePictureInput({ value, onChange }: ProfilePictureI
     <div className={styles.container}>
       <p className={styles.title}>Аватар профиля</p>
       <div className={styles.imageContainer}>
-        {value && (
-          <Image src={value} alt="Аватар" fill style={{ objectFit: "cover" }} />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={value || DEFAULT_AVATAR}
+          alt="Аватар"
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
       </div>
       {error && <p style={{ color: "red", fontSize: 12 }}>{error}</p>}
       <div className={styles.buttons}>

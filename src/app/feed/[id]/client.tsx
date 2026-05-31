@@ -48,6 +48,7 @@ import {
   usePublications,
   useUpdateProject,
   useDeletePost,
+  useAddMember,
   getApiErrorMessage,
 } from "@/src/lib/query/project";
 import { getQueryStatus } from "@/src/lib/query/status";
@@ -94,6 +95,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
   const updateProjectMutation = useUpdateProject(data.project_id);
   const deletePostMutation = useDeletePost(data.project_id);
+  const addMemberMutation = useAddMember(data.project_id);
 
   const posts = publications.filter((p) => p.type === "post");
   const tasks = publications.filter((p) => p.type === "task");
@@ -340,6 +342,16 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             <span>ответов</span>
           </div>
         </div>
+
+        {!isAdmin && (
+          <button
+            className="basic-btn"
+            onClick={() => addMemberMutation.mutate(userId!)}
+            disabled={addMemberMutation.isPending}
+          >
+            {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
+          </button>
+        )}
       </div>
 
       {isAdmin && (

@@ -8,6 +8,7 @@ import { ChangeHandler, RefCallBack } from "react-hook-form";
 interface SearchInputProps {
   name?: string;
   placeholder?: string;
+  value?: string;
   onChange?: ChangeHandler | ((e: React.ChangeEvent<HTMLInputElement>) => void);
   onFocus?: () => void;
   onBlur?: ChangeHandler | (() => void);
@@ -18,6 +19,7 @@ interface SearchInputProps {
 
 export default function SearchInput({
     placeholder = "Хочу найти...",
+    value,
     onChange,
     onFocus,
     onBlur,
@@ -30,6 +32,7 @@ export default function SearchInput({
   <div className={`basic-input-container ${styles.container} ${styles.inputContainer}`}>
         <input
           className={`basic-input ${styles.input}`}
+          value={value}
           onChange={(e) => onChange?.(e)}
           onFocus={onFocus}
           onBlur={onBlur}

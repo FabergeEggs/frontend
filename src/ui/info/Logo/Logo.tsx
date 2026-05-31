@@ -1,11 +1,12 @@
 import styles from './Logo.module.css'
 import HeaderIcon from '../../images/HeaderIcon/HeaderIcon'
+import Link from 'next/link'
 
 export default function Logo() {
     return (
-        <div className={styles.logo}>
+        <Link href="/feed" className={styles.logo}>
             <HeaderIcon/>
-            <span className={styles.text}>Название</span>
-        </div>
+            <span className={styles.text}>Eggs</span>
+        </Link>
     )
 }

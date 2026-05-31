@@ -21,6 +21,7 @@ import {
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useUserMemberships } from "@/src/lib/query/project";
 import { useProfileInfo } from "@/src/lib/query/profile";
+import { updateProfile } from "@/src/lib/api/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
@@ -104,7 +105,25 @@ export default function ProfilePage() {
           <ProfileForm data={profileData} avatarUrl={avatarUrl} />
         </div>
         <div className={styles.pictureInputContainer}>
-          <ProfilePictureInput value={avatarUrl} onChange={setAvatarUrl} />
+          <ProfilePictureInput
+            value={avatarUrl}
+            onChange={async (url) => {
+              setAvatarUrl(url);
+              if (profileData && userId) {
+                try {
+                  await updateProfile(userId, {
+                    first_name: profileData.first_name,
+                    last_name: "",
+                    bio: profileData.bio || "",
+                    avatar_url: url,
+                  });
+                } catch {
+                  // аватар отображается локально, но сохранится при следующем
+                  // подтверждении имени/описания в ProfileForm
+                }
+              }
+            }}
+          />
         </div>
       </div>
       <div className={styles.projectsContainer}>

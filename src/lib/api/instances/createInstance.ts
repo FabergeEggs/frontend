@@ -4,6 +4,7 @@ import {
   getAccessToken,
   clearAccessToken,
 } from "../../store/tokenStore";
+import { setUserId } from "../../store/userStore";
 import { ApiRoutes } from "../constants";
 import { parseAxiosError } from "../errors";
 
@@ -65,6 +66,7 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
           return instance.request(origin);
         } catch {
           clearAccessToken();
+          setUserId("");
           if (typeof window !== "undefined") {
             window.location.href = "/login";
           }

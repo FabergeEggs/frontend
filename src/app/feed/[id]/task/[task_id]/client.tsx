@@ -28,11 +28,9 @@ import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 export default function TaskPageClient({
   projectId,
   taskId,
-  responses: initialResponses,
 }: {
   projectId: string;
   taskId: string;
-  responses: ResponseDTO[];
 }) {
   const taskQuery = useTask(projectId, taskId);
   const taskStatus = getQueryStatus(taskQuery);
@@ -44,9 +42,9 @@ export default function TaskPageClient({
   const [editDescription, setEditDescription] = useState("");
   const [editShortDesc, setEditShortDesc] = useState("");
 
-  // Live responses — falls back to SSR-preloaded data until query resolves
+  // Live responses — client-side only (no SSR fallback needed)
   const responsesQuery = useTaskResponses(projectId, taskId);
-  const displayedResponses: ResponseDTO[] = responsesQuery.data ?? initialResponses;
+  const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
 
   // Mutations
   const updateTaskMutation = useUpdateTask(projectId, taskId);

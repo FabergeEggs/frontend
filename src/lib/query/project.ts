@@ -25,6 +25,7 @@ import {
   projectHealthCheck,
   getPostComments,
   getTaskResponses,
+  addMember,
 } from "@/src/lib/api/project";
 import { projectKeys, responseKeys } from "./keys";
 import { getApiErrorMessage } from "@/src/lib/api/errors";
@@ -35,7 +36,9 @@ import type {
   TaskCreateDTO,
   TaskUpdateDTO,
   PostCreateDTO,
+  DenormUserDTO,
 } from "@/src/lib/models/export/project";
+import { ProjectRoleEnum } from "@/src/lib/models/export/project";
 
 export function useProject(
   projectId: string,
@@ -213,7 +216,16 @@ export function useUpdateTask(projectId: string, taskId: string) {
   });
 }
 
-
+export function useAddMember(projectId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: string) =>
+      addMember(projectId, { id: userId, role: ProjectRoleEnum.VOLUNTEER } as DenormUserDTO),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+}
 
 /** Сообщение об ошибке из query/mutation для UI */
 export { getApiErrorMessage };
