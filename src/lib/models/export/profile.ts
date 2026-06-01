@@ -11,9 +11,10 @@ export interface ProfileDTO {
     is_active: boolean
 }
 
-export interface UpdateProfileRequestDTO { 
+export interface UpdateProfileRequestDTO {
   first_name: string
   last_name: string
   bio: string
-  avatar_url: string
+  avatar_url?: string
+  avatar_asset_id?: string
 }

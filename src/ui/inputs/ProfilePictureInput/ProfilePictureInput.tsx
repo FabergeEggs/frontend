@@ -7,10 +7,11 @@ const DEFAULT_AVATAR = "/assets/project/example.png";
 
 interface ProfilePictureInputProps {
   value?: string;
-  onChange?: (url: string) => void;
+  onChange?: (data: { assetId: string; displayUrl: string }) => void;
+  onDelete?: () => void;
 }
 
-export default function ProfilePictureInput({ value, onChange }: ProfilePictureInputProps) {
+export default function ProfilePictureInput({ value, onChange, onDelete }: ProfilePictureInputProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -19,8 +20,8 @@ export default function ProfilePictureInput({ value, onChange }: ProfilePictureI
     setIsLoading(true);
     setError(null);
     try {
-      const downloadUrl = await uploadFilePublic(file);
-      onChange?.(downloadUrl);
+      const { assetId, downloadUrl } = await uploadFilePublic(file);
+      onChange?.({ assetId, displayUrl: downloadUrl });
     } catch {
       setError("Ошибка загрузки. Попробуйте снова.");
     } finally {
@@ -61,7 +62,7 @@ export default function ProfilePictureInput({ value, onChange }: ProfilePictureI
         </button>
         <button
           className={`basic-btn ${styles.btn}`}
-          onClick={() => onChange?.("")}
+          onClick={() => onDelete?.()}
           disabled={isLoading || !value}
         >
           Удалить
