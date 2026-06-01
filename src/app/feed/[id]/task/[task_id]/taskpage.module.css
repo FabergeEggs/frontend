@@ -60,6 +60,26 @@
     word-wrap: break-word;
 }
 
+.editCard {
+    background-color: var(--varity2-color);
+}
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.editForm :global(.basic-input-container) {
+    background-color: var(--varity2-color);
+}
+
+.editActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
 
 @media(max-width: 1000px) {
     /* .taskContainer {

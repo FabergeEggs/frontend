@@ -24,6 +24,9 @@ import FinishImage from "@/public/assets/project/finish.svg";
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import ProjectTextarea from "@/src/ui/inputs/ProjectInput/ProjectTextarea";
+import CancelImage from "@/public/assets/close.svg";
 
 export default function TaskPageClient({
   projectId,
@@ -106,37 +109,46 @@ export default function TaskPageClient({
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.taskContainer}>
-        <div className={`${styles.card} ${styles.cardPadding}`}>
+        <div
+          className={`${styles.card} ${styles.cardPadding} ${editing ? styles.editCard : ""}`}
+        >
 
           {/* ── Inline edit form ── */}
           {isAdmin && editing ? (
-            <div className={styles.editForm ?? "basic-flex-column"}>
-              <input
-                className={styles.editInput ?? ""}
+            <div className={styles.editForm}>
+              <AuthInput
+                label="Название задачи"
+                placeholder="Название задачи"
                 value={editLabel}
                 onChange={(e) => setEditLabel(e.target.value)}
-                placeholder="Название задачи"
+                required={false}
               />
-              <input
-                className={styles.editInput ?? ""}
+              <AuthInput
+                label="Краткое описание"
+                placeholder="Краткое описание"
                 value={editShortDesc}
                 onChange={(e) => setEditShortDesc(e.target.value)}
-                placeholder="Краткое описание"
+                required={false}
               />
-              <textarea
-                className={styles.editTextarea ?? ""}
+              <ProjectTextarea
+                label="Описание задачи"
+                placeholder="Описание задачи"
+                height={150}
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
-                placeholder="Описание задачи"
-                rows={5}
+                required={false}
               />
-              <div className="basic-flex" style={{ gap: "8px", marginTop: "8px" }}>
+              <div className={styles.editActions}>
                 <GreenButton
                   text={updateTaskMutation.isPending ? "Сохранение…" : "Сохранить"}
                   onClick={saveEdit}
                   disabled={!editLabel.trim() || updateTaskMutation.isPending}
                 />
-                <button onClick={() => setEditing(false)}>Отмена</button>
+                <ImageTextButton
+                  text="Отмена"
+                  src={CancelImage}
+                  onClick={() => setEditing(false)}
+                />
               </div>
               {updateTaskMutation.isError && (
                 <ValidationError messages={["Не удалось сохранить изменения"]} />
