@@ -1,19 +1,18 @@
 "use client";
 
-// import { useTask, useTaskResponses } from "@/src/lib/query/project";
+import { useTask, useTaskResponses } from "@/src/lib/query/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
-// import { useProfiles } from "@/src/lib/query/profile";
-import { getMockTask, getMockTaskResponses, getMockProfile } from "@/src/lib/api/mockData";
-import { useMemo } from "react";
+import { useProfiles } from "@/src/lib/query/profile";
+import { Fragment, useMemo } from "react";
 
 import ResponseForm from "@/src/ui/forms/ResponseForm/ResponseForm";
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-export default function ReportPageClientMock({
+export default function ReportPageClient({
   projectId,
   taskId,
 }: {
@@ -21,23 +20,19 @@ export default function ReportPageClientMock({
   taskId: string;
 }) {
   const { userId } = useAuth();
-  // const taskQuery = useTask(projectId, taskId);
-  // const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
-  const task = getMockTask(projectId, taskId);
-  const taskStatus = { isLoading: false, isError: false, errorMessage: null };
+  const taskQuery = useTask(projectId, taskId);
+  const task = taskQuery.data;
+  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
   const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
-  // const responsesQuery = useTaskResponses(projectId, taskId);
-  const responses = getMockTaskResponses(projectId, taskId);
+  const responsesQuery = useTaskResponses(projectId, taskId);
+  const responses = responsesQuery.data ?? [];
   const userIds = useMemo(
     () => Array.from(new Set(responses.map((r) => r.user_id))),
     [responses],
   );
-  // const profilesQuery = useProfiles(userIds);
-  // const profiles = profilesQuery.data ?? {};
-  const profiles = Object.fromEntries(
-    userIds.map((userId) => [userId, getMockProfile(userId)]),
-  ) as Record<string, { username: string }>;
+  const profilesQuery = useProfiles(userIds);
+  const profiles = profilesQuery.data ?? {};
 
   if (taskStatus.isLoading) {
     return <div className="centered">Загрузка…</div>;
@@ -84,27 +79,28 @@ export default function ReportPageClientMock({
         <div className="basic-flex-column" style={{ gap: "12px" }}>
           <h2>Отклики ({responses.length})</h2>
           {responses.map((r, idx) => (
-            <ResponseCard
-              key={r.id ?? idx}
-              className=""
-              {...r}
-              username={
-                profiles[r.user_id]?.username ?? r.user_name ?? "Загрузка..."
-              }
-              isAdmin={isAdmin}
-              onApprove={() =>
-                changeStatusMutation.mutate({
-                  responseId: r.id,
-                  status: ResponseStatus.ACCEPTED,
-                })
-              }
-              onReject={() =>
-                changeStatusMutation.mutate({
-                  responseId: r.id,
-                  status: ResponseStatus.REJECTED,
-                })
-              }
-            />
+            <Fragment key={r.id ?? idx}>
+              <ResponseCard
+                className=""
+                {...r}
+                username={
+                  profiles[r.user_id]?.username ?? r.user_name ?? "Загрузка..."
+                }
+                isAdmin={isAdmin}
+                onApprove={() =>
+                  changeStatusMutation.mutate({
+                    responseId: r.id,
+                    status: ResponseStatus.ACCEPTED,
+                  })
+                }
+                onReject={() =>
+                  changeStatusMutation.mutate({
+                    responseId: r.id,
+                    status: ResponseStatus.REJECTED,
+                  })
+                }
+              />
+            </Fragment>
           ))}
         </div>
       )}
