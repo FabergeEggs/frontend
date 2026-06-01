@@ -110,7 +110,7 @@ export default function TaskPageClient({
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.taskContainer}>
         <div
-          className={`${styles.card} ${styles.cardPadding} ${editing ? styles.editCard : ""}`}
+          className={`${styles.card} ${styles.cardPadding}`}
         >
 
           {/* ── Inline edit form ── */}

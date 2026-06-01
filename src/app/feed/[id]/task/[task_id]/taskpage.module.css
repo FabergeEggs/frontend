@@ -60,24 +60,24 @@
     word-wrap: break-word;
 }
 
-.editCard {
-    background-color: var(--varity2-color);
-}
+/* .editCard {
+    background-color: var(--bg-color);
+} */
 
 .editForm {
-    display: flex;
+    display       : flex;
     flex-direction: column;
-    gap: 10px;
-    width: 100%;
+    gap           : 10px;
+    width         : 100%;
 }
 
 .editForm :global(.basic-input-container) {
-    background-color: var(--varity2-color);
+    background-color: var(--bg-color);
 }
 
 .editActions {
-    display: flex;
-    gap: 8px;
+    display   : flex;
+    gap       : 8px;
     margin-top: 8px;
 }
 
