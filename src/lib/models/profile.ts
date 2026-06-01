@@ -26,9 +26,10 @@ const emptyProfile = (): ProfileDTO => ({
 
 const profile = emptyProfile()
 
-interface UpdateProfileRequestDTO { 
+interface UpdateProfileRequestDTO {
   first_name: string
   last_name: string
   bio: string
-  avatar_url: string
+  avatar_url?: string
+  avatar_asset_id?: string
 }
