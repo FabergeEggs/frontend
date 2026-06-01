@@ -53,10 +53,8 @@ export const profileSchema = z
 /** Projects */
 
 const labelSchema = z.string().min(3, "Должно быть не менее 3 символов").max(255, "Должно быть не более 255 символов");
-// Optional — UI marks these fields as non-required; min(1) would keep the button
-// disabled whenever the user leaves them blank.
-const shortDescriptionSchema = z.string().max(500, "Должно быть не более 500 символов").optional();
-const descriptionSchema = z.string().max(5000, "Должно быть не более 5000 символов").optional();
+const shortDescriptionSchema = z.string().min(1, "Краткое описание обязательно").max(500, "Должно быть не более 500 символов");
+const descriptionSchema = z.string().min(1, "Развёрнутое описание обязательно").max(5000, "Должно быть не более 5000 символов");
 
 export const projectSchema = z
   .object({
