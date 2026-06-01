@@ -1,21 +1,22 @@
 /* Copied from projectpage.module.css */
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+    display       : flex;
+    flex-direction: column;
+    gap           : 30px;
 }
 
 .taskContainer {
     display: flex;
-    gap: 15px;
+    gap    : 15px;
 }
 
 .card {
     background-color: white;
-    border: 0.5px solid var(--active-dark-color);
-    border-radius: 15px;
-    box-sizing: border-box;
+    border          : 0.5px solid var(--active-dark-color);
+    border-radius   : 15px;
+    box-sizing      : border-box;
+    width           : 100%;
 }
 
 .cardPadding {
@@ -24,24 +25,24 @@
 
 .label {
     font-weight: 400;
-    font-size: 28px;
-    margin-top: 0;
+    font-size  : 28px;
+    margin-top : 0;
 
 }
 
 .info {
-    display: flex;
-    flex-wrap: wrap;
+    display    : flex;
+    flex-wrap  : wrap;
     align-items: center;
-    gap: 25px;
+    gap        : 25px;
 
-    font-size: 16px;
-    margin-bottom: 10px;        
+    font-size    : 16px;
+    margin-bottom: 10px;
 }
 
 .infoPiece {
-    display: flex;
-    gap: 5px;
+    display    : flex;
+    gap        : 5px;
     align-items: center;
 }
 
@@ -50,13 +51,13 @@
 }
 
 .responses {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+    display       : flex;
+    flex-direction: column;
+    gap           : 15px;
 }
 
 .description {
-    word-wrap: break-word; 
+    word-wrap: break-word;
 }
 
 
@@ -84,7 +85,7 @@
 
     .info {
         font-size: 14px;
-        gap: 10px;
+        gap      : 10px;
     }
 
     .cardPadding {
