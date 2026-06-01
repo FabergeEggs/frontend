@@ -23,7 +23,7 @@ export function useLoginMutation() {
     },
     onSuccess: (response) => {
       setUserId(response.user_id);
-      router.push("/profile");
+      router.push("/feed");
     },
   });
 }

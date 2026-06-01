@@ -43,29 +43,33 @@ import { projectSchema } from "@/src/lib/utils/zodSchemas";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-import {
-  useProject,
-  usePublications,
-  useUpdateProject,
-  useDeletePost,
-  useAddMember,
-  getApiErrorMessage,
-} from "@/src/lib/query/project";
-import { getQueryStatus } from "@/src/lib/query/status";
+// import {
+//   useProject,
+//   usePublications,
+//   useUpdateProject,
+//   useDeletePost,
+//   useAddMember,
+//   getApiErrorMessage,
+// } from "@/src/lib/query/project";
+import { getApiErrorMessage } from "@/src/lib/query/project";
+import { getMockProject, getMockPublications } from "@/src/lib/api/mockData";
+// import { getQueryStatus } from "@/src/lib/query/status";
 
-export default function ProjectPageClient({
+export default function ProjectPageClientMock({
   projectId,
 }: {
   projectId: string;
 }) {
-  const projectQuery = useProject(projectId);
-  const projectStatus = getQueryStatus(projectQuery);
+  // const projectQuery = useProject(projectId);
+  // const projectStatus = getQueryStatus(projectQuery);
+  const projectStatus = { isLoading: false, isError: false, errorMessage: null };
+  const data = getMockProject(projectId);
 
   if (projectStatus.isLoading) {
     return <div className="centered">Загрузка проекта…</div>;
   }
 
-  if (projectStatus.isError || !projectQuery.data) {
+  if (projectStatus.isError || !data) {
     return (
       <div className="centered">
         <ValidationError
@@ -77,10 +81,10 @@ export default function ProjectPageClient({
     );
   }
 
-  return <ProjectPageContent data={projectQuery.data} />;
+  return <ProjectPageContentMock data={data} />;
 }
 
-function ProjectPageContent({ data }: { data: ProjectFull }) {
+function ProjectPageContentMock({ data }: { data: ProjectFull }) {
   const { userId } = useAuth();
   const isAdmin = userId === data.creator_id;
 
@@ -89,13 +93,27 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const [isPosting, setPosting] = useState(false);
   const [currentTagInput, setCurrentTagInput] = useState("");
 
-  const publicationsQuery = usePublications(data.project_id);
-  const publicationsStatus = getQueryStatus(publicationsQuery);
-  const publications = publicationsQuery.data?.items ?? [];
+  // const publicationsQuery = usePublications(data.project_id);
+  // const publicationsStatus = getQueryStatus(publicationsQuery);
+  // const publications = publicationsQuery.data?.items ?? [];
+  const publications = getMockPublications(data.project_id).items;
+  const publicationsStatus = {
+    isLoading: false,
+    isError: false,
+    errorMessage: null,
+  };
 
-  const updateProjectMutation = useUpdateProject(data.project_id);
-  const deletePostMutation = useDeletePost(data.project_id);
-  const addMemberMutation = useAddMember(data.project_id);
+  // const updateProjectMutation = useUpdateProject(data.project_id);
+  // const deletePostMutation = useDeletePost(data.project_id);
+  // const addMemberMutation = useAddMember(data.project_id);
+  const updateProjectMutation = {
+    isPending: false,
+    isError: false,
+    error: null as unknown,
+    mutateAsync: async (_payload?: unknown) => {},
+  };
+  const deletePostMutation = { mutate: (_: string) => {} };
+  const addMemberMutation = { mutate: (_: string) => {}, isPending: false };
 
   const posts = publications.filter((p) => p.type === "post");
   const tasks = publications.filter((p) => p.type === "task");
@@ -325,54 +343,33 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             />
           </form>
         )}
-
-        {updateError && <ValidationError messages={[updateError]} />}
-
-        <div className={styles.countInfo}>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.participants_count}</span>
-            <span>участников</span>
-          </div>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.tasks_count}</span>
-            <span>заданий</span>
-          </div>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.answers_count}</span>
-            <span>ответов</span>
-          </div>
-        </div>
-
-        {!isAdmin && (
-          <button
-            className="basic-btn"
-            onClick={() => addMemberMutation.mutate(userId!)}
-            disabled={addMemberMutation.isPending}
-          >
-            {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
-          </button>
-        )}
       </div>
 
-      {isAdmin && (
-        <>
-          {isCreatingTask && (
-            <div id="taskform">
-              <TaskForm
-                project_id={data.project_id}
-                onSuccess={() => setCreatingTask(false)}
-              />
-            </div>
-          )}
-          {isPosting && (
-            <div id="postform">
-              <PostForm
-                project_id={data.project_id}
-                onSuccess={() => setPosting(false)}
-              />
-            </div>
-          )}
-        </>
+      {updateError && <ValidationError messages={[updateError]} />}
+
+      <div className={styles.countInfo}>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.participants_count}</span>
+          <span>участников</span>
+        </div>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.tasks_count}</span>
+          <span>заданий</span>
+        </div>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.answers_count}</span>
+          <span>ответов</span>
+        </div>
+      </div>
+
+      {!isAdmin && (
+        <button
+          className="basic-btn"
+          onClick={() => addMemberMutation.mutate(userId!)}
+          disabled={addMemberMutation.isPending}
+        >
+          {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
+        </button>
       )}
 
       <div className={styles.projects}>
@@ -414,6 +411,5 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
           </>
         )}
       </div>
-    </div>
-  );
+    </div>)
 }

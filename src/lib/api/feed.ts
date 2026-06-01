@@ -1,4 +1,5 @@
 import { api } from './instances/base';
+import { getMockFeedPage } from "./mockData";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -65,10 +66,11 @@ export const getFeed = async (
   limit: number = 20,
   cursor?: string,
 ): Promise<FeedPage> => {
-  const params: Record<string, string | number> = { limit };
-  if (cursor) params.cursor = cursor;
-  const { data } = await api.get("/api/v1/feed/global", { params });
-  return data;
+  // const params: Record<string, string | number> = { limit };
+  // if (cursor) params.cursor = cursor;
+  // const { data } = await api.get("/api/v1/feed/global", { params });
+  // return data;
+  return getMockFeedPage(limit, cursor);
 };
 
 export const getProjectFeed = async (
@@ -76,13 +78,14 @@ export const getProjectFeed = async (
   limit: number = 20,
   cursor?: string,
 ): Promise<FeedPage> => {
-  const params: Record<string, string | number> = { limit };
-  if (cursor) params.cursor = cursor;
-  const { data } = await api.get(
-    `/api/v1/feed/projects/${project_id}`,
-    { params },
-  );
-  return data;
+  // const params: Record<string, string | number> = { limit };
+  // if (cursor) params.cursor = cursor;
+  // const { data } = await api.get(
+  //   `/api/v1/feed/projects/${project_id}`,
+  //   { params },
+  // );
+  // return data;
+  return getMockFeedPage(limit, cursor);
 };
 
 // ─── Subscriptions ───────────────────────────────────────────────────────────

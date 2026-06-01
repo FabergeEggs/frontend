@@ -21,7 +21,7 @@ export default function FeedHeader({ search = "", onSearchChange }: FeedHeaderPr
       <Logo />
       <SearchInput
         value={search}
-        onChange={(e) => onSearchChange?.((e as { target: { value: string } }).target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onSearchChange?.((e as { target: { value: string } }).target.value)}
         placeholder="Поиск по ленте..."
       />
       <div className="basic-flex">

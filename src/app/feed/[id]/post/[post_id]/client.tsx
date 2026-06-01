@@ -2,9 +2,10 @@
 
 import styles from "./postpage.module.css";
 import Image from "next/image";
-import { usePost, usePostComments } from "@/src/lib/query/project";
-import { useProfiles } from "@/src/lib/query/profile";
-import { getQueryStatus } from "@/src/lib/query/status";
+// import { usePost, usePostComments } from "@/src/lib/query/project";
+// import { useProfiles } from "@/src/lib/query/profile";
+import { getMockPost, getMockPostComments, getMockProfile } from "@/src/lib/api/mockData";
+// import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
@@ -12,18 +13,23 @@ import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
 import { useMemo } from "react";
 
-export default function PostPageClient({
+export default function PostPageClientMock({
   projectId,
   postId,
 }: {
   projectId: string;
   postId: string;
 }) {
-  const postQuery = usePost(projectId, postId);
-  const postStatus = getQueryStatus(postQuery);
-  const commentsQuery = usePostComments(projectId, postId);
-  const commentsStatus = getQueryStatus(commentsQuery);
-  const comments = commentsQuery.data ?? [];
+  // const postQuery = usePost(projectId, postId);
+  // const postStatus = getQueryStatus(postQuery);
+  const postStatus = { isLoading: false, isError: false, errorMessage: null };
+  const data = getMockPost(projectId, postId);
+
+  // const commentsQuery = usePostComments(projectId, postId);
+  // const commentsStatus = getQueryStatus(commentsQuery);
+  // const comments = commentsQuery.data ?? [];
+  const commentsStatus = { isLoading: false, isError: false, errorMessage: null };
+  const comments = getMockPostComments(projectId, postId);
 
   // Extract unique user IDs from comments
   const userIds = useMemo(() => {
@@ -31,14 +37,18 @@ export default function PostPageClient({
   }, [comments]);
 
   // Load profiles for all users
-  const profilesQuery = useProfiles(userIds);
-  const profiles = profilesQuery.data ?? {};
+  // const profilesQuery = useProfiles(userIds);
+  // const profiles = profilesQuery.data ?? {};
+  const profiles = Object.fromEntries(
+    userIds.map((userId) => [userId, getMockProfile(userId)]),
+  ) as Record<string, { username: string }>;
 
   if (postStatus.isLoading) {
     return <div className="centered">Загрузка поста…</div>;
   }
 
-  if (postStatus.isError || !postQuery.data) {
+  // if (postStatus.isError || !postQuery.data) {
+  if (postStatus.isError || !data) {
     return (
       <div className="centered">
         <ValidationError
@@ -48,7 +58,7 @@ export default function PostPageClient({
     );
   }
 
-  const data = postQuery.data;
+  // const data = postQuery.data;
 
   return (
     <div className={`pagecontainer ${styles.container}`}>

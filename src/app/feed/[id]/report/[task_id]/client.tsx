@@ -1,20 +1,19 @@
 "use client";
 
-import { useTask, useTaskResponses } from "@/src/lib/query/project";
+// import { useTask, useTaskResponses } from "@/src/lib/query/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
-import { useProfiles } from "@/src/lib/query/profile";
+// import { useProfiles } from "@/src/lib/query/profile";
+import { getMockTask, getMockTaskResponses, getMockProfile } from "@/src/lib/api/mockData";
 import { useMemo } from "react";
 
 import ResponseForm from "@/src/ui/forms/ResponseForm/ResponseForm";
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-import styles from "../projectpage.module.css";
-
-export default function ReportPageClient({
+export default function ReportPageClientMock({
   projectId,
   taskId,
 }: {
@@ -22,23 +21,29 @@ export default function ReportPageClient({
   taskId: string;
 }) {
   const { userId } = useAuth();
-  const taskQuery = useTask(projectId, taskId);
-  const responsesQuery = useTaskResponses(projectId, taskId);
+  // const taskQuery = useTask(projectId, taskId);
+  // const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
+  const task = getMockTask(projectId, taskId);
+  const taskStatus = { isLoading: false, isError: false, errorMessage: null };
   const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
-  const responses = responsesQuery.data ?? [];
+  // const responsesQuery = useTaskResponses(projectId, taskId);
+  const responses = getMockTaskResponses(projectId, taskId);
   const userIds = useMemo(
     () => Array.from(new Set(responses.map((r) => r.user_id))),
     [responses],
   );
-  const profilesQuery = useProfiles(userIds);
-  const profiles = profilesQuery.data ?? {};
+  // const profilesQuery = useProfiles(userIds);
+  // const profiles = profilesQuery.data ?? {};
+  const profiles = Object.fromEntries(
+    userIds.map((userId) => [userId, getMockProfile(userId)]),
+  ) as Record<string, { username: string }>;
 
-  if (taskQuery.isLoading) {
+  if (taskStatus.isLoading) {
     return <div className="centered">Загрузка…</div>;
   }
 
-  if (taskQuery.isError || !taskQuery.data) {
+  if (taskStatus.isError || !task) {
     return (
       <div className="centered">
         <ValidationError messages={["Не удалось загрузить задачу"]} />
@@ -46,12 +51,11 @@ export default function ReportPageClient({
     );
   }
 
-  const task = taskQuery.data;
+  // const task = taskQuery.data;
   const isAdmin = userId === task.creator_id;
 
   return (
     <div className="pagecontainer basic-flex-column">
-      {/* Task summary */}
       <div className="basic-card" style={{ padding: "24px" }}>
         <h1>{task.label}</h1>
         <p style={{ color: "var(--secondary-text-color)", marginTop: "8px" }}>
@@ -67,7 +71,6 @@ export default function ReportPageClient({
         </p>
       </div>
 
-      {/* Submission form — only for active tasks and non-admin */}
       {task.status === TaskStatusEnum.ACTIVE && !isAdmin && (
         <ResponseForm
           className=""
@@ -77,7 +80,6 @@ export default function ReportPageClient({
         />
       )}
 
-      {/* Admin: manage all responses */}
       {responses.length > 0 && (
         <div className="basic-flex-column" style={{ gap: "12px" }}>
           <h2>Отклики ({responses.length})</h2>
@@ -107,7 +109,7 @@ export default function ReportPageClient({
         </div>
       )}
 
-      {responses.length === 0 && !responsesQuery.isLoading && (
+      {responses.length === 0 && (
         <p style={{ color: "var(--secondary-text-color)" }}>
           Откликов пока нет.
         </p>

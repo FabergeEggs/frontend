@@ -19,42 +19,27 @@ import {
   type MembershipProjectDTO,
 } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-import { useUserMemberships } from "@/src/lib/query/project";
 import { useProfileInfo } from "@/src/lib/query/profile";
+import { useUserMemberships } from "@/src/lib/query/project";
 import { updateProfile } from "@/src/lib/api/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-const testProjectData = {
-    id: "kek",
-    label: "Перепись населения в городе Ижевск",
-    creator: "Somewho",
-    short_description:
-      "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...",
-    description: "kek",
-    tags: ["Урбанистика", "Кириешки"],
-    created_at: new Date(2026, 3, 16), // April 16, 2026 (months are 0-based)
-    updated_at: new Date(),
-    status: ProjectStatusEnum.ACTIVE,
+// <!> Mocking
+import { getMockProfile, getMockUserMemberships } from "@/src/lib/api/mockData";
 
-    tasks_count: 16,
-    participants_count: 17,
-    answers_count: 128,
-  };
-
-const myProjects = [];
-const projectParticipations = [testProjectData, testProjectData];
-
-export default function ProfilePage() {
+export default function ProfilePageMock() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const { userId, isLoading } = useAuth();
 
-  const profileQuery = useProfileInfo(userId || "");
-  const profileStatus = getQueryStatus(profileQuery);
-  const profileData = profileQuery.data;
+  // const profileQuery = useProfileInfo(userId || "");
+  // const profileStatus = getQueryStatus(profileQuery);
+  // const profileData = profileQuery.data;
+  const profileStatus = { isLoading: false, isError: false, errorMessage: null };
+  const profileData = getMockProfile(userId || "mock-user-1");
 
   // Sync avatar URL from loaded profile data
   useEffect(() => {
@@ -63,15 +48,16 @@ export default function ProfilePage() {
     }
   }, [profileData?.avatar_url]);
 
-  const membershipsQuery = useUserMemberships(userId || "");
-  const membershipsStatus = getQueryStatus(membershipsQuery);
-  const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
+  // const membershipsQuery = useUserMemberships(userId || "");
+  // const membershipsStatus = getQueryStatus(membershipsQuery);
+  // const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
+  const memberships = getMockUserMemberships(userId || "mock-user-1");
 
   const toggleScientistProjects = () => {
     setShowScientistProjects(prev => !prev);
   };
 
-  const toggleVolunteerProjects = () => { 
+  const toggleVolunteerProjects = () => {
     setShowVolunteerProjects(prev => !prev);
   };
 
@@ -147,22 +133,19 @@ export default function ProfilePage() {
             <div className={styles.projects}>
               {scientistProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
             </div>
-            
-            }
-
-          {
-            (scientistProjects.length == 0) && <div className={styles.noProjects}>
-              <p>У вас пока что нет проектов.</p>
-              <Link
-                href="/feed/create"
-                className="basic-link"
-              >
-                <button className={`basic-btn ${styles.noProjectsBtn}`}>
-                  Создать проект
-                </button>
-              </Link>
-            </div>
           }
+
+          { (scientistProjects.length == 0) && <div className={styles.noProjects}>
+            <p>У вас пока что нет проектов.</p>
+            <Link
+              href="/feed/create"
+              className="basic-link"
+            >
+              <button className={`basic-btn ${styles.noProjectsBtn}`}>
+                Создать проект
+              </button>
+            </Link>
+          </div>}
         </div>
         <div className={styles.myProjectsContainer}>
           <div className={styles.myProjectsHeader}>
@@ -176,7 +159,6 @@ export default function ProfilePage() {
           </div>
           { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
             {volunteerProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            
           </div>}
           { (volunteerProjects.length == 0) && 
             <div className={styles.noProjects}>
@@ -187,8 +169,7 @@ export default function ProfilePage() {
                 </button>
               </Link>
             </div>
-            }
-
+          }
         </div>
       </div>
     </div>

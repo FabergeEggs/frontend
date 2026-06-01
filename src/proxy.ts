@@ -6,6 +6,7 @@ const PUBLIC_ROUTES = [
   "/signup",
   "/reset-password",
   "/verify-email",
+  "/feed",
   "/testcli",
   "/testsrv"
 ];
@@ -16,15 +17,16 @@ export function proxy(request: NextRequest) {
 
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
 
+  // DEBUG
   // Не авторизован + закрытая страница -> на логин
-  if (!token && !isPublic) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if (!token && !isPublic) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
-  // Авторизован + страница логина -> на ленту
-  if (token && isPublic) {
-    return NextResponse.redirect(new URL("/feed", request.url));
-  }
+  // // Авторизован + страница логина -> на ленту
+  // if (token && isPublic) {
+  //   return NextResponse.redirect(new URL("/feed", request.url));
+  // }
 
   return NextResponse.next();
 }

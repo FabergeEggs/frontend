@@ -71,7 +71,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     trigger(["oldPassword", "newPassword", "confirmPassword"]);
     setPasswordError(null);
     setPasswordSuccess(false);
-
+    
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
     const formValues = Object.fromEntries(formData.entries());
@@ -82,7 +82,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     ) {
       return;
     }
-
+    
     try {
       await changePassword(
         formValues.oldPassword as string,
@@ -95,6 +95,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
       setPasswordSuccess(true);
     } catch {
       setPasswordError("Не удалось сменить пароль. Проверьте старый пароль.");
+      return false;
     }
   }
 
@@ -126,8 +127,9 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
         type="password"
         label="Пароль"
         placeholder="Введите старый пароль..."
-        onEditSwitch={() => { if(!isEditingPassword) setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
+        onStartEdit={() => { setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
         onConfirm={updatePassword}
+        onSuccessConfirm={() => setIsEditingPassword((prev) => !prev)}
         {...registerField("oldPassword")}
       />
       {errors.oldPassword && (

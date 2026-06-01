@@ -8,10 +8,9 @@ import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import type { ResponseDTO } from "@/src/lib/models/export/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
-import { useProfiles } from "@/src/lib/query/profile";
+// import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
-import { getQueryStatus } from "@/src/lib/query/status";
+import { getMockTask, getMockTaskResponses, getMockProfile } from "@/src/lib/api/mockData";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
 import AuthorImage from "@/public/assets/project/author.svg";
@@ -25,16 +24,19 @@ import FinishImage from "@/public/assets/project/finish.svg";
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 
-export default function TaskPageClient({
+export default function TaskPageClientMock({
   projectId,
   taskId,
 }: {
   projectId: string;
   taskId: string;
 }) {
-  const taskQuery = useTask(projectId, taskId);
-  const taskStatus = getQueryStatus(taskQuery);
   const { userId } = useAuth();
+
+  // const taskQuery = useTask(projectId, taskId);
+  // const taskStatus = getQueryStatus(taskQuery);
+  const task = getMockTask(projectId, taskId);
+  const taskStatus = { isLoading: false, isError: false, errorMessage: null };
 
   // Edit form state
   const [editing, setEditing] = useState(false);
@@ -43,26 +45,38 @@ export default function TaskPageClient({
   const [editShortDesc, setEditShortDesc] = useState("");
 
   // Live responses — client-side only (no SSR fallback needed)
-  const responsesQuery = useTaskResponses(projectId, taskId);
-  const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
+  // const responsesQuery = useTaskResponses(projectId, taskId);
+  // const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
+  const displayedResponses: ResponseDTO[] = getMockTaskResponses(projectId, taskId);
 
   // Mutations
-  const updateTaskMutation = useUpdateTask(projectId, taskId);
-  const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
+  // const updateTaskMutation = useUpdateTask(projectId, taskId);
+  // const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
+  const updateTaskMutation = {
+    isPending: false,
+    isError: false,
+    error: null as unknown,
+    mutate: async (_: unknown, _options?: unknown) => {},
+  };
+  const changeStatusMutation = { mutate: (_: unknown) => {} };
 
   // Extract unique user IDs from responses for profile batch-load
   const userIds = useMemo(() => {
     return Array.from(new Set(displayedResponses.map((r) => r.user_id)));
   }, [displayedResponses]);
 
-  const profilesQuery = useProfiles(userIds);
-  const profiles = profilesQuery.data ?? {};
+  // const profilesQuery = useProfiles(userIds);
+  // const profiles = profilesQuery.data ?? {};
+  const profiles = Object.fromEntries(
+    userIds.map((userId) => [userId, getMockProfile(userId)]),
+  ) as Record<string, { username: string }>;
 
   if (taskStatus.isLoading) {
     return <div className="centered">Загрузка задачи…</div>;
   }
 
-  if (taskStatus.isError || !taskQuery.data) {
+  // if (taskStatus.isError || !taskQuery.data) {
+  if (taskStatus.isError || !task) {
     return (
       <div className="centered">
         <ValidationError
@@ -72,7 +86,8 @@ export default function TaskPageClient({
     );
   }
 
-  const data = taskQuery.data;
+  // const data = taskQuery.data;
+  const data = task;
   const isAdmin = userId === data.creator_id;
 
   function startEditing() {
@@ -107,8 +122,6 @@ export default function TaskPageClient({
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.taskContainer}>
         <div className={`${styles.card} ${styles.cardPadding}`}>
-
-          {/* ── Inline edit form ── */}
           {isAdmin && editing ? (
             <div className={styles.editForm ?? "basic-flex-column"}>
               <input
@@ -186,11 +199,9 @@ export default function TaskPageClient({
               <p className={styles.description}>{data.description}</p>
             </>
           )}
-
         </div>
       </div>
 
-      {/* Show response form only for active tasks (non-admin can submit) */}
       {data.status === TaskStatusEnum.ACTIVE && (
         <ResponseForm
           className={styles.cardPadding}

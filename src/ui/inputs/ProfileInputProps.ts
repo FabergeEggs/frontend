@@ -13,7 +13,8 @@ export default interface ProfileInputProps {
   onBlur?: ChangeHandler | (() => void);
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onConfirm?: () => void;
-  onEditSwitch?: () => void;
+  onSuccessConfirm?: () => void;
+  onStartEdit?: () => void;
   hasEditButton?: boolean;
   hasConfirmButton?: boolean;
   ref?: RefCallBack;
