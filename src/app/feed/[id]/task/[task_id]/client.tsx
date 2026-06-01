@@ -21,6 +21,7 @@ import ResponseForm from "@/src/ui/forms/ResponseForm/ResponseForm";
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 import EditImage from "@/public/assets/edit.svg";
 import FinishImage from "@/public/assets/project/finish.svg";
+import RestartImage from "@/public/assets/project/restart.svg";
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
@@ -112,6 +113,15 @@ export default function TaskPageClient({
     });
   }
 
+  function resumeTask() {
+    updateTaskMutation.mutate({
+      label: data.label,
+      short_description: data.short_description ?? "",
+      description: data.description ?? "",
+      status: TaskStatusEnum.ACTIVE,
+    });
+  }
+
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <BackToProjectLink projectId={projectId} />
@@ -168,6 +178,14 @@ export default function TaskPageClient({
                         text={updateTaskMutation.isPending ? "…" : "Завершить"}
                         src={FinishImage}
                         onClick={finishTask}
+                        disabled={updateTaskMutation.isPending}
+                      />
+                    )}
+                    {data.status === TaskStatusEnum.FINISHED && (
+                      <ImageTextButton
+                        text={updateTaskMutation.isPending ? "…" : "Возобновить"}
+                        src={RestartImage}
+                        onClick={resumeTask}
                         disabled={updateTaskMutation.isPending}
                       />
                     )}
