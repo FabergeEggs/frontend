@@ -23,10 +23,10 @@ import {
   getTask,
   getPost,
   projectHealthCheck,
-  getPostComments,
   getTaskResponses,
   addMember,
 } from "@/src/lib/api/project";
+import { getPostComments } from "@/src/lib/api/response";
 import { projectKeys, responseKeys } from "./keys";
 import { getApiErrorMessage } from "@/src/lib/api/errors";
 import type {

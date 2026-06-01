@@ -39,7 +39,11 @@ export const ApiRoutes = {
     GET_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
     UPDATE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
     DELETE_POST: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}`,
-    GET_POST_COMMENTS: (projectId: string, postId: string) => `/project/${projectId}/post/${postId}/comments`,
+    // Комментарии — response_service (projectId в URL не используется, только postId)
+    GET_POST_COMMENTS: (_projectId: string, postId: string) =>
+      `/response/posts/${postId}/comments`,
+    CREATE_POST_COMMENT: (_projectId: string, postId: string) =>
+      `/response/posts/${postId}/comments`,
 
     // Responses (for tasks)
     GET_TASK_RESPONSES: (projectId: string, taskId: string) => `/project/${projectId}/task/${taskId}/responses`,
