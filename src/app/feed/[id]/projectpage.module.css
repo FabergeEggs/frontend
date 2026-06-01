@@ -1,0 +1,184 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.projectContainer {
+    display: flex;
+    gap: 15px;
+}
+
+.card {
+    flex: 1;
+
+    background-color: white;
+    border: 0.5px solid var(--active-dark-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    min-height: 480px;
+    padding: 30px;
+}
+
+/* Edit card properties */
+
+.top {
+
+    display: flex;
+    /* flex-direction: column; */
+    gap: 10px;
+}
+
+.editCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    background-color: var(--varity2-color);
+}
+
+.editCard :global(.basic-input-container) {
+    background-color: var(--varity2-color);
+}
+
+.tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+/* -------------------- */
+
+.label {
+    margin-top: 0;
+
+    font-weight: 400;
+    font-size: 28px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 25px;
+
+    font-size: 16px;
+    margin-bottom: 10px;        
+}
+
+.infoPiece {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.infoDescription {
+    color: var(--active-dark-color)
+}
+
+.countInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.count {
+    font-size: 32px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.box {
+    background-color: white;
+    border: 0.5px solid var(--active-dark-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+    height: 150px;
+    width: 150px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.adminButtons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+
+@media(max-width: 1000px) {
+    .projectContainer {
+        flex-direction: column;
+    }
+
+    .countInfo {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .count {
+        font-size: 28px;
+    }
+
+    .box {
+        width: 100%;
+        height: 81px;
+    }
+
+    .card {
+        height: 100%;
+    }
+
+    .info {
+        gap: 15px;
+    }
+}
+
+@media(max-width: 550px) {
+    .card {
+        padding: 20px;
+    }
+}
+
+@media(max-width: 450px) { /* CHANGED */
+    .box {
+        /* width: 98px; */
+        height: 59px;
+        font-size: 14px;
+    }
+
+    .label, .count {
+        font-size: 18px;
+    }
+
+    .info {
+        font-size: 14px;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}

@@ -1,0 +1,202 @@
+html,
+body {
+  margin: 0;
+  /* height: 100%; 
+    overflow: hidden */
+}
+
+body {
+  font-weight: 400;
+  background-color: var(--bg-color);
+}
+
+/* * {
+    font-family: inherit;
+    font-weight: inherit;
+} */
+
+/* These elements does not inherit by default: */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-weight: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: 1px solid black; /* Some browsers make red outline, which is not what our site needs */
+}
+
+.basic-header {
+  height: 40px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .header {
+    height: 30px;
+  }
+}
+
+.basic-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Додумать */
+.basic-flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basic-box {
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
+
+  height: 30px;
+  line-height: 30px;
+  vertical-align: top;
+  padding-left: 15px; 
+  padding-right: 15px;
+}
+
+.basic-card {
+  background-color: white;
+  border: 0.5px solid var(--active-dark-color);
+  border-radius: 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basic-card-unbordered {
+  background-color: white;
+  border-radius: 15px;
+  /* box-sizing: border-box; */
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.basic-info-piece {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.basic-link {
+  text-decoration: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.basic-btn {
+  font-size: 14px;
+  border-radius: 10px;
+  border: none;
+
+  height: 40px;
+
+  cursor: pointer;
+
+  transition: filter 0.15s, opacity 0.05s;
+}
+
+.basic-btn:hover {
+  filter: brightness(90%);
+}
+
+.basic-btn:active {
+  filter: brightness(65%);
+}
+
+/* .basic-btn-disabled { */
+.basic-btn:disabled {
+  border-radius: 10px;
+  border: none;
+
+  opacity: 0.5;
+  cursor: default;
+
+  filter: none;
+}
+
+/* Separation (basic-input-container & basic-input) is made for comfortable work with inputs with images */
+.basic-input-container {
+  display: flex;
+  align-items: center;
+
+  height: 50px;
+  border: 1px solid var(--active-dark-color);
+  border-radius: 10px;
+
+  box-sizing: border-box;
+  width: 100%;
+
+  transition: background-color 0.1s; /* empty: off-on */
+}
+
+.basic-input {
+  flex: 1;
+
+  font-size: 16px;
+  transition: filter 0.15s;
+
+  padding-left: 11px; /* <- moves both placeholder and typed text */
+}
+
+.basic-input:focus {
+  outline: none;
+}
+
+.basic-input::placeholder {
+  color: var(--placeholder-color);
+}
+
+/* .basic-input:hover {
+    filter: brightness(90%)
+}
+
+.basic-input:active {
+    filter: brightness(65%)
+} */
+
+
+.basic-input-label {
+  padding-left: 2px;
+  font-size: 20px;
+}
+
+@media (max-width: 834px) {
+  .basic-input-label {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .basic-input-label {
+    font-size: 16px;
+  }
+}

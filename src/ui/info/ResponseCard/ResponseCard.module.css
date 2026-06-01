@@ -1,0 +1,37 @@
+.header {
+  font-weight: 400;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+.status {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+
+.attachedFiles {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 675px) {
+
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .card {
+    padding: 15px 10px;
+  }
+  .text {
+    font-size: 14px;
+  }
+}

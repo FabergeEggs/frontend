@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 10px;
+
+  box-sizing: border-box;
+  width: 100%; /* занимает доступное пространство */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  align-items: center;
+
+  width: 100%;
+
+  background-color: var(--main-color);
+
+  border: 0.5px solid var(--active-dark-color);
+  border-radius: 15px;
+  box-sizing: border-box;
+
+  /* width: 500px;
+    height: 643px; */
+
+  /* padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px; */
+
+  padding: 20px 30px;
+}
+
+.inputs {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  font-size: 28px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.subtitle {
+  font-size: 21px;
+  margin: 0;
+  margin-top: 10px;
+  width: 100%;
+  font-weight: 500;
+}
+
+
+.submitBtn {
+  margin-top: 20px;
+
+  width: 100%;
+  height: 50px;
+
+  font-weight: 400;
+  font-size: 18px;
+}
+
+
+@media (max-width: 834px) {
+  .submitBtn {
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .form {
+    padding: 10px 15px;
+  }
+
+  .submitBtn {
+    font-size: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+}

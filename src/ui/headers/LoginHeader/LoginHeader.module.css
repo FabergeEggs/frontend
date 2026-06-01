@@ -1,0 +1,19 @@
+.signupBtn {
+    width: 185px;
+    margin-right: 15px;
+}
+
+@media (max-width: 834px) {
+    .signupBtn {
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 450px) { /* CHANGED */
+    .signupBtn {
+        width: 148px;
+        font-size: 12px;
+        height: 30px;
+    }
+}
+

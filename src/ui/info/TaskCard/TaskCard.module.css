@@ -1,0 +1,47 @@
+.card {
+  padding: 21px 15px;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: 500;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tags {
+  display: flex;
+  gap: 7px;
+}
+
+.responses {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.description {
+  word-wrap: break-word;
+}
+
+@media (max-width: 675px) {
+
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .card {
+    padding: 15px 10px;
+  }
+  .description {
+    font-size: 14px;
+  }
+}

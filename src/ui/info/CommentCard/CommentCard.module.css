@@ -1,0 +1,29 @@
+.header {
+  font-weight: 400;
+  font-size: 16px;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+@media (max-width: 450px) { /* CHANGED */
+  .card {
+    padding: 15px 10px;
+  }
+  .content {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,10 @@
+.logo {
+    display: flex;
+    align-items: center;
+    color: var(--active-dark-color);
+    text-decoration: none;
+}
+
+.text {
+    margin-left: 7px;
+}

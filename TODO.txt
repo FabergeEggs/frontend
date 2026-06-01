@@ -1,0 +1,24 @@
+<!> - moments that need better solution
+DEBUG - debug moments that should be deleted on production
+
+Make:
+- feed/{project_id} - should be public page
+- logout button
+- avatar
+
+ui/images/HeaderIcon:
+- Replace stub by image
+
+PROBLEMS:
+- logout, reset-password/key verify-email/key TWICE - wHY?
+- Fix adaptive /login - "Registration" button width is too big
+
+
+
+Отложенное не-MVP:
+- ProfileInput tag in Project Editor color
+- No "eye" on login inputs
+- Почта введена неправильно — почта меняется и повторно отправляется письмо (USE CASE)
+- next-intl
+- Понакидать user-select: none; где надо, чтобы нельзя было выделять текст
+- Форма создания проекта: 1. Теги не по дизайну, 2. У названия есть красная *, у остальных полей - нет (то же самое в форме поста и таски)

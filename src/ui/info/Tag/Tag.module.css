@@ -1,0 +1,4 @@
+.tag {
+    color: var(--active-dark-color);
+    background-color: var(--varity2-color);
+}
