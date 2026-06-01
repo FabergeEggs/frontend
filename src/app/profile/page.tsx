@@ -93,19 +93,35 @@ export default function ProfilePageMock() {
         <div className={styles.pictureInputContainer}>
           <ProfilePictureInput
             value={avatarUrl}
-            onChange={async (url) => {
-              setAvatarUrl(url);
+            onChange={async ({ assetId, displayUrl }) => {
+              setAvatarUrl(displayUrl);
               if (profileData && userId) {
                 try {
                   await updateProfile(userId, {
                     first_name: profileData.first_name,
                     last_name: "",
                     bio: profileData.bio || "",
-                    avatar_url: url,
+                    avatar_asset_id: assetId,
                   });
                 } catch {
-                  // аватар отображается локально, но сохранится при следующем
-                  // подтверждении имени/описания в ProfileForm
+                  // аватар отображается локально, при перезагрузке profile_service
+                  // вернёт свежий URL через media_service S2S
+                }
+              }
+            }}
+            onDelete={async () => {
+              setAvatarUrl("");
+              if (profileData && userId) {
+                try {
+                  await updateProfile(userId, {
+                    first_name: profileData.first_name,
+                    last_name: "",
+                    bio: profileData.bio || "",
+                    avatar_url: "",
+                    avatar_asset_id: "",
+                  });
+                } catch {
+                  // ignore
                 }
               }
             }}

@@ -202,11 +202,14 @@ export const uploadFile = async (file: File): Promise<string> => {
 };
 
 /**
- * Upload file as public + poll until scan completes → returns presigned download URL.
- * Use for response attachments so any user (including task admin) can download them.
- * URL is valid for 7 days (MinIO presigned GET TTL).
+ * Upload file as public + poll until scan completes.
+ * Returns both the asset UUID and the presigned download URL.
+ * - assetId: store in profile to get a fresh URL on every profile read (no 7-day expiry)
+ * - downloadUrl: use for immediate display or as a file attachment link
  */
-export const uploadFilePublic = async (file: File): Promise<string> => {
+export const uploadFilePublic = async (
+  file: File,
+): Promise<{ assetId: string; downloadUrl: string }> => {
   const { asset, upload } = await initUpload({
     filename: file.name,
     content_type: file.type,
@@ -220,7 +223,8 @@ export const uploadFilePublic = async (file: File): Promise<string> => {
   for (let i = 0; i < 15; i++) {
     await new Promise((r) => setTimeout(r, 2000));
     const info = await getAsset(asset.id);
-    if (info.status === "ready" && info.download_url) return info.download_url;
+    if (info.status === "ready" && info.download_url)
+      return { assetId: asset.id, downloadUrl: info.download_url };
     if (info.status === "rejected") throw new Error("Файл отклонён сервером");
   }
   throw new Error("Таймаут сканирования файла");

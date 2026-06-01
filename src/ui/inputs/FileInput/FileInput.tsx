@@ -24,7 +24,7 @@ export default function FileInput({ onAdd, accept }: FileInputProps) {
     setState("uploading");
     setErrorMsg(null);
     try {
-      const downloadUrl = await uploadFilePublic(file);
+      const { downloadUrl } = await uploadFilePublic(file);
       onAdd?.(downloadUrl);
       setState("idle");
     } catch (e) {
