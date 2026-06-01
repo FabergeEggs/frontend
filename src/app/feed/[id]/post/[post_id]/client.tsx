@@ -10,6 +10,7 @@ import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
+import BackToProjectLink from "@/src/ui/links/BackToProjectLink/BackToProjectLink";
 import { useMemo } from "react";
 
 export default function PostPageClient({
@@ -35,15 +36,23 @@ export default function PostPageClient({
   const profiles = profilesQuery.data ?? {};
 
   if (postStatus.isLoading) {
-    return <div className="centered">Загрузка поста…</div>;
+    return (
+      <div className={`pagecontainer ${styles.container}`}>
+        <BackToProjectLink projectId={projectId} />
+        <div className="centered">Загрузка поста…</div>
+      </div>
+    );
   }
 
   if (postStatus.isError || !postQuery.data) {
     return (
-      <div className="centered">
-        <ValidationError
-          messages={[postStatus.errorMessage ?? "Не удалось загрузить пост"]}
-        />
+      <div className={`pagecontainer ${styles.container}`}>
+        <BackToProjectLink projectId={projectId} />
+        <div className="centered">
+          <ValidationError
+            messages={[postStatus.errorMessage ?? "Не удалось загрузить пост"]}
+          />
+        </div>
       </div>
     );
   }
@@ -52,6 +61,7 @@ export default function PostPageClient({
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
+      <BackToProjectLink projectId={projectId} />
       <div className={styles.taskContainer}>
         <div className={`${styles.card} ${styles.cardPadding}`}>
           <h1 className={styles.label}>{data.label}</h1>
