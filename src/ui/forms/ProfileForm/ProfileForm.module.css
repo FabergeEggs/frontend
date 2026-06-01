@@ -1,12 +1,12 @@
 .profileInfo {
-  margin-top: 10px;;
-  display: flex;
-  flex-direction: column;
+  margin-top     : 15px;
+  display        : flex;
+  flex-direction : column;
   justify-content: space-between;
-  gap: 10px;
+  gap            : 10px;
 }
 
 .error {
-  color: red;
+  color : red;
   margin: 0;
 }
