@@ -55,7 +55,7 @@ import { getApiErrorMessage } from "@/src/lib/query/project";
 import { getMockProject, getMockPublications } from "@/src/lib/api/mockData";
 // import { getQueryStatus } from "@/src/lib/query/status";
 
-export default function ProjectPageClientMock({
+export default function ProjectPageClient({
   projectId,
 }: {
   projectId: string;
@@ -81,10 +81,10 @@ export default function ProjectPageClientMock({
     );
   }
 
-  return <ProjectPageContentMock data={data} />;
+  return <ProjectPageContent data={data} />;
 }
 
-function ProjectPageContentMock({ data }: { data: ProjectFull }) {
+function ProjectPageContent({ data }: { data: ProjectFull }) {
   const { userId } = useAuth();
   const isAdmin = userId === data.creator_id;
 
@@ -397,6 +397,9 @@ function ProjectPageContentMock({ data }: { data: ProjectFull }) {
 
         {isAdmin && (
           <>
+            {tasks.map((value) => (
+              <TaskCardAdmin {...value} key={value.id} />
+            ))}
             {posts.map((value) => (
               <PostCardAdmin
                 {...value}
@@ -405,11 +408,17 @@ function ProjectPageContentMock({ data }: { data: ProjectFull }) {
                 comments_count={value.answers_count}
               />
             ))}
-            {tasks.map((value) => (
-              <TaskCardAdmin {...value} key={value.id} />
-            ))}
           </>
         )}
+
+        {publications.length == 0 && 
+        <div className={styles.noTasks}>
+            <p>
+            В данном проекте пока нету задач или публикаций.
+          </p>
+
+        </div>
+        }
       </div>
     </div>)
 }
