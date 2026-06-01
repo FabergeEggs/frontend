@@ -13,7 +13,7 @@ import type {
   MembershipsDTO,
 } from "@/src/lib/models/export/project";
 import type { CommentDTO, ResponseDTO } from "@/src/lib/models/export/response";
-import { ProjectStatusEnum, TaskStatusEnum } from "@/src/lib/models/export/project";
+import { ProjectStatusEnum, TaskStatusEnum, PublicationTypeEnum } from "@/src/lib/models/export/project";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 
 const BASE_PROJECT_ID = "mock-project-1";
@@ -99,7 +99,7 @@ const MOCK_PUBLICATIONS: PublicationDTO[] = [
     created_at: MOCK_POST.created_at,
     creator_id: MOCK_POST.creator_id,
     creator_name: MOCK_POST.creator,
-    type: "post",
+    type: PublicationTypeEnum.POST,
     answers_count: MOCK_POST.comments_count,
     status: null,
   },
@@ -111,7 +111,7 @@ const MOCK_PUBLICATIONS: PublicationDTO[] = [
     created_at: MOCK_TASK.created_at,
     creator_id: MOCK_TASK.creator_id,
     creator_name: MOCK_TASK.creator,
-    type: "task",
+    type: PublicationTypeEnum.TASK,
     answers_count: MOCK_TASK.answers_count,
     status: MOCK_TASK.status,
   },
@@ -237,7 +237,7 @@ export function updateMockProfile(
     first_name: request.first_name,
     last_name: request.last_name,
     bio: request.bio,
-    avatar_url: request.avatar_url,
+    avatar_url: request.avatar_url ?? base.avatar_url ?? "",
   };
 
   if (id === MOCK_PROFILE.id || id === MOCK_PROFILE.user_id) {
