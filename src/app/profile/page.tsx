@@ -102,7 +102,7 @@ export default function ProfilePage() {
       <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <ProfileForm data={profileData} avatarUrl={avatarUrl} />
+          <ProfileForm data={profileData} />
         </div>
         <div className={styles.pictureInputContainer}>
           <ProfilePictureInput
