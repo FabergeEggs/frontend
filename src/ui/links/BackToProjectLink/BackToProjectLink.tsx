@@ -8,7 +8,7 @@ import styles from "./BackToProjectLink.module.css";
 export default function BackToProjectLink({ projectId }: { projectId: string }) {
   return (
     <Link className={styles.link} href={`/feed/${projectId}`}>
-      <Image src={ArrowLeftImage} alt="" width={20} height={20} />
+      <Image className={styles.arrow} src={ArrowLeftImage} alt="" width={20} height={20} />
       <span className={styles.text}>К проекту</span>
     </Link>
   );
