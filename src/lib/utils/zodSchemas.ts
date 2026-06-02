@@ -71,7 +71,7 @@ export const projectUpdateSchema = z
     short_description: shortDescriptionSchema,
     description: descriptionSchema,
     tags: z.array(z.string()),
-    status: z.string(ProjectStatusEnum.ACTIVE || ProjectStatusEnum.DELETED || ProjectStatusEnum.FINISHED)
+    status: z.nativeEnum(ProjectStatusEnum),
   })
 
 export const publicationSchema = z

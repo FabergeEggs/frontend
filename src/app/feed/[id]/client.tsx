@@ -116,10 +116,10 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     resolver: zodResolver(projectUpdateSchema),
     defaultValues: {
       label: data.label,
-      short_description: data.description.slice(0, 500), // <!> no short_description
+      short_description: data.short_description,
       description: data.description,
       tags: data.tags.map((t) => t.name),
-      status: data.status
+      status: ensureProjectStatus(data.status),
     },
   });
 
@@ -160,10 +160,10 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
     const payload: ProjectUpdateDTO = {
       label: formValues.label as string,
-      short_description: (formValues.short_description as string) || "",
+      short_description: data.short_description,
       description: formValues.description as string,
       tags: getValues("tags") || [],
-      status: data.status,
+      status: ensureProjectStatus(data.status),
     };
 
     try {
@@ -182,13 +182,24 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     ? getApiErrorMessage(updateProjectMutation.error, "Ошибка обновления проекта")
     : null;
 
+  function ensureProjectStatus(status: unknown): ProjectStatusEnum {
+    if (
+      status === ProjectStatusEnum.ACTIVE ||
+      status === ProjectStatusEnum.FINISHED ||
+      status === ProjectStatusEnum.DELETED
+    ) {
+      return status;
+    }
+    return ProjectStatusEnum.ACTIVE;
+  }
+
   async function changeProjectStatus(status: ProjectStatusEnum) {
     const payload: ProjectUpdateDTO = {
       label: data.label as string,
-      short_description: data.description.slice(0, 500), // <!> no short_description
+      short_description: data.short_description,
       description: data.description as string,
       tags: data.tags.map((t) => t.name),
-      status: status,
+      status,
     };
 
     try {

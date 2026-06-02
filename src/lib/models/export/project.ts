@@ -60,6 +60,7 @@ export interface ProjectInfoDTO {
   creator_id: string;
   label: string;
   creator: string;
+  short_description: string;
   description: string;
   tags: Tag[];
   created_at: string;
