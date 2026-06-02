@@ -1,11 +1,19 @@
 .project {
   border-left: 4px solid #3c4930;
+  border-right: 4px solid #3c4930;
 }
 
 .task {
   border-left: 4px solid #f97316;
+  border-right: 4px solid #f97316;
 }
 
 .post {
   border-left: 4px solid #92400e;
+  border-right: 4px solid #92400e;
+}
+
+.response {
+  border-left: 4px solid #7c3aed;
+  border-right: 4px solid #7c3aed;
 }

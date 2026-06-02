@@ -18,6 +18,7 @@ interface ProjectCardProps {
   tasks_count?: number,
   participants_count?: number,
   className?: string,
+  showCounts?: boolean,
 }
 
 // <!>
@@ -33,32 +34,33 @@ interface ProjectCardProps {
 //     creator_name: string
 // }
 
-export default function ProjectCard({children, project_id, label, short_description, tags = [], tasks_count = 0, participants_count = 0, className = ""}: ProjectCardProps) {
+export default function ProjectCard({children, project_id, label, short_description, tags = [], tasks_count = 0, participants_count = 0, className = "", showCounts = true}: ProjectCardProps) {
 
   return (
     <div onClick={() => redirect(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card} ${className}`}>
       {children}
       <div className={styles.label}>{label}</div>
-      <div className={styles.info}>
-        <div className={styles.tags}>
-        {tags.map((tag, index) => (
-          <Tag key={index}>
-            {tag}
-          </Tag>
-        ))}
+      {showCounts ? (
+        <div className={styles.info}>
+          <div className={styles.tags}>
+            {tags.map((tag, index) => (
+              <Tag key={index}>{tag}</Tag>
+            ))}
+          </div>
+          <div className={styles.countInfo}>
+            <Image className={styles.temporaryVerticalLine} src={VerticalLine} alt="Vertical Line" />
+            <Image src={UserImage} alt="User Image" />
+            {participants_count} участников
+            <Image src={VerticalLine} alt="Vertical Line" />
+            <Image src={TaskImage} alt="Task Image" />
+            {tasks_count} задач
+          </div>
         </div>
-        <div className={styles.countInfo}>
-          <Image className={styles.temporaryVerticalLine} src={VerticalLine} alt="Vertical Line" />
-          <Image src={UserImage} alt="User Image" />
-          {participants_count} участников
-          <Image src={VerticalLine} alt="Vertical Line" />
-          <Image src={TaskImage} alt="Task Image" />
-          {tasks_count} задач
+      ) : (
+        <div className={styles.description}>
+          {short_description}
         </div>
-      </div>
-      <div className={styles.description}>
-        {short_description}
-      </div>
+      )}
     </div>
   );
 }

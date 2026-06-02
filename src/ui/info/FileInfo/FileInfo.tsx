@@ -1,7 +1,18 @@
 import styles from './FileInfo.module.css'
 
+function filenameFromUrl(url: string, fallbackIndex: number): string {
+    try {
+        const pathname = new URL(url).pathname;
+        const decoded = decodeURIComponent(pathname.split("/").pop() ?? "");
+        return decoded || `Файл ${fallbackIndex + 1}`;
+    } catch {
+        return `Файл ${fallbackIndex + 1}`;
+    }
+}
+
 export default function FileInfo({name, index}: {name: string, index: number}) {
     const isUrl = name.startsWith("http");
+    const label = isUrl ? filenameFromUrl(name, index) : `Файл ${index + 1}`;
     return (
         <div className={`basic-box ${styles.file}`}>
             {isUrl ? (
@@ -11,10 +22,10 @@ export default function FileInfo({name, index}: {name: string, index: number}) {
                     rel="noopener noreferrer"
                     style={{ color: "var(--active-dark-color)", textDecoration: "underline" }}
                 >
-                    📎 Файл {index + 1}
+                    {label}
                 </a>
             ) : (
-                <span>📎 {name}</span>
+                <span>{label}</span>
             )}
         </div>
     );
