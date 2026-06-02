@@ -13,10 +13,11 @@ interface ProjectCardProps {
   children?: React.ReactNode
   project_id: string,
   label: string,
-  short_description: string, // I suppose description should be shorted if needed and then ... needs to be added
+  short_description: string,
   tags?: string[],
   tasks_count?: number,
-  participants_count?: number
+  participants_count?: number,
+  className?: string,
 }
 
 // <!>
@@ -32,10 +33,10 @@ interface ProjectCardProps {
 //     creator_name: string
 // }
 
-export default function ProjectCard({children, project_id, label, short_description, tags = [], tasks_count = 0, participants_count = 0}: ProjectCardProps) {
-  
+export default function ProjectCard({children, project_id, label, short_description, tags = [], tasks_count = 0, participants_count = 0, className = ""}: ProjectCardProps) {
+
   return (
-    <div onClick={() => redirect(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card}`}>
+    <div onClick={() => redirect(`/feed/${project_id}`)} className={`basic-card-unbordered ${styles.card} ${className}`}>
       {children}
       <div className={styles.label}>{label}</div>
       <div className={styles.info}>

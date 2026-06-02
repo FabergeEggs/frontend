@@ -25,6 +25,7 @@ import RestartImage from "@/public/assets/project/restart.svg"
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
+import BackToProjectLink from "@/src/ui/links/BackToProjectLink/BackToProjectLink";
 import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
 import ProjectTextarea from "@/src/ui/inputs/ProjectInput/ProjectTextarea";
 import CancelImage from "@/public/assets/close.svg";
@@ -61,15 +62,23 @@ export default function TaskPageClient({
   const profiles = profilesQuery.data ?? {};
 
   if (taskStatus.isLoading) {
-    return <div className="centered">Загрузка задачи…</div>;
+    return (
+      <div className={`pagecontainer ${styles.container}`}>
+        <BackToProjectLink projectId={projectId} />
+        <div className="centered">Загрузка задачи…</div>
+      </div>
+    );
   }
 
   if (taskStatus.isError || !task) {
     return (
-      <div className="centered">
-        <ValidationError
-          messages={[taskStatus.errorMessage ?? "Не удалось загрузить задачу"]}
-        />
+      <div className={`pagecontainer ${styles.container}`}>
+        <BackToProjectLink projectId={projectId} />
+        <div className="centered">
+          <ValidationError
+            messages={[taskStatus.errorMessage ?? "Не удалось загрузить задачу"]}
+          />
+        </div>
       </div>
     );
   }
@@ -107,6 +116,7 @@ export default function TaskPageClient({
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
+      <BackToProjectLink projectId={projectId} />
       <div className={styles.taskContainer}>
         <div
           className={`${styles.card} ${styles.cardPadding}`}

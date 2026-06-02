@@ -420,25 +420,22 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         </button>
       )}
 
-      {isAdmin && (
-        <>
-          {isCreatingTask && (
-            <div id="taskform">
-              <TaskForm
-                project_id={data.project_id}
-                onSuccess={() => setCreatingTask(false)}
-              />
-            </div>
-          )}
-          {isPosting && (
-            <div id="postform">
-              <PostForm
-                project_id={data.project_id}
-                onSuccess={() => setPosting(false)}
-              />
-            </div>
-          )}
-        </>
+      {isAdmin && isCreatingTask && (
+        <div id="taskform">
+          <TaskForm
+            project_id={data.project_id}
+            onSuccess={() => setCreatingTask(false)}
+          />
+        </div>
+      )}
+
+      {isAdmin && isPosting && (
+        <div id="postform">
+          <PostForm
+            project_id={data.project_id}
+            onSuccess={() => setPosting(false)}
+          />
+        </div>
       )}
 
       <div className={styles.projects}>
