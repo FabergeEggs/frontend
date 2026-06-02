@@ -2,52 +2,42 @@
 
 import styles from "./postpage.module.css";
 import Image from "next/image";
-// import { usePost, usePostComments } from "@/src/lib/query/project";
-// import { useProfiles } from "@/src/lib/query/profile";
-import { getMockPost, getMockPostComments, getMockProfile } from "@/src/lib/api/mockData";
-// import { getQueryStatus } from "@/src/lib/query/status";
+import { usePost, usePostComments } from "@/src/lib/query/project";
+import { useProfiles } from "@/src/lib/query/profile";
+import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 
-export default function PostPageClientMock({
+export default function PostPageClient({
   projectId,
   postId,
 }: {
   projectId: string;
   postId: string;
 }) {
-  // const postQuery = usePost(projectId, postId);
-  // const postStatus = getQueryStatus(postQuery);
-  const postStatus = { isLoading: false, isError: false, errorMessage: null };
-  const data = getMockPost(projectId, postId);
+  const postQuery = usePost(projectId, postId);
+  const postStatus = getQueryStatus(postQuery);
+  const data = postQuery.data;
 
-  // const commentsQuery = usePostComments(projectId, postId);
-  // const commentsStatus = getQueryStatus(commentsQuery);
-  // const comments = commentsQuery.data ?? [];
-  const commentsStatus = { isLoading: false, isError: false, errorMessage: null };
-  const comments = getMockPostComments(projectId, postId);
+  const commentsQuery = usePostComments(projectId, postId);
+  const commentsStatus = getQueryStatus(commentsQuery);
+  const comments = commentsQuery.data ?? [];
 
-  // Extract unique user IDs from comments
   const userIds = useMemo(() => {
     return Array.from(new Set(comments.map((c) => c.user_id)));
   }, [comments]);
 
-  // Load profiles for all users
-  // const profilesQuery = useProfiles(userIds);
-  // const profiles = profilesQuery.data ?? {};
-  const profiles = Object.fromEntries(
-    userIds.map((userId) => [userId, getMockProfile(userId)]),
-  ) as Record<string, { username: string }>;
+  const profilesQuery = useProfiles(userIds);
+  const profiles = profilesQuery.data ?? {};
 
   if (postStatus.isLoading) {
     return <div className="centered">Загрузка поста…</div>;
   }
 
-  // if (postStatus.isError || !postQuery.data) {
   if (postStatus.isError || !data) {
     return (
       <div className="centered">
@@ -102,12 +92,13 @@ export default function PostPageClientMock({
       {comments.length > 0 && (
         <div className={styles.responses}>
           {comments.map((value, index) => (
-            <CommentCard
-              className={styles.cardPadding}
-              {...value}
-              username={profiles[value.user_id]?.username ?? "Загрузка..."}
-              key={value.id ?? index}
-            />
+            <Fragment key={value.id ?? index}>
+              <CommentCard
+                className={styles.cardPadding}
+                {...value}
+                username={profiles[value.user_id]?.username ?? "Загрузка..."}
+              />
+            </Fragment>
           ))}
         </div>
       )}

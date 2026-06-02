@@ -2,15 +2,15 @@
 
 import styles from "./taskpage.module.css";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import type { ResponseDTO } from "@/src/lib/models/export/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-// import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
+import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
-import { getMockTask, getMockTaskResponses, getMockProfile } from "@/src/lib/api/mockData";
+import { useProfiles } from "@/src/lib/query/profile";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
 import AuthorImage from "@/public/assets/project/author.svg";
@@ -23,8 +23,11 @@ import FinishImage from "@/public/assets/project/finish.svg";
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import ProjectTextarea from "@/src/ui/inputs/ProjectInput/ProjectTextarea";
+import CancelImage from "@/public/assets/close.svg";
 
-export default function TaskPageClientMock({
+export default function TaskPageClient({
   projectId,
   taskId,
 }: {
@@ -33,49 +36,32 @@ export default function TaskPageClientMock({
 }) {
   const { userId } = useAuth();
 
-  // const taskQuery = useTask(projectId, taskId);
-  // const taskStatus = getQueryStatus(taskQuery);
-  const task = getMockTask(projectId, taskId);
-  const taskStatus = { isLoading: false, isError: false, errorMessage: null };
+  const taskQuery = useTask(projectId, taskId);
+  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
+  const task = taskQuery.data;
 
-  // Edit form state
   const [editing, setEditing] = useState(false);
   const [editLabel, setEditLabel] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editShortDesc, setEditShortDesc] = useState("");
 
-  // Live responses — client-side only (no SSR fallback needed)
-  // const responsesQuery = useTaskResponses(projectId, taskId);
-  // const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
-  const displayedResponses: ResponseDTO[] = getMockTaskResponses(projectId, taskId);
+  const responsesQuery = useTaskResponses(projectId, taskId);
+  const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
 
-  // Mutations
-  // const updateTaskMutation = useUpdateTask(projectId, taskId);
-  // const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
-  const updateTaskMutation = {
-    isPending: false,
-    isError: false,
-    error: null as unknown,
-    mutate: async (_: unknown, _options?: unknown) => {},
-  };
-  const changeStatusMutation = { mutate: (_: unknown) => {} };
+  const updateTaskMutation = useUpdateTask(projectId, taskId);
+  const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
-  // Extract unique user IDs from responses for profile batch-load
   const userIds = useMemo(() => {
     return Array.from(new Set(displayedResponses.map((r) => r.user_id)));
   }, [displayedResponses]);
 
-  // const profilesQuery = useProfiles(userIds);
-  // const profiles = profilesQuery.data ?? {};
-  const profiles = Object.fromEntries(
-    userIds.map((userId) => [userId, getMockProfile(userId)]),
-  ) as Record<string, { username: string }>;
+  const profilesQuery = useProfiles(userIds);
+  const profiles = profilesQuery.data ?? {};
 
   if (taskStatus.isLoading) {
     return <div className="centered">Загрузка задачи…</div>;
   }
 
-  // if (taskStatus.isError || !taskQuery.data) {
   if (taskStatus.isError || !task) {
     return (
       <div className="centered">
@@ -121,35 +107,46 @@ export default function TaskPageClientMock({
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.taskContainer}>
-        <div className={`${styles.card} ${styles.cardPadding}`}>
+        <div
+          className={`${styles.card} ${styles.cardPadding}`}
+        >
+
+          {/* ── Inline edit form ── */}
           {isAdmin && editing ? (
-            <div className={styles.editForm ?? "basic-flex-column"}>
-              <input
-                className={styles.editInput ?? ""}
+            <div className={styles.editForm}>
+              <AuthInput
+                label="Название задачи"
+                placeholder="Название задачи"
                 value={editLabel}
                 onChange={(e) => setEditLabel(e.target.value)}
-                placeholder="Название задачи"
+                required={false}
               />
-              <input
-                className={styles.editInput ?? ""}
+              <AuthInput
+                label="Краткое описание"
+                placeholder="Краткое описание"
                 value={editShortDesc}
                 onChange={(e) => setEditShortDesc(e.target.value)}
-                placeholder="Краткое описание"
+                required={false}
               />
-              <textarea
-                className={styles.editTextarea ?? ""}
+              <ProjectTextarea
+                label="Описание задачи"
+                placeholder="Описание задачи"
+                height={150}
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
-                placeholder="Описание задачи"
-                rows={5}
+                required={false}
               />
-              <div className="basic-flex" style={{ gap: "8px", marginTop: "8px" }}>
+              <div className={styles.editActions}>
                 <GreenButton
                   text={updateTaskMutation.isPending ? "Сохранение…" : "Сохранить"}
                   onClick={saveEdit}
                   disabled={!editLabel.trim() || updateTaskMutation.isPending}
                 />
-                <button onClick={() => setEditing(false)}>Отмена</button>
+                <ImageTextButton
+                  text="Отмена"
+                  src={CancelImage}
+                  onClick={() => setEditing(false)}
+                />
               </div>
               {updateTaskMutation.isError && (
                 <ValidationError messages={["Не удалось сохранить изменения"]} />
@@ -214,29 +211,30 @@ export default function TaskPageClientMock({
       {displayedResponses.length > 0 && (
         <div className={styles.responses}>
           {displayedResponses.map((value, index) => (
-            <ResponseCard
-              className={styles.cardPadding}
-              {...value}
-              username={
-                profiles[value.user_id]?.username ??
-                value.user_name ??
-                "Загрузка..."
-              }
-              key={value.id ?? index}
-              isAdmin={isAdmin}
-              onApprove={() =>
-                changeStatusMutation.mutate({
-                  responseId: value.id,
-                  status: ResponseStatus.ACCEPTED,
-                })
-              }
-              onReject={() =>
-                changeStatusMutation.mutate({
-                  responseId: value.id,
-                  status: ResponseStatus.REJECTED,
-                })
-              }
-            />
+            <Fragment key={value.id ?? index}>
+              <ResponseCard
+                className={styles.cardPadding}
+                {...value}
+                username={
+                  profiles[value.user_id]?.username ??
+                  value.user_name ??
+                  "Загрузка..."
+                }
+                isAdmin={isAdmin}
+                onApprove={() =>
+                  changeStatusMutation.mutate({
+                    responseId: value.id,
+                    status: ResponseStatus.ACCEPTED,
+                  })
+                }
+                onReject={() =>
+                  changeStatusMutation.mutate({
+                    responseId: value.id,
+                    status: ResponseStatus.REJECTED,
+                  })
+                }
+              />
+            </Fragment>
           ))}
         </div>
       )}

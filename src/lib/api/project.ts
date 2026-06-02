@@ -17,7 +17,7 @@ import type {
   MembershipsDTO,
   DenormUserDTO,
 } from "@/src/lib/models/export/project";
-import type { CommentDTO, ResponseDTO } from "@/src/lib/models/export/response";
+import type { ResponseDTO } from "@/src/lib/models/export/response";
 
 // ──── Project CRUD ────
 export const createProject = async (request: ProjectCreateDTO) => {
@@ -179,17 +179,7 @@ export const projectHealthCheck = async () => {
   return data;
 };
 
-// ──── Comments & Responses ────
-export const getPostComments = async (
-  projectId: string,
-  postId: string,
-): Promise<CommentDTO[]> => {
-  const { data } = await projectApi.get(
-    ApiRoutes.PROJECT.GET_POST_COMMENTS(projectId, postId),
-  );
-  return data;
-};
-
+// ──── Task responses (proxied to response_service via gateway) ────
 export const getTaskResponses = async (
   projectId: string,
   taskId: string,

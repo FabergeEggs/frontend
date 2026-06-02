@@ -13,9 +13,8 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import {
-  ProjectStatusEnum,
   type MembershipProjectDTO,
 } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
@@ -25,21 +24,16 @@ import { updateProfile } from "@/src/lib/api/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-// <!> Mocking
-import { getMockProfile, getMockUserMemberships } from "@/src/lib/api/mockData";
-
-export default function ProfilePageMock() {
+export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
   const [showVolunteerProjects, setShowVolunteerProjects] = useState(true);
   const [avatarUrl, setAvatarUrl] = useState("");
 
   const { userId, isLoading } = useAuth();
 
-  // const profileQuery = useProfileInfo(userId || "");
-  // const profileStatus = getQueryStatus(profileQuery);
-  // const profileData = profileQuery.data;
-  const profileStatus = { isLoading: false, isError: false, errorMessage: null };
-  const profileData = getMockProfile(userId || "mock-user-1");
+  const profileQuery = useProfileInfo(userId || "");
+  const profileStatus = getQueryStatus(profileQuery);
+  const profileData = profileQuery.data;
 
   // Sync avatar URL from loaded profile data
   useEffect(() => {
@@ -48,10 +42,8 @@ export default function ProfilePageMock() {
     }
   }, [profileData?.avatar_url]);
 
-  // const membershipsQuery = useUserMemberships(userId || "");
-  // const membershipsStatus = getQueryStatus(membershipsQuery);
-  // const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
-  const memberships = getMockUserMemberships(userId || "mock-user-1");
+  const membershipsQuery = useUserMemberships(userId || "");
+  const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
 
   const toggleScientistProjects = () => {
     setShowScientistProjects(prev => !prev);
@@ -147,7 +139,11 @@ export default function ProfilePageMock() {
           </div>
           { (showScientistProjects && scientistProjects.length > 0) && 
             <div className={styles.projects}>
-              {scientistProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
+              {scientistProjects.map((value: MembershipProjectDTO, index: number) => (
+                <Fragment key={index}>
+                  <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+                </Fragment>
+              ))}
             </div>
           }
 
@@ -174,7 +170,11 @@ export default function ProfilePageMock() {
             </Link>}
           </div>
           { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
-            {volunteerProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
+            {volunteerProjects.map((value: MembershipProjectDTO, index: number) => (
+              <Fragment key={index}>
+                <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+              </Fragment>
+            ))}
           </div>}
           { (volunteerProjects.length == 0) && 
             <div className={styles.noProjects}>

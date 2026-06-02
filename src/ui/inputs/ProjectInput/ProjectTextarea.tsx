@@ -8,13 +8,16 @@ export default function ProjectTextarea({
   label,
   placeholder,
   required,
+  value,
   onChange,
   onFocus,
   onBlur,
   ref,
   height
 }: TextareaProps) {
-  const [className, setClassName] = useState(styles.empty);
+  const [className, setClassName] = useState(() =>
+    value ? "" : styles.empty,
+  );
 
   function handleInput(target: HTMLTextAreaElement) {
     if (target.value) setClassName("");
@@ -29,6 +32,7 @@ export default function ProjectTextarea({
           name={name}
           style={{ height: height ? height + "px" : "auto" }}
           className={`basic-input-container basic-input ${styles.input} ${styles.textarea} ${className}`}
+          value={value}
           onChange={(e) => { handleInput(e.target); onChange?.(e); }}
           id={name}
           placeholder={placeholder}

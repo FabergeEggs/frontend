@@ -1,6 +1,6 @@
 import styles from "./CommentCard.module.css";
 import Image from "next/image";
-import ProfilePicturePlug from "@/public/assets/project/profile_picture_plug.svg"
+const DEFAULT_AVATAR = "/assets/project/example.png";
 
 interface CommentCardProps {
   className: string,
@@ -14,7 +14,7 @@ export default function CommentCard({className, username, user_id, content, crea
   return (
     <div className={`${className} basic-card`}>
       <div className={styles.user}>
-        <Image src={ProfilePicturePlug} alt="Profile picture"/>
+        <Image src={DEFAULT_AVATAR} alt="Profile picture" width={40} height={40} />
         <div className={styles.username}>
           {username}
           <div className={styles.date}>

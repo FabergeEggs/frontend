@@ -67,14 +67,14 @@ export default function PostForm({
           <ProjectTextarea
             label="Краткое описание"
             placeholder="Краткое описание поста..."
-            required={false}
+            required={true}
             height={75}
             {...registerField("short_description")}
           />
           <ProjectTextarea
             label="Текст"
             placeholder="Основной текст поста..."
-            required={false}
+            required={true}
             height={100}
             {...registerField("description")}
           />

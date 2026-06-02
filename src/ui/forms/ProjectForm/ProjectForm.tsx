@@ -113,7 +113,7 @@ export default function ProjectForm() {
           <ProjectTextarea
             label="Краткое описание"
             placeholder="Кратко расскажите о своём проекте..."
-            required={false}
+            required={true}
             height={100}
             {...registerField("short_description")}
           />
@@ -125,7 +125,7 @@ export default function ProjectForm() {
           <ProjectTextarea
             label="Развёрнутое описание"
             placeholder="Подробно расскажите о своём проекте..."
-            required={false}
+            required={true}
             height={200}
             {...registerField("description")}
           />

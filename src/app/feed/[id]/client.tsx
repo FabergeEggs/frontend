@@ -44,26 +44,24 @@ import { projectSchema } from "@/src/lib/utils/zodSchemas";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
-// import {
-//   useProject,
-//   usePublications,
-//   useUpdateProject,
-//   useDeletePost,
-//   useAddMember,
-//   getApiErrorMessage,
-// } from "@/src/lib/query/project";
-import { getApiErrorMessage } from "@/src/lib/query/project";
-// import { getQueryStatus } from "@/src/lib/query/status";
+import {
+  useProject,
+  usePublications,
+  useUpdateProject,
+  useDeletePost,
+  useAddMember,
+  getApiErrorMessage,
+} from "@/src/lib/query/project";
+import { getQueryStatus } from "@/src/lib/query/status";
 
 export default function ProjectPageClient({
   projectId,
 }: {
   projectId: string;
 }) {
-  // const projectQuery = useProject(projectId);
-  // const projectStatus = getQueryStatus(projectQuery);
-  const projectStatus = { isLoading: false, isError: false, errorMessage: null };
-  const data = getMockProject(projectId);
+  const projectQuery = useProject(projectId);
+  const projectStatus = getQueryStatus(projectQuery);
+  const data = projectQuery.data;
 
   if (projectStatus.isLoading) {
     return <div className="centered">Загрузка проекта…</div>;
@@ -93,27 +91,13 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const [isPosting, setPosting] = useState(false);
   const [currentTagInput, setCurrentTagInput] = useState("");
 
-  // const publicationsQuery = usePublications(data.project_id);
-  // const publicationsStatus = getQueryStatus(publicationsQuery);
-  // const publications = publicationsQuery.data?.items ?? [];
-  const publications = getMockPublications(data.project_id).items;
-  const publicationsStatus = {
-    isLoading: false,
-    isError: false,
-    errorMessage: null,
-  };
+  const publicationsQuery = usePublications(data.project_id);
+  const publicationsStatus = getQueryStatus(publicationsQuery);
+  const publications = publicationsQuery.data?.items ?? [];
 
-  // const updateProjectMutation = useUpdateProject(data.project_id);
-  // const deletePostMutation = useDeletePost(data.project_id);
-  // const addMemberMutation = useAddMember(data.project_id);
-  const updateProjectMutation = {
-    isPending: false,
-    isError: false,
-    error: null as unknown,
-    mutateAsync: async (_payload?: unknown) => {},
-  };
-  const deletePostMutation = { mutate: (_: string) => {} };
-  const addMemberMutation = { mutate: (_: string) => {}, isPending: false };
+  const updateProjectMutation = useUpdateProject(data.project_id);
+  const deletePostMutation = useDeletePost(data.project_id);
+  const addMemberMutation = useAddMember(data.project_id);
 
   const posts = publications.filter((p) => p.type === "post");
   const tasks = publications.filter((p) => p.type === "task");
