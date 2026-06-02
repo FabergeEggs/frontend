@@ -53,7 +53,6 @@ import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 //   getApiErrorMessage,
 // } from "@/src/lib/query/project";
 import { getApiErrorMessage } from "@/src/lib/query/project";
-import { getMockProject, getMockPublications } from "@/src/lib/api/mockData";
 // import { getQueryStatus } from "@/src/lib/query/status";
 
 export default function ProjectPageClient({
@@ -87,8 +86,7 @@ export default function ProjectPageClient({
 
 function ProjectPageContent({ data }: { data: ProjectFull }) {
   const { userId } = useAuth();
-  // const isAdmin = userId === data.creator_id;
-  const isAdmin = true
+  const isAdmin = userId === data.creator_id;
 
   const [isEditing, setEditing] = useState(false);
   const [isCreatingTask, setCreatingTask] = useState(false);
