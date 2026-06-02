@@ -2,16 +2,15 @@
 
 import styles from "./taskpage.module.css";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import type { ResponseDTO } from "@/src/lib/models/export/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
-import { useProfiles } from "@/src/lib/query/profile";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
-import { getQueryStatus } from "@/src/lib/query/status";
+import { useProfiles } from "@/src/lib/query/profile";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 
 import AuthorImage from "@/public/assets/project/author.svg";
@@ -26,6 +25,9 @@ import RestartImage from "@/public/assets/project/restart.svg";
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
 import BackToProjectLink from "@/src/ui/links/BackToProjectLink/BackToProjectLink";
+import AuthInput from "@/src/ui/inputs/AuthInput/AuthInput";
+import ProjectTextarea from "@/src/ui/inputs/ProjectInput/ProjectTextarea";
+import CancelImage from "@/public/assets/close.svg";
 
 export default function TaskPageClient({
   projectId,
@@ -34,25 +36,23 @@ export default function TaskPageClient({
   projectId: string;
   taskId: string;
 }) {
-  const taskQuery = useTask(projectId, taskId);
-  const taskStatus = getQueryStatus(taskQuery);
   const { userId } = useAuth();
 
-  // Edit form state
+  const taskQuery = useTask(projectId, taskId);
+  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
+  const task = taskQuery.data;
+
   const [editing, setEditing] = useState(false);
   const [editLabel, setEditLabel] = useState("");
   const [editDescription, setEditDescription] = useState("");
   const [editShortDesc, setEditShortDesc] = useState("");
 
-  // Live responses — client-side only (no SSR fallback needed)
   const responsesQuery = useTaskResponses(projectId, taskId);
   const displayedResponses: ResponseDTO[] = responsesQuery.data ?? [];
 
-  // Mutations
   const updateTaskMutation = useUpdateTask(projectId, taskId);
   const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
-  // Extract unique user IDs from responses for profile batch-load
   const userIds = useMemo(() => {
     return Array.from(new Set(displayedResponses.map((r) => r.user_id)));
   }, [displayedResponses]);
@@ -69,7 +69,7 @@ export default function TaskPageClient({
     );
   }
 
-  if (taskStatus.isError || !taskQuery.data) {
+  if (taskStatus.isError || !task) {
     return (
       <div className={`pagecontainer ${styles.container}`}>
         <BackToProjectLink projectId={projectId} />
@@ -82,7 +82,8 @@ export default function TaskPageClient({
     );
   }
 
-  const data = taskQuery.data;
+  // const data = taskQuery.data;
+  const data = task;
   const isAdmin = userId === data.creator_id;
 
   function startEditing() {
@@ -108,37 +109,46 @@ export default function TaskPageClient({
     <div className={`pagecontainer ${styles.container}`}>
       <BackToProjectLink projectId={projectId} />
       <div className={styles.taskContainer}>
-        <div className={`${styles.card} ${styles.cardPadding}`}>
+        <div
+          className={`${styles.card} ${styles.cardPadding}`}
+        >
 
           {/* ── Inline edit form ── */}
           {isAdmin && editing ? (
-            <div className={styles.editForm ?? "basic-flex-column"}>
-              <input
-                className={styles.editInput ?? ""}
+            <div className={styles.editForm}>
+              <AuthInput
+                label="Название задачи"
+                placeholder="Название задачи"
                 value={editLabel}
                 onChange={(e) => setEditLabel(e.target.value)}
-                placeholder="Название задачи"
+                required={false}
               />
-              <input
-                className={styles.editInput ?? ""}
+              <AuthInput
+                label="Краткое описание"
+                placeholder="Краткое описание"
                 value={editShortDesc}
                 onChange={(e) => setEditShortDesc(e.target.value)}
-                placeholder="Краткое описание"
+                required={false}
               />
-              <textarea
-                className={styles.editTextarea ?? ""}
+              <ProjectTextarea
+                label="Описание задачи"
+                placeholder="Описание задачи"
+                height={150}
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
-                placeholder="Описание задачи"
-                rows={5}
+                required={false}
               />
-              <div className="basic-flex" style={{ gap: "8px", marginTop: "8px" }}>
+              <div className={styles.editActions}>
                 <GreenButton
                   text={updateTaskMutation.isPending ? "Сохранение…" : "Сохранить"}
                   onClick={saveEdit}
                   disabled={!editLabel.trim() || updateTaskMutation.isPending}
                 />
-                <button onClick={() => setEditing(false)}>Отмена</button>
+                <ImageTextButton
+                  text="Отмена"
+                  src={CancelImage}
+                  onClick={() => setEditing(false)}
+                />
               </div>
               {updateTaskMutation.isError && (
                 <ValidationError messages={["Не удалось сохранить изменения"]} />
@@ -180,11 +190,9 @@ export default function TaskPageClient({
               <p className={styles.description}>{data.description}</p>
             </>
           )}
-
         </div>
       </div>
 
-      {/* Show response form only for active tasks (non-admin can submit) */}
       {data.status === TaskStatusEnum.ACTIVE && (
         <ResponseForm
           className={styles.cardPadding}
@@ -197,29 +205,30 @@ export default function TaskPageClient({
       {displayedResponses.length > 0 && (
         <div className={styles.responses}>
           {displayedResponses.map((value, index) => (
-            <ResponseCard
-              className={styles.cardPadding}
-              {...value}
-              username={
-                profiles[value.user_id]?.username ??
-                value.user_name ??
-                "Загрузка..."
-              }
-              key={value.id ?? index}
-              isAdmin={isAdmin}
-              onApprove={() =>
-                changeStatusMutation.mutate({
-                  responseId: value.id,
-                  status: ResponseStatus.ACCEPTED,
-                })
-              }
-              onReject={() =>
-                changeStatusMutation.mutate({
-                  responseId: value.id,
-                  status: ResponseStatus.REJECTED,
-                })
-              }
-            />
+            <Fragment key={value.id ?? index}>
+              <ResponseCard
+                className={styles.cardPadding}
+                {...value}
+                username={
+                  profiles[value.user_id]?.username ??
+                  value.user_name ??
+                  "Загрузка..."
+                }
+                isAdmin={isAdmin}
+                onApprove={() =>
+                  changeStatusMutation.mutate({
+                    responseId: value.id,
+                    status: ResponseStatus.ACCEPTED,
+                  })
+                }
+                onReject={() =>
+                  changeStatusMutation.mutate({
+                    responseId: value.id,
+                    status: ResponseStatus.REJECTED,
+                  })
+                }
+              />
+            </Fragment>
           ))}
         </div>
       )}

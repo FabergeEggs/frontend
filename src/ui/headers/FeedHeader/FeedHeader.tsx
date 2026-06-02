@@ -5,10 +5,10 @@ import styles from "./FeedHeader.module.css";
 import Logo from "../../info/Logo/Logo";
 import HeaderIcon from "../../images/HeaderIcon/HeaderIcon";
 import GreenButton from "../../buttons/GreenButton/GreenButton";
-
 import SearchInput from "../../inputs/SearchInput/SearchInput";
-
 import Link from "next/link";
+import { useAuth } from "@/src/lib/providers/AuthProvider";
+import { useProfileInfo } from "@/src/lib/query/profile";
 
 interface FeedHeaderProps {
   search?: string;
@@ -16,12 +16,15 @@ interface FeedHeaderProps {
 }
 
 export default function FeedHeader({ search = "", onSearchChange }: FeedHeaderProps) {
+  const { userId } = useAuth();
+  const { data: profile } = useProfileInfo(userId || "");
+
   return (
     <header className="basic-header basic-flex">
       <Logo />
       <SearchInput
         value={search}
-        onChange={(e) => onSearchChange?.((e as { target: { value: string } }).target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onSearchChange?.((e as { target: { value: string } }).target.value)}
         placeholder="Поиск по ленте..."
       />
       <div className="basic-flex">
@@ -29,12 +32,12 @@ export default function FeedHeader({ search = "", onSearchChange }: FeedHeaderPr
           href="/feed/create"
           className="basic-link"
         >
-          {/* <!> В зависимости от положения дел пользователя будет "Создать проект" со ссылкой на создание проекта, 
+          {/* <!> В зависимости от положения дел пользователя будет "Создать проект" со ссылкой на создание проекта,
                 "Мой проект", если проект есть и он один, "Мои проекты" с якорной ссылкой на профиль на список проектов */}
           <GreenButton text="Создать проект" className={`${styles.projectBtn}`}/>
         </Link>
         <Link href="/profile" className="basic-link">
-          <HeaderIcon />
+          <HeaderIcon src={profile?.avatar_url} />
         </Link>
       </div>
     </header>

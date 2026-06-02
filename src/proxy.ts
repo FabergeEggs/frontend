@@ -1,13 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Страницы, доступные без токена
 const PUBLIC_ROUTES = [
+  "/feed",
+  "/testcli",
+  "/testsrv"
+];
+
+// Страницы только для неавторизованных (авторизованных — редиректим на /feed)
+const AUTH_ROUTES = [
   "/login",
   "/signup",
   "/reset-password",
   "/verify-email",
-  "/testcli",
-  "/testsrv"
 ];
 
 export function proxy(request: NextRequest) {
@@ -15,14 +21,15 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("refresh_token")?.value;
 
   const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+  const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
   // Не авторизован + закрытая страница -> на логин
-  if (!token && !isPublic) {
+  if (!token && !isPublic && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Авторизован + страница логина -> на ленту
-  if (token && isPublic) {
+  // Авторизован + страница логина/регистрации -> на ленту
+  if (token && isAuthRoute) {
     return NextResponse.redirect(new URL("/feed", request.url));
   }
 

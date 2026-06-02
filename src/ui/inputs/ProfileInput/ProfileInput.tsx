@@ -19,12 +19,13 @@ export default function ProfileInput({
     onKeyDown,
     name,
     ref,
-    onEditSwitch,
+    onStartEdit,
+    onSuccessConfirm,
     hasEditButton = true,
     hasConfirmButton = true,
   }: ProfileInputProps) {
 
-  const [disabled, setDisabled] = useState(hasEditButton && !hasConfirmButton);
+  const [disabled, setDisabled] = useState(hasEditButton);
   const visibility = required === true && !value ? "visible" : "hidden";
   return (
   <div className={`${styles.container}`}>
@@ -50,14 +51,14 @@ export default function ProfileInput({
           disabled={disabled}
         />
         {hasEditButton && <>
-          { disabled && <div onClick={() => { setDisabled(false); onEditSwitch?.()}} className={styles.imageContainer}>
+          { disabled && <div onClick={() => { setDisabled(false); onStartEdit?.()}} className={styles.imageContainer}>
           <Image src={EditImage} alt="Edit" />
         </div>}
-        {!disabled && <div onClick={() => { 
-            const success = onConfirm?.(); 
+        {!disabled && <div onClick={async () => { 
+            const success = await onConfirm?.(); 
             if (success) {
               setDisabled(true); 
-              onEditSwitch?.()
+              onSuccessConfirm?.()
             }
           } 
           } className={styles.imageContainer}> 

@@ -6,13 +6,11 @@ import { useChangeResponseStatus } from "@/src/lib/query/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { TaskStatusEnum } from "@/src/lib/models/export/project";
 import { useProfiles } from "@/src/lib/query/profile";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 
 import ResponseForm from "@/src/ui/forms/ResponseForm/ResponseForm";
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
-
-import styles from "../projectpage.module.css";
 
 export default function ReportPageClient({
   projectId,
@@ -23,9 +21,11 @@ export default function ReportPageClient({
 }) {
   const { userId } = useAuth();
   const taskQuery = useTask(projectId, taskId);
-  const responsesQuery = useTaskResponses(projectId, taskId);
+  const task = taskQuery.data;
+  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
   const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
+  const responsesQuery = useTaskResponses(projectId, taskId);
   const responses = responsesQuery.data ?? [];
   const userIds = useMemo(
     () => Array.from(new Set(responses.map((r) => r.user_id))),
@@ -34,11 +34,11 @@ export default function ReportPageClient({
   const profilesQuery = useProfiles(userIds);
   const profiles = profilesQuery.data ?? {};
 
-  if (taskQuery.isLoading) {
+  if (taskStatus.isLoading) {
     return <div className="centered">Загрузка…</div>;
   }
 
-  if (taskQuery.isError || !taskQuery.data) {
+  if (taskStatus.isError || !task) {
     return (
       <div className="centered">
         <ValidationError messages={["Не удалось загрузить задачу"]} />
@@ -46,12 +46,11 @@ export default function ReportPageClient({
     );
   }
 
-  const task = taskQuery.data;
+  // const task = taskQuery.data;
   const isAdmin = userId === task.creator_id;
 
   return (
     <div className="pagecontainer basic-flex-column">
-      {/* Task summary */}
       <div className="basic-card" style={{ padding: "24px" }}>
         <h1>{task.label}</h1>
         <p style={{ color: "var(--secondary-text-color)", marginTop: "8px" }}>
@@ -67,7 +66,6 @@ export default function ReportPageClient({
         </p>
       </div>
 
-      {/* Submission form — only for active tasks and non-admin */}
       {task.status === TaskStatusEnum.ACTIVE && !isAdmin && (
         <ResponseForm
           className=""
@@ -77,37 +75,37 @@ export default function ReportPageClient({
         />
       )}
 
-      {/* Admin: manage all responses */}
       {responses.length > 0 && (
         <div className="basic-flex-column" style={{ gap: "12px" }}>
           <h2>Отклики ({responses.length})</h2>
           {responses.map((r, idx) => (
-            <ResponseCard
-              key={r.id ?? idx}
-              className=""
-              {...r}
-              username={
-                profiles[r.user_id]?.username ?? r.user_name ?? "Загрузка..."
-              }
-              isAdmin={isAdmin}
-              onApprove={() =>
-                changeStatusMutation.mutate({
-                  responseId: r.id,
-                  status: ResponseStatus.ACCEPTED,
-                })
-              }
-              onReject={() =>
-                changeStatusMutation.mutate({
-                  responseId: r.id,
-                  status: ResponseStatus.REJECTED,
-                })
-              }
-            />
+            <Fragment key={r.id ?? idx}>
+              <ResponseCard
+                className=""
+                {...r}
+                username={
+                  profiles[r.user_id]?.username ?? r.user_name ?? "Загрузка..."
+                }
+                isAdmin={isAdmin}
+                onApprove={() =>
+                  changeStatusMutation.mutate({
+                    responseId: r.id,
+                    status: ResponseStatus.ACCEPTED,
+                  })
+                }
+                onReject={() =>
+                  changeStatusMutation.mutate({
+                    responseId: r.id,
+                    status: ResponseStatus.REJECTED,
+                  })
+                }
+              />
+            </Fragment>
           ))}
         </div>
       )}
 
-      {responses.length === 0 && !responsesQuery.isLoading && (
+      {responses.length === 0 && (
         <p style={{ color: "var(--secondary-text-color)" }}>
           Откликов пока нет.
         </p>

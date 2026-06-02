@@ -1,11 +1,11 @@
 import styles from './UserInfo.module.css'
 import Image from "next/image";
-import ProfilePicturePlug from "@/public/assets/project/profile_picture_plug.svg"
+const DEFAULT_AVATAR = "/assets/project/example.png";
 
 export default function UserInfo({username, created_at}: {username: string, created_at: string}) {
     return (
     <div className={styles.user}>
-            <Image src={ProfilePicturePlug} alt="Profile picture"/>
+            <Image src={DEFAULT_AVATAR} alt="Profile picture" width={40} height={40} />
             <div className={styles.username}>
               {username}
               <div className={styles.date}>

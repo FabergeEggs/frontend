@@ -13,37 +13,16 @@ import ArrowDown from "@/public/assets/arrow-down.svg"
 import NewImage from "@/public/assets/profile/new.svg"
 import FindImage from "@/public/assets/profile/find.svg"
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import {
-  ProjectStatusEnum,
   type MembershipProjectDTO,
 } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
-import { useUserMemberships } from "@/src/lib/query/project";
 import { useProfileInfo } from "@/src/lib/query/profile";
+import { useUserMemberships } from "@/src/lib/query/project";
 import { updateProfile } from "@/src/lib/api/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
-
-const testProjectData = {
-    id: "kek",
-    label: "Перепись населения в городе Ижевск",
-    creator: "Somewho",
-    short_description:
-      "В связи с приходом весны жители Буммаша начали активно почковаться, внося диссонанс в статистику населения столицы России. С целью обновления статистических данных нам необходимо собрать информацию о текущем населении Ижевска. Вы можете помочь нам, ведь вам понадобиться лишь простой советский...",
-    description: "kek",
-    tags: ["Урбанистика", "Кириешки"],
-    created_at: new Date(2026, 3, 16), // April 16, 2026 (months are 0-based)
-    updated_at: new Date(),
-    status: ProjectStatusEnum.ACTIVE,
-
-    tasks_count: 16,
-    participants_count: 17,
-    answers_count: 128,
-  };
-
-const myProjects = [];
-const projectParticipations = [testProjectData, testProjectData];
 
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
@@ -64,14 +43,13 @@ export default function ProfilePage() {
   }, [profileData?.avatar_url]);
 
   const membershipsQuery = useUserMemberships(userId || "");
-  const membershipsStatus = getQueryStatus(membershipsQuery);
   const memberships = membershipsQuery.data ?? { scientist: [], volunteer: [] };
 
   const toggleScientistProjects = () => {
     setShowScientistProjects(prev => !prev);
   };
 
-  const toggleVolunteerProjects = () => { 
+  const toggleVolunteerProjects = () => {
     setShowVolunteerProjects(prev => !prev);
   };
 
@@ -102,7 +80,7 @@ export default function ProfilePage() {
       <h2 className={styles.title}>Профиль</h2>
       <div className={styles.container}>
         <div className={styles.profileContainer}>
-          <ProfileForm data={profileData} avatarUrl={avatarUrl} />
+          <ProfileForm data={profileData} />
         </div>
         <div className={styles.pictureInputContainer}>
           <ProfilePictureInput
@@ -161,24 +139,25 @@ export default function ProfilePage() {
           </div>
           { (showScientistProjects && scientistProjects.length > 0) && 
             <div className={styles.projects}>
-              {scientistProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            </div>
-            
-            }
-
-          {
-            (scientistProjects.length == 0) && <div className={styles.noProjects}>
-              <p>У вас пока что нет проектов.</p>
-              <Link
-                href="/feed/create"
-                className="basic-link"
-              >
-                <button className={`basic-btn ${styles.noProjectsBtn}`}>
-                  Создать проект
-                </button>
-              </Link>
+              {scientistProjects.map((value: MembershipProjectDTO, index: number) => (
+                <Fragment key={index}>
+                  <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+                </Fragment>
+              ))}
             </div>
           }
+
+          { (scientistProjects.length == 0) && <div className={styles.noProjects}>
+            <p>У вас пока что нет проектов.</p>
+            <Link
+              href="/feed/create"
+              className="basic-link"
+            >
+              <button className={`basic-btn ${styles.noProjectsBtn}`}>
+                Создать проект
+              </button>
+            </Link>
+          </div>}
         </div>
         <div className={styles.myProjectsContainer}>
           <div className={styles.myProjectsHeader}>
@@ -191,8 +170,11 @@ export default function ProfilePage() {
             </Link>}
           </div>
           { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
-            {volunteerProjects.map((value, index) => <ProjectCard {...value} key={index} />)}
-            
+            {volunteerProjects.map((value: MembershipProjectDTO, index: number) => (
+              <Fragment key={index}>
+                <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+              </Fragment>
+            ))}
           </div>}
           { (volunteerProjects.length == 0) && 
             <div className={styles.noProjects}>
@@ -203,8 +185,7 @@ export default function ProfilePage() {
                 </button>
               </Link>
             </div>
-            }
-
+          }
         </div>
       </div>
     </div>

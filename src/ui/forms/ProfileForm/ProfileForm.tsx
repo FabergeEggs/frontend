@@ -13,7 +13,7 @@ import { changePassword } from "@/src/lib/api/auth";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useRef, useState } from "react"
 
-export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, avatarUrl: string}) {
+export default function ProfileForm({ data } : {data : ProfileDTO}) {
   const { register: registerField, setValue, trigger, formState: { errors, dirtyFields }, } = useForm<z.infer<typeof profileSchema>>({
     mode: "onChange",
     resolver: zodResolver(profileSchema),
@@ -63,7 +63,6 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
       first_name: formValues.first_name as string,
       last_name: "",
       bio: formValues.about as string,
-      avatar_url: avatarUrl
     })
   }
 
@@ -71,7 +70,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     trigger(["oldPassword", "newPassword", "confirmPassword"]);
     setPasswordError(null);
     setPasswordSuccess(false);
-
+    
     if (!formRef.current) return;
     const formData = new FormData(formRef.current);
     const formValues = Object.fromEntries(formData.entries());
@@ -82,7 +81,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
     ) {
       return;
     }
-
+    
     try {
       await changePassword(
         formValues.oldPassword as string,
@@ -95,6 +94,7 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
       setPasswordSuccess(true);
     } catch {
       setPasswordError("Не удалось сменить пароль. Проверьте старый пароль.");
+      return false;
     }
   }
 
@@ -126,8 +126,9 @@ export default function ProfileForm({ data, avatarUrl } : {data : ProfileDTO, av
         type="password"
         label="Пароль"
         placeholder="Введите старый пароль..."
-        onEditSwitch={() => { if(!isEditingPassword) setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
+        onStartEdit={() => { setValue("oldPassword", ""); setIsEditingPassword((prev) => !prev)}}
         onConfirm={updatePassword}
+        onSuccessConfirm={() => setIsEditingPassword((prev) => !prev)}
         {...registerField("oldPassword")}
       />
       {errors.oldPassword && (

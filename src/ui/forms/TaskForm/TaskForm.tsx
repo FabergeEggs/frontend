@@ -67,14 +67,14 @@ export default function TaskForm({
           <ProjectTextarea
             label="Краткое описание"
             placeholder="Краткое описание задачи..."
-            required={false}
+            required={true}
             height={75}
             {...registerField("short_description")}
           />
           <ProjectTextarea
             label="Задание"
             placeholder="Ваша задача..."
-            required={false}
+            required={true}
             height={100}
             {...registerField("description")}
           />

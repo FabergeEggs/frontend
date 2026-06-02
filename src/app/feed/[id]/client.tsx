@@ -17,6 +17,7 @@ import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
 import CancelImage from "@/public/assets/close.svg";
+import FinishImage from "@/public/assets/project/finish.svg"
 import TaskCard from "@/src/ui/info/TaskCard/TaskCard";
 import TaskCardAdmin from "@/src/ui/info/TaskCardAdmin/TaskCardAdmin";
 import PostCard from "@/src/ui/info/PostCard/PostCard";
@@ -60,12 +61,13 @@ export default function ProjectPageClient({
 }) {
   const projectQuery = useProject(projectId);
   const projectStatus = getQueryStatus(projectQuery);
+  const data = projectQuery.data;
 
   if (projectStatus.isLoading) {
     return <div className="centered">Загрузка проекта…</div>;
   }
 
-  if (projectStatus.isError || !projectQuery.data) {
+  if (projectStatus.isError || !data) {
     return (
       <div className="centered">
         <ValidationError
@@ -77,7 +79,7 @@ export default function ProjectPageClient({
     );
   }
 
-  return <ProjectPageContent data={projectQuery.data} />;
+  return <ProjectPageContent data={data} />;
 }
 
 function ProjectPageContent({ data }: { data: ProjectFull }) {
@@ -111,7 +113,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     resolver: zodResolver(projectSchema),
     defaultValues: {
       label: data.label,
-      short_description: data.description.slice(0, 500),
+      short_description: data.description.slice(0, 500), // <!> no short_description
       description: data.description,
       tags: data.tags.map((t) => t.name),
     },
@@ -175,6 +177,22 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const updateError = updateProjectMutation.isError
     ? getApiErrorMessage(updateProjectMutation.error, "Ошибка обновления проекта")
     : null;
+
+  async function finishProject() {
+    const payload: ProjectUpdateDTO = {
+      label: data.label as string,
+      short_description: data.description.slice(0, 500), // <!> no short_description
+      description: data.description as string,
+      tags: data.tags.map((t) => t.name),
+      status: ProjectStatusEnum.FINISHED,
+    };
+
+    try {
+      await updateProjectMutation.mutateAsync(payload); 
+    } catch {
+      // ошибка в mutation.error
+    }
+  }
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -251,6 +269,12 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                     onClick={() => setPosting(false)}
                   />
                 )}
+                <ImageTextButton
+                    text="Завершить проект"
+                    src={FinishImage}
+                    backgroundColor="var(--main-color)"
+                    onClick={finishProject}
+                  />
               </div>
             )}
           </div>
@@ -325,34 +349,34 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             />
           </form>
         )}
-
-        {updateError && <ValidationError messages={[updateError]} />}
-
-        <div className={styles.countInfo}>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.participants_count}</span>
-            <span>участников</span>
-          </div>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.tasks_count}</span>
-            <span>заданий</span>
-          </div>
-          <div className={styles.box}>
-            <span className={styles.count}>{data.answers_count}</span>
-            <span>ответов</span>
-          </div>
-        </div>
-
-        {!isAdmin && (
-          <button
-            className="basic-btn"
-            onClick={() => addMemberMutation.mutate(userId!)}
-            disabled={addMemberMutation.isPending}
-          >
-            {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
-          </button>
-        )}
       </div>
+
+      {updateError && <ValidationError messages={[updateError]} />}
+
+      <div className={styles.countInfo}>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.participants_count}</span>
+          <span>участников</span>
+        </div>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.tasks_count}</span>
+          <span>заданий</span>
+        </div>
+        <div className={styles.box}>
+          <span className={styles.count}>{data.answers_count}</span>
+          <span>ответов</span>
+        </div>
+      </div>
+
+      {!isAdmin && (
+        <button
+          className="basic-btn"
+          onClick={() => addMemberMutation.mutate(userId!)}
+          disabled={addMemberMutation.isPending}
+        >
+          {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
+        </button>
+      )}
 
       {isAdmin && (
         <>
@@ -400,6 +424,9 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
         {isAdmin && (
           <>
+            {tasks.map((value) => (
+              <TaskCardAdmin {...value} key={value.id} />
+            ))}
             {posts.map((value) => (
               <PostCardAdmin
                 {...value}
@@ -408,12 +435,17 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                 comments_count={value.answers_count}
               />
             ))}
-            {tasks.map((value) => (
-              <TaskCardAdmin {...value} key={value.id} />
-            ))}
           </>
         )}
+
+        {publications.length == 0 && 
+        <div className={styles.noTasks}>
+            <p>
+            В данном проекте пока нету задач или публикаций.
+          </p>
+
+        </div>
+        }
       </div>
-    </div>
-  );
+    </div>)
 }

@@ -6,9 +6,10 @@ export enum ResponseStatus {
 }
 
 export interface CommentDTO {
-    id?: number;
-    response_id: string;
+    id?: string;
+    post_id: string;
     user_id: string;
+    user_name?: string;
     content: string;
     created_at?: string;
     updated_at?: string;

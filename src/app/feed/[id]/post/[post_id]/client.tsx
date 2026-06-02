@@ -12,6 +12,7 @@ import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
 import BackToProjectLink from "@/src/ui/links/BackToProjectLink/BackToProjectLink";
 import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 
 export default function PostPageClient({
   projectId,
@@ -22,16 +23,16 @@ export default function PostPageClient({
 }) {
   const postQuery = usePost(projectId, postId);
   const postStatus = getQueryStatus(postQuery);
+  const data = postQuery.data;
+
   const commentsQuery = usePostComments(projectId, postId);
   const commentsStatus = getQueryStatus(commentsQuery);
   const comments = commentsQuery.data ?? [];
 
-  // Extract unique user IDs from comments
   const userIds = useMemo(() => {
     return Array.from(new Set(comments.map((c) => c.user_id)));
   }, [comments]);
 
-  // Load profiles for all users
   const profilesQuery = useProfiles(userIds);
   const profiles = profilesQuery.data ?? {};
 
@@ -44,7 +45,7 @@ export default function PostPageClient({
     );
   }
 
-  if (postStatus.isError || !postQuery.data) {
+  if (postStatus.isError || !data) {
     return (
       <div className={`pagecontainer ${styles.container}`}>
         <BackToProjectLink projectId={projectId} />
@@ -57,7 +58,7 @@ export default function PostPageClient({
     );
   }
 
-  const data = postQuery.data;
+  // const data = postQuery.data;
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -102,12 +103,13 @@ export default function PostPageClient({
       {comments.length > 0 && (
         <div className={styles.responses}>
           {comments.map((value, index) => (
-            <CommentCard
-              className={styles.cardPadding}
-              {...value}
-              username={profiles[value.user_id]?.username ?? "Загрузка..."}
-              key={value.id ?? index}
-            />
+            <Fragment key={value.id ?? index}>
+              <CommentCard
+                className={styles.cardPadding}
+                {...value}
+                username={profiles[value.user_id]?.username ?? "Загрузка..."}
+              />
+            </Fragment>
           ))}
         </div>
       )}

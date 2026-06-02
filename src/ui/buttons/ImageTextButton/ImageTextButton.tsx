@@ -10,6 +10,7 @@ interface ImageTextButtonProps {
   hideText?: boolean;
   hideTextAtPx?: number;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 
@@ -23,6 +24,7 @@ export default function ImageTextButton({
   hideText = false,
   hideTextAtPx = 675,
   onClick,
+  disabled = false,
 }: ImageTextButtonProps) {
   return (
     <>
@@ -37,6 +39,7 @@ export default function ImageTextButton({
         className={`basic-btn ${styles.container}`}
         onClick={onClick}
         style={{ color, backgroundColor }}
+        disabled={disabled}
       >
         <Image src={src} alt={text} />
         <span className={`imageTextButtonText ${styles.text}`}>{text}</span>

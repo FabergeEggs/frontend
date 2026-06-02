@@ -33,6 +33,7 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
                 placeholder={placeholder}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                onSubmit={handleSubmit}
             />
             <div className={styles.fileForm}>
                 <FileInput onAdd={(id) => setFiles(prev => [...prev, id])} />
@@ -43,12 +44,6 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
             {mutationStatus.isError && (
                 <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка создания ответа"]} />
             )}
-            <GreenButton
-                text="Отправить ответ"
-                disabled={!text.trim() || mutationStatus.isSubmitting}
-                onClick={handleSubmit}
-                style={{marginTop: "10px"}}
-            />
         </div>
     )
 }
