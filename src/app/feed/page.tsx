@@ -18,7 +18,8 @@ export default function Page() {
     isFetchingNextPage,
   } = useGlobalFeed();
 
-  const items: FeedItem[] = data?.pages.flatMap((p: FeedPage) => p.items) ?? [];
+  const items: FeedItem[] = (data?.pages.flatMap((p: FeedPage) => p.items) ?? [])
+    .filter((item: FeedItem) => item.source_type !== "response");
 
   const filtered: FeedItem[] = search.trim()
     ? items.filter((item) => {

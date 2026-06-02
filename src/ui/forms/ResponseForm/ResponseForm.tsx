@@ -4,7 +4,6 @@ import styles from "./ResponseForm.module.css"
 import CommentTextarea from "../../inputs/CommentTextarea/CommentTextarea"
 import FileInput from "../../inputs/FileInput/FileInput"
 import ValidationError from "../ValidationError/ValidationError"
-import GreenButton from "../../buttons/GreenButton/GreenButton"
 import { useState } from "react"
 import File from "../../inputs/File/File"
 import { useCreateTaskResponse } from "@/src/lib/query/response"
@@ -17,7 +16,7 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
     const mutationStatus = getMutationStatus(createResponseMutation)
 
     const handleSubmit = () => {
-        if (!text.trim()) return
+        if (!text.trim() || mutationStatus.isSubmitting) return
         createResponseMutation.mutate({text, attached_files: files}, {
             onSuccess: () => {
                 setText("")
@@ -29,10 +28,11 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
     return (
         <div className={`${styles.container} ${className}`}>
             <h2 className={styles.label}>Ваш ответ</h2>
-            <CommentTextarea 
+            <CommentTextarea
                 placeholder={placeholder}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                onSubmit={handleSubmit}
             />
             <div className={styles.fileForm}>
                 <FileInput onAdd={(id) => setFiles(prev => [...prev, id])} />
@@ -43,12 +43,6 @@ export default function ResponseForm({className, placeholder, projectId, taskId}
             {mutationStatus.isError && (
                 <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка создания ответа"]} />
             )}
-            <GreenButton
-                text="Отправить ответ"
-                disabled={!text.trim() || mutationStatus.isSubmitting}
-                onClick={handleSubmit}
-                style={{marginTop: "10px"}}
-            />
         </div>
     )
 }

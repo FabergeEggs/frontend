@@ -7,8 +7,8 @@ import FileImage from "@/public/assets/response/file.svg";
 import { uploadFilePublic } from "@/src/lib/api/feed";
 
 interface FileInputProps {
-  /** Called with the asset_id once the file is uploaded and ready */
-  onAdd?: (assetId: string) => void;
+  /** Called with the presigned download URL once the file is uploaded and ready */
+  onAdd?: (downloadUrl: string) => void;
   /** Optional: restrict accepted file types, e.g. "image/*,.pdf" */
   accept?: string;
 }
