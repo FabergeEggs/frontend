@@ -27,16 +27,11 @@ export default function CommentForm({className, placeholder, projectId, postId}:
                 placeholder={placeholder}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
+                onSubmit={handleSubmit}
             />
             {mutationStatus.isError && (
                 <ValidationError messages={[mutationStatus.errorMessage ?? "Ошибка создания комментария"]} />
             )}
-            <GreenButton
-                text="Отправить"
-                disabled={!content.trim() || mutationStatus.isSubmitting}
-                onClick={handleSubmit}
-                style={{marginTop: "10px"}}
-            />
         </div>
     )
 }

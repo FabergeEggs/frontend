@@ -1,0 +1,35 @@
+.link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  padding: 6px 15px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background-color: var(--varity2-color);
+  color: var(--active-dark-color);
+  text-decoration: none;
+  font-size: 14px;
+  transition: filter 0.15s;
+}
+
+.arrow {
+  transform: rotate(180deg);
+}
+
+.link:hover {
+  filter: brightness(90%);
+}
+
+.link:active {
+  filter: brightness(65%);
+}
+
+@media (max-width: 675px) {
+  .text {
+    display: none;
+  }
+}
