@@ -16,6 +16,7 @@ interface ResponseCardProps {
   id: string;
   username: string;
   user_id: string;
+  avatar_url?: string | null;
   text: string;
   status: ResponseStatus;
   attached_files: string[];
@@ -25,13 +26,21 @@ interface ResponseCardProps {
   onReject?: () => void;
 }
 
+const statusBorder: Record<ResponseStatus, string> = {
+  [ResponseStatus.PENDING]: "4px solid #3b82f6",
+  [ResponseStatus.ACCEPTED]: "4px solid #16a34a",
+  [ResponseStatus.REJECTED]: "4px solid #dc2626",
+  [ResponseStatus.CANCELLED]: "none",
+};
+
 // Alternative Project Card variant for project page
-export default function ResponseCard({className, id: _id, username, user_id: _user_id, text, status, attached_files, created_at, isAdmin = false, onApprove, onReject}: ResponseCardProps) {
+export default function ResponseCard({className, id: _id, username, user_id: _user_id, avatar_url, text, status, attached_files, created_at, isAdmin = false, onApprove, onReject}: ResponseCardProps) {
+  const borderColor = statusBorder[status] ?? "none";
   return (
-    <div className={`${className} basic-card`}>
+    <div className={`${className} basic-card`} style={{ borderLeft: borderColor, borderRight: borderColor }}>
       <div className={styles.header}>
         <div className="basic-flex">
-          <UserInfo username={username} created_at={created_at} />
+          <UserInfo username={username} created_at={created_at} avatar_url={avatar_url} />
           <div className={styles.status}>
             <Image src={StatusActiveImage} alt="active status image"></Image>
             <span className={styles.infoDescription}>Статус:</span>

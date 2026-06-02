@@ -53,6 +53,7 @@ import {
   useUpdateProject,
   useDeletePost,
   useAddMember,
+  useRemoveMember,
   getApiErrorMessage,
 } from "@/src/lib/query/project";
 import { getQueryStatus } from "@/src/lib/query/status";
@@ -101,6 +102,9 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const updateProjectMutation = useUpdateProject(data.project_id);
   const deletePostMutation = useDeletePost(data.project_id);
   const addMemberMutation = useAddMember(data.project_id);
+  const removeMemberMutation = useRemoveMember(data.project_id);
+  const [localJoined, setLocalJoined] = useState<boolean | null>(null);
+  const isMember = localJoined ?? false;
 
   const posts = publications.filter((p) => p.type === "post");
   const tasks = publications.filter((p) => p.type === "task");
@@ -155,13 +159,10 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
-    const formValues = Object.fromEntries(formData.entries());
-
     const payload: ProjectUpdateDTO = {
-      label: formValues.label as string,
+      label: getValues("label"),
       short_description: data.short_description,
-      description: formValues.description as string,
+      description: getValues("description"),
       tags: getValues("tags") || [],
       status: ensureProjectStatus(data.status),
     };
@@ -421,13 +422,31 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         </div>
       </div>
 
-      {!isAdmin && isActive && (
+      {!isAdmin && isActive && !isMember && (
         <button
           className="basic-btn"
-          onClick={() => addMemberMutation.mutate(userId!)}
+          onClick={() =>
+            addMemberMutation.mutate(userId!, {
+              onSuccess: () => setLocalJoined(true),
+            })
+          }
           disabled={addMemberMutation.isPending}
         >
           {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
+        </button>
+      )}
+      {!isAdmin && isMember && (
+        <button
+          className="basic-btn"
+          style={{ background: "var(--danger-color)", color: "#fff" }}
+          onClick={() =>
+            removeMemberMutation.mutate(userId!, {
+              onSuccess: () => setLocalJoined(false),
+            })
+          }
+          disabled={removeMemberMutation.isPending}
+        >
+          {removeMemberMutation.isPending ? "Выход…" : "Выйти из проекта"}
         </button>
       )}
 

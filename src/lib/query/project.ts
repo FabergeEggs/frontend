@@ -25,6 +25,7 @@ import {
   projectHealthCheck,
   getTaskResponses,
   addMember,
+  removeMember,
   updatePost,
 } from "@/src/lib/api/project";
 import { getPostComments } from "@/src/lib/api/response";
@@ -232,6 +233,16 @@ export function useAddMember(projectId: string) {
   return useMutation({
     mutationFn: (userId: string) =>
       addMember(projectId, { id: userId, role: ProjectRoleEnum.VOLUNTEER } as DenormUserDTO),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
+    },
+  });
+}
+
+export function useRemoveMember(projectId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (userId: string) => removeMember(projectId, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) });
     },

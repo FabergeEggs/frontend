@@ -201,6 +201,7 @@ export default function PostPageClient({
                 className={styles.cardPadding}
                 {...value}
                 username={profiles[value.user_id]?.username ?? "Загрузка..."}
+                avatar_url={profiles[value.user_id]?.avatar_url}
               />
             </Fragment>
           ))}
