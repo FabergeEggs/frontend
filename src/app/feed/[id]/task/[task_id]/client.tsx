@@ -104,24 +104,6 @@ export default function TaskPageClient({
     );
   }
 
-  function finishTask() {
-    updateTaskMutation.mutate({
-      label: data.label,
-      short_description: data.short_description ?? "",
-      description: data.description ?? "",
-      status: TaskStatusEnum.FINISHED,
-    });
-  }
-
-  function resumeTask() {
-    updateTaskMutation.mutate({
-      label: data.label,
-      short_description: data.short_description ?? "",
-      description: data.description ?? "",
-      status: TaskStatusEnum.ACTIVE,
-    });
-  }
-
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <BackToProjectLink projectId={projectId} />
@@ -173,22 +155,6 @@ export default function TaskPageClient({
                       src={EditImage}
                       onClick={startEditing}
                     />
-                    {data.status === TaskStatusEnum.ACTIVE && (
-                      <ImageTextButton
-                        text={updateTaskMutation.isPending ? "…" : "Завершить"}
-                        src={FinishImage}
-                        onClick={finishTask}
-                        disabled={updateTaskMutation.isPending}
-                      />
-                    )}
-                    {data.status === TaskStatusEnum.FINISHED && (
-                      <ImageTextButton
-                        text={updateTaskMutation.isPending ? "…" : "Возобновить"}
-                        src={RestartImage}
-                        onClick={resumeTask}
-                        disabled={updateTaskMutation.isPending}
-                      />
-                    )}
                   </div>
                 )}
               </h1>
