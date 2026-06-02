@@ -11,6 +11,7 @@ interface MutationLike {
   isPending: boolean;
   isError: boolean;
   error: unknown;
+  isSuccess: boolean;
 }
 
 /** Унифицированный статус для отображения в UI */
@@ -28,5 +29,6 @@ export function getMutationStatus(mutation: MutationLike) {
     isSubmitting: mutation.isPending,
     isError: mutation.isError,
     errorMessage: mutation.isError ? getApiErrorMessage(mutation.error) : null,
+    isSuccess: mutation.isSuccess
   };
 }

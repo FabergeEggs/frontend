@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { projectSchema } from "@/src/lib/utils/zodSchemas";
+import { projectCreateSchema } from "@/src/lib/utils/zodSchemas";
 import {
   useCreateProject,
   getApiErrorMessage,
@@ -27,7 +27,7 @@ export default function ProjectForm() {
   const [currentTagInput, setCurrentTagInput] = useState("");
   const router = useRouter();
   const createProject = useCreateProject();
-  const { isSubmitting, errorMessage } = getMutationStatus(createProject);
+  const { isSubmitting, errorMessage, isSuccess } = getMutationStatus(createProject);
 
   const {
     register: registerField,
@@ -35,9 +35,9 @@ export default function ProjectForm() {
     setValue,
     getValues,
     watch,
-  } = useForm<z.infer<typeof projectSchema>>({
+  } = useForm<z.infer<typeof projectCreateSchema>>({
     mode: "onChange",
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(projectCreateSchema),
     defaultValues: {
       tags: [],
     },
@@ -156,7 +156,7 @@ export default function ProjectForm() {
         </div>
         <GreenButton
           type="submit"
-          disabled={!isValid || isSubmitting}
+          disabled={!isValid || isSubmitting || isSuccess}
           className={styles.submitBtn}
           text={isSubmitting ? "Создание…" : "Создать проект"}
         />

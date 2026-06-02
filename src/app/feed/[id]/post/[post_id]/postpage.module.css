@@ -9,6 +9,7 @@
 
 .taskContainer {
     display: flex;
+    flex-direction: column;
     gap    : 15px;
 }
 
@@ -53,6 +54,23 @@
     display       : flex;
     flex-direction: column;
     gap           : 15px;
+}
+
+.editForm {
+    display       : flex;
+    flex-direction: column;
+    gap           : 10px;
+    width         : 100%;
+}
+
+.editForm :global(.basic-input-container) {
+    background-color: var(--bg-color);
+}
+
+.editActions {
+    display   : flex;
+    gap       : 8px;
+    margin-top: 8px;
 }
 
 

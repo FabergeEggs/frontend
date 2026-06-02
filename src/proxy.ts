@@ -16,11 +16,16 @@ const AUTH_ROUTES = [
   "/verify-email",
 ];
 
+// Страницы только для авторизованных (неавторизованных — редиректим на /login)
+const LOGINNED_ROUTES = [
+  "/feed/create"
+];
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("refresh_token")?.value;
 
-  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route));
+  const isPublic = PUBLIC_ROUTES.some((route) => pathname.startsWith(route)) && !LOGINNED_ROUTES.some((route) => pathname.startsWith(route));
   const isAuthRoute = AUTH_ROUTES.some((route) => pathname.startsWith(route));
 
   // Не авторизован + закрытая страница -> на логин
