@@ -6,9 +6,10 @@ interface CommentTextAreaProps {
     placeholder: string
     value?: string
     onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
+    onSubmit?: () => void
 }
 
-export default function CommentTextarea({placeholder, value, onChange}: CommentTextAreaProps) {
+export default function CommentTextarea({placeholder, value, onChange, onSubmit}: CommentTextAreaProps) {
     return (
         <div className={`basic-input-container ${styles.textareaContainer}`}>
             <textarea 
@@ -19,7 +20,7 @@ export default function CommentTextarea({placeholder, value, onChange}: CommentT
                 onChange={onChange}
             />
             <div className={`basic-btn ${styles.imageContainer}`}>
-                <Image className={styles.image} src={CommentSendImage} alt="Comment send image"></Image>
+                <Image className={styles.image} src={CommentSendImage} alt="Comment send image" onClick={onSubmit}></Image>
             </div>
         </div>
         

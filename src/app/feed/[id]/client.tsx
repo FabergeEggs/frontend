@@ -17,6 +17,7 @@ import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
 import CancelImage from "@/public/assets/close.svg";
+import FinishImage from "@/public/assets/project/finish.svg"
 import TaskCard from "@/src/ui/info/TaskCard/TaskCard";
 import TaskCardAdmin from "@/src/ui/info/TaskCardAdmin/TaskCardAdmin";
 import PostCard from "@/src/ui/info/PostCard/PostCard";
@@ -112,7 +113,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     resolver: zodResolver(projectSchema),
     defaultValues: {
       label: data.label,
-      short_description: data.description.slice(0, 500),
+      short_description: data.description.slice(0, 500), // <!> no short_description
       description: data.description,
       tags: data.tags.map((t) => t.name),
     },
@@ -176,6 +177,22 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
   const updateError = updateProjectMutation.isError
     ? getApiErrorMessage(updateProjectMutation.error, "Ошибка обновления проекта")
     : null;
+
+  async function finishProject() {
+    const payload: ProjectUpdateDTO = {
+      label: data.label as string,
+      short_description: data.description.slice(0, 500), // <!> no short_description
+      description: data.description as string,
+      tags: data.tags.map((t) => t.name),
+      status: ProjectStatusEnum.FINISHED,
+    };
+
+    try {
+      await updateProjectMutation.mutateAsync(payload); 
+    } catch {
+      // ошибка в mutation.error
+    }
+  }
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -252,6 +269,12 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                     onClick={() => setPosting(false)}
                   />
                 )}
+                <ImageTextButton
+                    text="Завершить проект"
+                    src={FinishImage}
+                    backgroundColor="var(--main-color)"
+                    onClick={finishProject}
+                  />
               </div>
             )}
           </div>
@@ -355,6 +378,27 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         </button>
       )}
 
+      {isAdmin && (
+        <>
+          {isCreatingTask && (
+            <div id="taskform">
+              <TaskForm
+                project_id={data.project_id}
+                onSuccess={() => setCreatingTask(false)}
+              />
+            </div>
+          )}
+          {isPosting && (
+            <div id="postform">
+              <PostForm
+                project_id={data.project_id}
+                onSuccess={() => setPosting(false)}
+              />
+            </div>
+          )}
+        </>
+      )}
+
       <div className={styles.projects}>
         {publicationsStatus.isLoading && <p>Загрузка публикаций…</p>}
         {publicationsStatus.errorMessage && (
@@ -380,6 +424,9 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
         {isAdmin && (
           <>
+            {tasks.map((value) => (
+              <TaskCardAdmin {...value} key={value.id} />
+            ))}
             {posts.map((value) => (
               <PostCardAdmin
                 {...value}
@@ -388,11 +435,17 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                 comments_count={value.answers_count}
               />
             ))}
-            {tasks.map((value) => (
-              <TaskCardAdmin {...value} key={value.id} />
-            ))}
           </>
         )}
+
+        {publications.length == 0 && 
+        <div className={styles.noTasks}>
+            <p>
+            В данном проекте пока нету задач или публикаций.
+          </p>
+
+        </div>
+        }
       </div>
     </div>)
 }
