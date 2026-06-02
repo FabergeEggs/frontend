@@ -6,6 +6,7 @@
 
 .projectContainer {
     display: flex;
+    align-items: flex-start;
     gap: 15px;
 }
 
@@ -17,6 +18,7 @@
     border-radius: 15px;
     box-sizing: border-box;
     min-height: 480px;
+    min-width: 0;
     padding: 30px;
 }
 
@@ -25,7 +27,9 @@
 .top {
 
     display: flex;
-    /* flex-direction: column; */
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -53,7 +57,10 @@
 
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 15px;
+    overflow-wrap: anywhere;
 }
 
 .info {
@@ -81,6 +88,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .count {
@@ -119,6 +127,7 @@
 
 .adminButtons {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
     margin-top: 20px;
 }
@@ -132,6 +141,7 @@
     .countInfo {
         flex-direction: row;
         justify-content: space-between;
+        flex-wrap: wrap;
     }
 
     .count {
@@ -139,7 +149,8 @@
     }
 
     .box {
-        width: 100%;
+        flex: 1 1 180px;
+        width: auto;
         height: 81px;
     }
 
@@ -160,7 +171,7 @@
 
 @media(max-width: 450px) { /* CHANGED */
     .box {
-        /* width: 98px; */
+        flex: 1 1 120px;
         height: 59px;
         font-size: 14px;
     }
