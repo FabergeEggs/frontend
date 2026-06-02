@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProjectStatusEnum } from "../models/export/project";
 
 const password = z.string()
   .min(8, "Пароль должен быть не менее 8 символов")
@@ -56,12 +57,21 @@ const labelSchema = z.string().min(3, "Должно быть не менее 3 �
 const shortDescriptionSchema = z.string().min(1, "Краткое описание обязательно").max(500, "Должно быть не более 500 символов");
 const descriptionSchema = z.string().min(1, "Развёрнутое описание обязательно").max(5000, "Должно быть не более 5000 символов");
 
-export const projectSchema = z
+export const projectCreateSchema = z
   .object({
     label: labelSchema,
     short_description: shortDescriptionSchema,
     description: descriptionSchema,
     tags: z.array(z.string()),
+  })
+
+export const projectUpdateSchema = z
+  .object({
+    label: labelSchema,
+    short_description: shortDescriptionSchema,
+    description: descriptionSchema,
+    tags: z.array(z.string()),
+    status: z.string(ProjectStatusEnum.ACTIVE || ProjectStatusEnum.DELETED || ProjectStatusEnum.FINISHED)
   })
 
 export const publicationSchema = z

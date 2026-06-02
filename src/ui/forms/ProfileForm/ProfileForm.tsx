@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { profileSchema } from "@/src/lib/utils/zodSchemas";
 import { updateProfile } from "@/src/lib/api/profile";
-import { changePassword } from "@/src/lib/api/auth";
+// import { changePassword } from "@/src/lib/api/auth";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useRef, useState } from "react"
 
@@ -26,9 +26,9 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       confirmPassword: ""
     },
   });
-  const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [passwordSuccess, setPasswordSuccess] = useState(false);
+  // const [isEditingPassword, setIsEditingPassword] = useState(false);
+  // const [passwordError, setPasswordError] = useState<string | null>(null);
+  // const [passwordSuccess, setPasswordSuccess] = useState(false);
   const [failedConfirm, setFailedConfirm] = useState({
     first_name: false,
     email: false,
@@ -66,37 +66,37 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
     })
   }
 
-  async function updatePassword() {
-    trigger(["oldPassword", "newPassword", "confirmPassword"]);
-    setPasswordError(null);
-    setPasswordSuccess(false);
+  // async function updatePassword() {
+  //   trigger(["oldPassword", "newPassword", "confirmPassword"]);
+  //   setPasswordError(null);
+  //   setPasswordSuccess(false);
     
-    if (!formRef.current) return;
-    const formData = new FormData(formRef.current);
-    const formValues = Object.fromEntries(formData.entries());
+  //   if (!formRef.current) return;
+  //   const formData = new FormData(formRef.current);
+  //   const formValues = Object.fromEntries(formData.entries());
 
-    if (
-      errors.oldPassword || errors.newPassword || errors.confirmPassword ||
-      !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword
-    ) {
-      return;
-    }
+  //   if (
+  //     errors.oldPassword || errors.newPassword || errors.confirmPassword ||
+  //     !formValues.oldPassword || !formValues.newPassword || !formValues.confirmPassword
+  //   ) {
+  //     return;
+  //   }
     
-    try {
-      await changePassword(
-        formValues.oldPassword as string,
-        formValues.newPassword as string,
-      );
-      setValue("oldPassword", "xxxxxxxxxxx");
-      setValue("newPassword", "");
-      setValue("confirmPassword", "");
-      setIsEditingPassword(false);
-      setPasswordSuccess(true);
-    } catch {
-      setPasswordError("Не удалось сменить пароль. Проверьте старый пароль.");
-      return false;
-    }
-  }
+  //   try {
+  //     await changePassword(
+  //       formValues.oldPassword as string,
+  //       formValues.newPassword as string,
+  //     );
+  //     setValue("oldPassword", "xxxxxxxxxxx");
+  //     setValue("newPassword", "");
+  //     setValue("confirmPassword", "");
+  //     setIsEditingPassword(false);
+  //     setPasswordSuccess(true);
+  //   } catch {
+  //     setPasswordError("Не удалось сменить пароль. Проверьте старый пароль.");
+  //     return false;
+  //   }
+  // }
 
   return (
     <form ref={formRef} className={styles.profileInfo}>
@@ -119,10 +119,14 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
         onConfirm={() => confirm("about")}
         {...registerField("about")}
       />
-      {/* {failedConfirm.about && (
+    </form>
+  );
+}
+
+{/* {failedConfirm.about && (
         <p className={styles.error}>Введено пустое описание</p>
       )} */}
-      <ProfileInput
+      {/* <ProfileInput
         type="password"
         label="Пароль"
         placeholder="Введите старый пароль..."
@@ -167,10 +171,6 @@ export default function ProfileForm({ data } : {data : ProfileDTO}) {
       )}
       {passwordSuccess && (
         <p style={{ color: "var(--success-color, green)", marginTop: "4px" }}>
-          Пароль успешно изменён
+          Ссылка на изменение пароля выслана вам на почту.
         </p>
-      )}
-
-    </form>
-  );
-}
+      )} */}

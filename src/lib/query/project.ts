@@ -25,6 +25,7 @@ import {
   projectHealthCheck,
   getTaskResponses,
   addMember,
+  updatePost,
 } from "@/src/lib/api/project";
 import { getPostComments } from "@/src/lib/api/response";
 import { projectKeys, responseKeys } from "./keys";
@@ -195,6 +196,16 @@ export function usePostComments(projectId: string, postId: string) {
     queryKey: responseKeys.postComments(projectId, postId),
     queryFn: () => getPostComments(projectId, postId),
     enabled: Boolean(projectId && postId),
+  });
+}
+
+export function useUpdatePost(projectId: string, postId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: PostUpdateDTO) => updatePost(projectId, postId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: projectKeys.post(projectId, postId) });
+    },
   });
 }
 

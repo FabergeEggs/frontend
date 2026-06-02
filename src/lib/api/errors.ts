@@ -43,6 +43,7 @@ export class ApiError extends Error {
 
 const STATUS_MESSAGES: Record<number, string> = {
   400: "Некорректный запрос",
+  401: "Неверный логин или пароль",
   403: "Недостаточно прав",
   404: "Не найдено",
   409: "Конфликт данных",

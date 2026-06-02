@@ -17,6 +17,8 @@ import AuthorImage from "@/public/assets/project/author.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import StatusActiveImage from "@/public/assets/project/status-active.svg";
 import CancelImage from "@/public/assets/close.svg";
+import FinishImage from "@/public/assets/project/finish.svg"
+import RestartImage from "@/public/assets/project/restart.svg"
 import TaskCard from "@/src/ui/info/TaskCard/TaskCard";
 import TaskCardAdmin from "@/src/ui/info/TaskCardAdmin/TaskCardAdmin";
 import PostCard from "@/src/ui/info/PostCard/PostCard";
@@ -39,9 +41,11 @@ import ProjectUpdateFormTag from "@/src/ui/info/ProjectUpdateFormTag/ProjectUpda
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { projectSchema } from "@/src/lib/utils/zodSchemas";
+import { projectUpdateSchema } from "@/src/lib/utils/zodSchemas";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
+import {useTask, useUpdateTask } from "@/src/lib/query/project";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+import { TaskStatusEnum } from "@/src/lib/models/export/project";
 
 import {
   useProject,
@@ -107,14 +111,15 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     setValue,
     getValues,
     watch,
-  } = useForm<z.infer<typeof projectSchema>>({
+  } = useForm<z.infer<typeof projectUpdateSchema>>({
     mode: "onChange",
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(projectUpdateSchema),
     defaultValues: {
       label: data.label,
-      short_description: data.description.slice(0, 500),
+      short_description: data.description.slice(0, 500), // <!> no short_description
       description: data.description,
       tags: data.tags.map((t) => t.name),
+      status: data.status
     },
   });
 
@@ -177,6 +182,40 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     ? getApiErrorMessage(updateProjectMutation.error, "Ошибка обновления проекта")
     : null;
 
+  async function changeProjectStatus(status: ProjectStatusEnum) {
+    const payload: ProjectUpdateDTO = {
+      label: data.label as string,
+      short_description: data.description.slice(0, 500), // <!> no short_description
+      description: data.description as string,
+      tags: data.tags.map((t) => t.name),
+      status: status,
+    };
+
+    try {
+      await updateProjectMutation.mutateAsync(payload); 
+    } catch {
+      // ошибка в mutation.error
+    }
+  }
+
+  const isActive = data.status === ProjectStatusEnum.ACTIVE;
+
+  // async function changeTaskStatus(taskId: string, task: PublicationDTO, status: TaskStatusEnum) {
+  //   // const taskQuery = await useTask(data.project_id, taskId);
+  //   // const task = taskQuery.data;
+  //   // if (!task) {
+  //   //   console.log("Не удалось загрузить задачу для изменения её статуса")
+  //   //   return
+  //   // }
+  //   const updateTaskMutation = useUpdateTask(data.project_id, taskId);
+  //   updateTaskMutation.mutate({
+  //     label: task.label,
+  //     short_description: task.short_description ?? "",
+  //     description: task.short_description ?? "", // <!> Task description becomes short
+  //     status: status,
+  //   });
+  // }
+
   return (
     <div className={`pagecontainer ${styles.container}`}>
       <div className={styles.projectContainer}>
@@ -184,13 +223,13 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
           <div className={styles.card}>
             <h1 className={styles.label}>
               {data.label}
-              {isAdmin && (
+              {isAdmin && isActive &&
                 <ImageTextButton
                   text="Редактировать"
                   src={EditImage}
                   onClick={() => setEditing(true)}
                 />
-              )}
+              }
             </h1>
             <div className={styles.info}>
               <div className="basic-info-piece">
@@ -206,7 +245,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
               <div className="basic-info-piece">
                 <Image src={StatusActiveImage} alt="active status image" />
                 <span className={styles.infoDescription}>Статус:</span>
-                {data.status === ProjectStatusEnum.ACTIVE && "Активен"}
+                {isActive && "Активен"}
                 {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
                 {data.status === ProjectStatusEnum.DELETED && "Удалён"}
               </div>
@@ -219,7 +258,8 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             <p className={styles.description}>{data.description}</p>
             {isAdmin && (
               <div className={styles.adminButtons}>
-                {!isCreatingTask && (
+                {isActive && <>
+                  {!isCreatingTask && (
                   <a className="basic-link" href="#taskform">
                     <ImageTextButton
                       text="Новая задача"
@@ -252,6 +292,25 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                     onClick={() => setPosting(false)}
                   />
                 )}
+                </>}
+                
+
+                {data.status == ProjectStatusEnum.ACTIVE &&
+                <ImageTextButton
+                    text="Завершить проект"
+                    src={FinishImage}
+                    backgroundColor="var(--main-color)"
+                    onClick={() => changeProjectStatus(ProjectStatusEnum.FINISHED)}
+                  />
+                  }
+                {data.status == ProjectStatusEnum.FINISHED &&
+                <ImageTextButton
+                    text="Возобновить проект"
+                    src={RestartImage}
+                    backgroundColor="var(--main-color)"
+                    onClick={() => changeProjectStatus(ProjectStatusEnum.ACTIVE)}
+                  />
+                  }
               </div>
             )}
           </div>
@@ -272,6 +331,12 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                 type="submit"
                 text={updateProjectMutation.isPending ? "Сохранение…" : "Сохранить"}
                 src={CheckImage}
+                color="var(--active-dark-color)"
+                backgroundColor="var(--varity2-color)"
+              />
+              <ImageTextButton
+                text="Отмена"
+                src={CancelImage}
                 color="var(--active-dark-color)"
                 backgroundColor="var(--varity2-color)"
               />
@@ -313,7 +378,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
               <div className={styles.infoPiece}>
                 <Image src={StatusActiveImage} alt="active status image" />
                 <span className={styles.infoDescription}>Статус:</span>
-                {data.status === ProjectStatusEnum.ACTIVE && "Активен"}
+                {isActive && "Активен"}
                 {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
                 {data.status === ProjectStatusEnum.DELETED && "Удалён"}
               </div>
@@ -345,7 +410,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         </div>
       </div>
 
-      {!isAdmin && (
+      {!isAdmin && isActive && (
         <button
           className="basic-btn"
           onClick={() => addMemberMutation.mutate(userId!)}
@@ -398,6 +463,9 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
         {isAdmin && (
           <>
+            {tasks.map((value) => (
+              <TaskCardAdmin {...value} key={value.id} /> // resumeAction={() => changeTaskStatus(value.id, value, TaskStatusEnum.ACTIVE)} finishAction={() => changeTaskStatus(value.id, value, TaskStatusEnum.FINISHED)}
+            ))}
             {posts.map((value) => (
               <PostCardAdmin
                 {...value}
@@ -406,11 +474,17 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
                 comments_count={value.answers_count}
               />
             ))}
-            {tasks.map((value) => (
-              <TaskCardAdmin {...value} key={value.id} />
-            ))}
           </>
         )}
+
+        {publications.length == 0 && 
+        <div className={styles.noTasks}>
+            <p>
+            В данном проекте пока нету задач или публикаций.
+          </p>
+
+        </div>
+        }
       </div>
     </div>)
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTask, useTaskResponses } from "@/src/lib/query/project";
+import { getQueryStatus } from "@/src/lib/query/status";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
@@ -22,7 +23,7 @@ export default function ReportPageClient({
   const { userId } = useAuth();
   const taskQuery = useTask(projectId, taskId);
   const task = taskQuery.data;
-  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
+  const taskStatus = getQueryStatus(taskQuery)
   const changeStatusMutation = useChangeResponseStatus(projectId, taskId);
 
   const responsesQuery = useTaskResponses(projectId, taskId);

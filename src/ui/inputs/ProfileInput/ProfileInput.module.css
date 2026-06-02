@@ -32,7 +32,7 @@
 }
 
 .inputContainer:has(.input:placeholder-shown) {
-  background-color: var(--varity1-color);
+  background-color: var(--varity2-color);
 }
 
 .textarea {
