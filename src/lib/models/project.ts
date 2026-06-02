@@ -125,16 +125,20 @@ enum PublicationTypeEnum {
 }
 
 interface PublicationDTO {
+  
+}
+
+interface PublicationDTO {
   id: string;
   project_id: string;
   label: string;
   short_description: string;
-  created_at: Date;
+  created_at: string;
   creator_id: string;
   creator_name: string;
-  type: PublicationTypeEnum;
+  type: PublicationTypeEnum | "post" | "task";
   answers_count: number;
-  status: TaskStatusEnum | null; // null для постов, статус для задач
+  status: TaskStatusEnum | null;
 }
 
 interface PublicationsResponse {

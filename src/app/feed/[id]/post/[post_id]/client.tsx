@@ -8,6 +8,7 @@ import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
 import AuthorImage from "@/public/assets/project/author.svg";
 import CancelImage from "@/public/assets/close.svg"
+import EditImage from "@/public/assets/edit.svg";
 import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
@@ -136,7 +137,17 @@ export default function PostPageClient({
             </div>
           ) : (
             <>
-              <h1 className={styles.label}>{data.label}</h1>
+              <h1 className={styles.label}>{data.label}
+                {isAdmin && (
+                  <div className="basic-flex">
+                    <ImageTextButton
+                      text="Редактировать"
+                      src={EditImage}
+                      onClick={startEditing}
+                    />
+                  </div>
+                )}
+              </h1>
               <div className={styles.info}>
                 <div className="basic-info-piece">
                   <Image src={AuthorImage} alt="author image" />

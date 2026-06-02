@@ -45,6 +45,7 @@ import { projectUpdateSchema } from "@/src/lib/utils/zodSchemas";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import {useTask, useUpdateTask } from "@/src/lib/query/project";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+import { TaskStatusEnum } from "@/src/lib/models/export/project";
 
 import {
   useProject,
@@ -199,21 +200,21 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
   const isActive = data.status === ProjectStatusEnum.ACTIVE;
 
-  async function changeTaskStatus(taskId: string, status: TaskStatusEnum) {
-    const taskQuery = await useTask(data.project_id, taskId);
-    const task = taskQuery.data;
-    if (!task) {
-      console.log("Не удалось загрузить задачу для изменения её статуса")
-      return
-    }
-    const updateTaskMutation = useUpdateTask(data.project_id, taskId);
-    updateTaskMutation.mutate({
-      label: task.label,
-      short_description: task.short_description ?? "",
-      description: task.description ?? "",
-      status: status,
-    });
-  }
+  // async function changeTaskStatus(taskId: string, task: PublicationDTO, status: TaskStatusEnum) {
+  //   // const taskQuery = await useTask(data.project_id, taskId);
+  //   // const task = taskQuery.data;
+  //   // if (!task) {
+  //   //   console.log("Не удалось загрузить задачу для изменения её статуса")
+  //   //   return
+  //   // }
+  //   const updateTaskMutation = useUpdateTask(data.project_id, taskId);
+  //   updateTaskMutation.mutate({
+  //     label: task.label,
+  //     short_description: task.short_description ?? "",
+  //     description: task.short_description ?? "", // <!> Task description becomes short
+  //     status: status,
+  //   });
+  // }
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
@@ -466,7 +467,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         {isAdmin && (
           <>
             {tasks.map((value) => (
-              <TaskCardAdmin {...value} key={value.id} resumeAction={() => changeTaskStatus(value.id, TaskStatusEnum.ACTIVE)} finishAction={() => changeTaskStatus(value.id, TaskStatusEnum.FINISHED)}/>
+              <TaskCardAdmin {...value} key={value.id} /> // resumeAction={() => changeTaskStatus(value.id, value, TaskStatusEnum.ACTIVE)} finishAction={() => changeTaskStatus(value.id, value, TaskStatusEnum.FINISHED)}
             ))}
             {posts.map((value) => (
               <PostCardAdmin

@@ -7,8 +7,8 @@ import { TaskStatusEnum } from "@/src/lib/models/export/project";
 
 /* Images: */
 
-import FinishImage from '@/public/assets/project/finish.svg'
-import RestartImage from '@/public/assets/project/restart.svg'
+// import FinishImage from '@/public/assets/project/finish.svg'
+// import RestartImage from '@/public/assets/project/restart.svg'
 
 
 interface TaskCardAdminProps {
@@ -18,20 +18,20 @@ interface TaskCardAdminProps {
   label: string,
   short_description: string, // I suppose description should be shorted if needed and then ... needs to be added
   answers_count: number,
-  finishAction: () => void,
-  resumeAction: () => void,
+  // finishAction: () => void,
+  // resumeAction: () => void,
 }
 
-export default function TaskCardAdmin({project_id, id, status, label, short_description, answers_count, finishAction, resumeAction}: TaskCardAdminProps) {
+export default function TaskCardAdmin({project_id, id, status, label, short_description, answers_count}: TaskCardAdminProps) {
   return (
       <TaskCard project_id={project_id} id={id} label={label} short_description={short_description} answers_count={answers_count}>
           <span className={styles.interaction}>
-            {status === TaskStatusEnum.ACTIVE && <>
+            {/* {status === TaskStatusEnum.ACTIVE && <>
             <TransparentTextImageButton src={FinishImage} text="Завершить" imageFirst={true} onClick={finishAction} />
             </>}
             {status === TaskStatusEnum.FINISHED && <>
               <TransparentTextImageButton src={RestartImage} text="Возобновить" imageFirst={true} onClick={resumeAction} />
-            </>}
+            </>} */}
           </span>
       </TaskCard>
   );
