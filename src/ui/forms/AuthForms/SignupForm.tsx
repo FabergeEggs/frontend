@@ -89,7 +89,7 @@ export default function SignupForm() {
         <GreenButton
           type="submit"
           className={styles.submitBtn}
-          disabled={!isValid || mutationStatus.isSubmitting}
+          disabled={!isValid || mutationStatus.isSubmitting || mutationStatus.isSuccess}
           text="Зарегистрироваться"
         />
         <p className={styles.authRef}>

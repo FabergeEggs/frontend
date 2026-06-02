@@ -9,6 +9,7 @@ import type { ResponseDTO } from "@/src/lib/models/export/response";
 import { ResponseStatus } from "@/src/lib/models/export/response";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useTask, useTaskResponses, useUpdateTask } from "@/src/lib/query/project";
+import { getQueryStatus } from "@/src/lib/query/status";
 import { useChangeResponseStatus } from "@/src/lib/query/response";
 import { useProfiles } from "@/src/lib/query/profile";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
@@ -20,6 +21,7 @@ import ResponseForm from "@/src/ui/forms/ResponseForm/ResponseForm";
 import ResponseCard from "@/src/ui/info/ResponseCard/ResponseCard";
 import EditImage from "@/public/assets/edit.svg";
 import FinishImage from "@/public/assets/project/finish.svg";
+import RestartImage from "@/public/assets/project/restart.svg"
 
 import ImageTextButton from "@/src/ui/buttons/ImageTextButton/ImageTextButton";
 import GreenButton from "@/src/ui/buttons/GreenButton/GreenButton";
@@ -37,7 +39,7 @@ export default function TaskPageClient({
   const { userId } = useAuth();
 
   const taskQuery = useTask(projectId, taskId);
-  const taskStatus = { isLoading: taskQuery.isLoading, isError: taskQuery.isError, errorMessage: null };
+  const taskStatus = getQueryStatus(taskQuery)
   const task = taskQuery.data;
 
   const [editing, setEditing] = useState(false);
@@ -72,8 +74,7 @@ export default function TaskPageClient({
     );
   }
 
-  // const data = taskQuery.data;
-  const data = task;
+  const data = task
   const isAdmin = userId === data.creator_id;
 
   function startEditing() {
@@ -95,12 +96,12 @@ export default function TaskPageClient({
     );
   }
 
-  function finishTask() {
+  function changeTaskStatus(status: TaskStatusEnum) {
     updateTaskMutation.mutate({
       label: data.label,
       short_description: data.short_description ?? "",
       description: data.description ?? "",
-      status: TaskStatusEnum.FINISHED,
+      status: status,
     });
   }
 
@@ -118,14 +119,14 @@ export default function TaskPageClient({
                 label="Название задачи"
                 placeholder="Название задачи"
                 value={editLabel}
-                onChange={(e) => setEditLabel(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditLabel(e.target.value)}
                 required={false}
               />
               <AuthInput
                 label="Краткое описание"
                 placeholder="Краткое описание"
                 value={editShortDesc}
-                onChange={(e) => setEditShortDesc(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditShortDesc(e.target.value)}
                 required={false}
               />
               <ProjectTextarea
@@ -133,7 +134,7 @@ export default function TaskPageClient({
                 placeholder="Описание задачи"
                 height={150}
                 value={editDescription}
-                onChange={(e) => setEditDescription(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditDescription(e.target.value)}
                 required={false}
               />
               <div className={styles.editActions}>
@@ -167,7 +168,15 @@ export default function TaskPageClient({
                       <ImageTextButton
                         text={updateTaskMutation.isPending ? "…" : "Завершить"}
                         src={FinishImage}
-                        onClick={finishTask}
+                        onClick={() => changeTaskStatus(TaskStatusEnum.FINISHED)}
+                        disabled={updateTaskMutation.isPending}
+                      />
+                    )}
+                    {data.status === TaskStatusEnum.FINISHED && (
+                      <ImageTextButton
+                        text={updateTaskMutation.isPending ? "…" : "Возобновить"}
+                        src={RestartImage}
+                        onClick={() => changeTaskStatus(TaskStatusEnum.ACTIVE)}
                         disabled={updateTaskMutation.isPending}
                       />
                     )}

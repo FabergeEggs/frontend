@@ -57,7 +57,7 @@ export default function LoginForm() {
         <GreenButton
           type="submit"
           className={styles.submitBtn}
-          disabled={!isValid || mutationStatus.isSubmitting}
+          disabled={!isValid || mutationStatus.isSubmitting || mutationStatus.isSuccess}
           text="Войти"
         />
         <p className={styles.authRef}>

@@ -87,7 +87,6 @@ interface PostCreateDTO {
 }
 
 interface PostUpdateDTO {
-  post_id: string;
   project_id: string; // Нужен для проверки, что делается из нужного проекта
   label: string;
   short_description: string;

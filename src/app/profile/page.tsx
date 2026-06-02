@@ -87,35 +87,9 @@ export default function ProfilePage() {
             value={avatarUrl}
             onChange={async ({ assetId, displayUrl }) => {
               setAvatarUrl(displayUrl);
-              if (profileData && userId) {
-                try {
-                  await updateProfile(userId, {
-                    first_name: profileData.first_name,
-                    last_name: "",
-                    bio: profileData.bio || "",
-                    avatar_asset_id: assetId,
-                  });
-                } catch {
-                  // аватар отображается локально, при перезагрузке profile_service
-                  // вернёт свежий URL через media_service S2S
-                }
-              }
             }}
             onDelete={async () => {
               setAvatarUrl("");
-              if (profileData && userId) {
-                try {
-                  await updateProfile(userId, {
-                    first_name: profileData.first_name,
-                    last_name: "",
-                    bio: profileData.bio || "",
-                    avatar_url: "",
-                    avatar_asset_id: "",
-                  });
-                } catch {
-                  // ignore
-                }
-              }
             }}
           />
         </div>

@@ -44,7 +44,6 @@ export default function AuthInput({
             id={name}
             placeholder={placeholder}
             required={required ?? true}
-            autoComplete="new-password"
             ref={ref}
           />
         </div>

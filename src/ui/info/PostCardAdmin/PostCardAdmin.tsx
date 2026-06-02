@@ -22,7 +22,7 @@ export default function PostCardAdmin({project_id, id, label, short_description,
 
   return (
       <PostCard project_id={project_id} id={id} label={label} short_description={short_description} comments_count={comments_count}>
-          <TransparentTextImageButton onClick={(e: any) => {e.stopPropagation(); e.preventDefault();setConfirmationModalOpen(true)}} className={styles.interaction} src={TrashImage} text="Удалить" imageFirst={true} />
+          <TransparentTextImageButton onClick={() => setConfirmationModalOpen(true)} className={styles.interaction} src={TrashImage} text="Удалить" imageFirst={true} />
 
           {/* <div onClick={() => setConfirmationModalOpen(true)} className={styles.interaction}>
               <Image src={TrashImage} alt="Delete post button image" />
