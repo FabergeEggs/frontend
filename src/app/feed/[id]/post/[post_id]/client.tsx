@@ -11,7 +11,6 @@ import CreationTimeImage from "@/public/assets/project/creation-time.svg";
 import CommentForm from "@/src/ui/forms/CommentForm/CommentForm";
 import CommentCard from "@/src/ui/info/CommentCard/CommentCard";
 import BackToProjectLink from "@/src/ui/links/BackToProjectLink/BackToProjectLink";
-import { useMemo } from "react";
 import { Fragment, useMemo } from "react";
 
 export default function PostPageClient({
