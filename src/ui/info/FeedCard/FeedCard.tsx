@@ -21,7 +21,7 @@ export default function FeedCard({ item }: FeedCardProps) {
       short_description={item.short_description ?? ""}
     >
       {item.actor_name && (
-        <UserInfo username={item.actor_name} created_at={date} />
+        <UserInfo username={item.actor_name} created_at={date} avatar_url={item.actor_avatar_url} />
       )}
     </ProjectCard>
   );
