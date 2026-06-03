@@ -204,7 +204,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
     };
 
     try {
-      await updateProjectMutation.mutateAsync(payload); 
+      await updateProjectMutation.mutateAsync(payload);
     } catch {
       // ошибка в mutation.error
     }
@@ -230,195 +230,198 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
 
   return (
     <div className={`pagecontainer ${styles.container}`}>
-      <div className={styles.projectContainer}>
-        {(!isAdmin || !isEditing) && (
-          <div className={styles.card}>
-            <h1 className={styles.label}>
-              {data.label}
-              {isAdmin && isActive &&
-                <ImageTextButton
-                  text="Редактировать"
-                  src={EditImage}
-                  onClick={() => setEditing(true)}
-                />
-              }
-            </h1>
-            <div className={styles.info}>
-              <div className="basic-info-piece">
-                <Image src={AuthorImage} alt="author image" />
-                <span className={styles.infoDescription}>Автор:</span>
-                {data.creator}
-              </div>
-              <div className="basic-info-piece">
-                <Image src={CreationTimeImage} alt="creation time image" />
-                <span className={styles.infoDescription}>Создано:</span>
-                {new Date(data.created_at).toLocaleDateString("ru-RU")}
-              </div>
-              <div className="basic-info-piece">
-                <Image src={StatusActiveImage} alt="active status image" />
-                <span className={styles.infoDescription}>Статус:</span>
-                {isActive && "Активен"}
-                {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
-                {data.status === ProjectStatusEnum.DELETED && "Удалён"}
-              </div>
-            </div>
-            <div className={styles.tags}>
-              {data.tags?.map((tag: TagModel, index: number) => (
-                <Tag key={tag.tag_id || index}>{tag.name}</Tag>
-              ))}
-            </div>
-            <p className={styles.description}>{data.description}</p>
-            {isAdmin && (
-              <div className={styles.adminButtons}>
-                {isActive && <>
-                  {!isCreatingTask && (
-                  <a className="basic-link" href="#taskform">
+        <div className={styles.subContainer}>
+          <div className={styles.projectContainer}>
+            {(!isAdmin || !isEditing) && (
+              <div className={styles.card}>
+                <h1 className={styles.label}>
+                  {data.label}
+                  {isAdmin && isActive &&
                     <ImageTextButton
-                      text="Новая задача"
-                      src={NewTaskImage}
-                      onClick={() => setCreatingTask(true)}
+                      text="Редактировать"
+                      src={EditImage}
+                      onClick={() => setEditing(true)}
                     />
-                  </a>
-                )}
-                {isCreatingTask && (
-                  <ImageTextButton
-                    text="Отменить создание задачи"
-                    src={CancelImage}
-                    onClick={() => setCreatingTask(false)}
-                  />
-                )}
+                  }
+                </h1>
+                <div className={styles.info}>
+                  <div className="basic-info-piece">
+                    <Image src={AuthorImage} alt="author image" />
+                    <span className={styles.infoDescription}>Автор:</span>
+                    {data.creator}
+                  </div>
+                  <div className="basic-info-piece">
+                    <Image src={CreationTimeImage} alt="creation time image" />
+                    <span className={styles.infoDescription}>Создано:</span>
+                    {new Date(data.created_at).toLocaleDateString("ru-RU")}
+                  </div>
+                  <div className="basic-info-piece">
+                    <Image src={StatusActiveImage} alt="active status image" />
+                    <span className={styles.infoDescription}>Статус:</span>
+                    {isActive && "Активен"}
+                    {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
+                    {data.status === ProjectStatusEnum.DELETED && "Удалён"}
+                  </div>
+                </div>
+                <div className={styles.tags}>
+                  {data.tags?.map((tag: TagModel, index: number) => (
+                    <Tag key={tag.tag_id || index}>{tag.name}</Tag>
+                  ))}
+                </div>
+                <p className={styles.description}>{data.description}</p>
+                {isAdmin && (
+                  <div className={styles.adminButtons}>
+                    {isActive && <>
+                      {!isCreatingTask && (
+                      <a className="basic-link" href="#taskform">
+                        <ImageTextButton
+                          text="Новая задача"
+                          src={NewTaskImage}
+                          onClick={() => setCreatingTask(true)}
+                        />
+                      </a>
+                    )}
+                    {isCreatingTask && (
+                      <ImageTextButton
+                        text="Отменить создание задачи"
+                        src={CancelImage}
+                        onClick={() => setCreatingTask(false)}
+                      />
+                    )}
 
-                {!isPosting && (
-                  <a className="basic-link" href="#postform">
+                    {!isPosting && (
+                      <a className="basic-link" href="#postform">
+                        <ImageTextButton
+                          text="Новый пост"
+                          src={NewPostImage}
+                          onClick={() => setPosting(true)}
+                        />
+                      </a>
+                    )}
+                    {isPosting && (
+                      <ImageTextButton
+                        text="Отменить создание поста"
+                        src={CancelImage}
+                        onClick={() => setPosting(false)}
+                      />
+                    )}
+                    </>}
+
+
+                    {data.status == ProjectStatusEnum.ACTIVE &&
                     <ImageTextButton
-                      text="Новый пост"
-                      src={NewPostImage}
-                      onClick={() => setPosting(true)}
-                    />
-                  </a>
+                        text="Завершить проект"
+                        src={FinishImage}
+                        backgroundColor="var(--main-color)"
+                        onClick={() => changeProjectStatus(ProjectStatusEnum.FINISHED)}
+                      />
+                      }
+                    {data.status == ProjectStatusEnum.FINISHED &&
+                    <ImageTextButton
+                        text="Возобновить проект"
+                        src={RestartImage}
+                        backgroundColor="var(--main-color)"
+                        onClick={() => changeProjectStatus(ProjectStatusEnum.ACTIVE)}
+                      />
+                      }
+                  </div>
                 )}
-                {isPosting && (
-                  <ImageTextButton
-                    text="Отменить создание поста"
-                    src={CancelImage}
-                    onClick={() => setPosting(false)}
-                  />
-                )}
-                </>}
-                
-
-                {data.status == ProjectStatusEnum.ACTIVE &&
-                <ImageTextButton
-                    text="Завершить проект"
-                    src={FinishImage}
-                    backgroundColor="var(--main-color)"
-                    onClick={() => changeProjectStatus(ProjectStatusEnum.FINISHED)}
-                  />
-                  }
-                {data.status == ProjectStatusEnum.FINISHED &&
-                <ImageTextButton
-                    text="Возобновить проект"
-                    src={RestartImage}
-                    backgroundColor="var(--main-color)"
-                    onClick={() => changeProjectStatus(ProjectStatusEnum.ACTIVE)}
-                  />
-                  }
               </div>
             )}
+
+            {isAdmin && isEditing && (
+              <form
+                onSubmit={handleSubmit}
+                className={`${styles.card} ${styles.editCard}`}
+              >
+                <div className={styles.top}>
+                  <AuthInput
+                    label="Название проекта"
+                    placeholder="Введите новое название проекта..."
+                    {...registerField("label")}
+                  />
+                  <ImageTextButton
+                    type="submit"
+                    text={updateProjectMutation.isPending ? "Сохранение…" : "Сохранить"}
+                    src={CheckImage}
+                    color="var(--active-dark-color)"
+                    backgroundColor="var(--varity2-color)"
+                  />
+                  <ImageTextButton
+                    text="Отмена"
+                    src={CancelImage}
+                    color="var(--active-dark-color)"
+                    backgroundColor="var(--varity2-color)"
+                  />
+                </div>
+                <div className={styles.tags}>
+                  {watchedTags.map((tag, index) => (
+                    <ProjectUpdateFormTag
+                      key={index}
+                      onClick={() => handleRemoveTag(tag)}
+                    >
+                      {tag}
+                    </ProjectUpdateFormTag>
+                  ))}
+                  <ProfileInput
+                    label=""
+                    placeholder="Добавьте тег..."
+                    required={false}
+                    value={currentTagInput}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setCurrentTagInput(e.target.value)
+                    }
+                    onKeyDown={handleTagInputKeyDown}
+                    onConfirm={handleAddTag}
+                    hasEditButton={false}
+                    className={styles.tagInput}
+                  />
+                </div>
+                <div className={styles.info}>
+                  <div className={styles.infoPiece}>
+                    <Image src={AuthorImage} alt="author image" />
+                    <span className={styles.infoDescription}>Автор:</span>
+                    {data.creator}
+                  </div>
+                  <div className={styles.infoPiece}>
+                    <Image src={CreationTimeImage} alt="creation time image" />
+                    <span className={styles.infoDescription}>Создано:</span>
+                    {new Date(data.created_at).toLocaleDateString("ru-RU")}
+                  </div>
+                  <div className={styles.infoPiece}>
+                    <Image src={StatusActiveImage} alt="active status image" />
+                    <span className={styles.infoDescription}>Статус:</span>
+                    {isActive && "Активен"}
+                    {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
+                    {data.status === ProjectStatusEnum.DELETED && "Удалён"}
+                  </div>
+                </div>
+                <ProjectTextarea
+                  height={238}
+                  label="Описание:"
+                  placeholder="Введите новое описание проекта..."
+                  {...registerField("description")}
+                />
+              </form>
+            )}
           </div>
-        )}
 
-        {isAdmin && isEditing && (
-          <form
-            onSubmit={handleSubmit}
-            className={`${styles.card} ${styles.editCard}`}
-          >
-            <div className={styles.top}>
-              <AuthInput
-                label="Название проекта"
-                placeholder="Введите новое название проекта..."
-                {...registerField("label")}
-              />
-              <ImageTextButton
-                type="submit"
-                text={updateProjectMutation.isPending ? "Сохранение…" : "Сохранить"}
-                src={CheckImage}
-                color="var(--active-dark-color)"
-                backgroundColor="var(--varity2-color)"
-              />
-              <ImageTextButton
-                text="Отмена"
-                src={CancelImage}
-                color="var(--active-dark-color)"
-                backgroundColor="var(--varity2-color)"
-              />
-            </div>
-            <div className={styles.tags}>
-              {watchedTags.map((tag, index) => (
-                <ProjectUpdateFormTag
-                  key={index}
-                  onClick={() => handleRemoveTag(tag)}
-                >
-                  {tag}
-                </ProjectUpdateFormTag>
-              ))}
-              <ProfileInput
-                label=""
-                placeholder="Добавьте тег..."
-                required={false}
-                value={currentTagInput}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setCurrentTagInput(e.target.value)
-                }
-                onKeyDown={handleTagInputKeyDown}
-                onConfirm={handleAddTag}
-                hasEditButton={false}
-                className={styles.tagInput}
-              />
-            </div>
-            <div className={styles.info}>
-              <div className={styles.infoPiece}>
-                <Image src={AuthorImage} alt="author image" />
-                <span className={styles.infoDescription}>Автор:</span>
-                {data.creator}
-              </div>
-              <div className={styles.infoPiece}>
-                <Image src={CreationTimeImage} alt="creation time image" />
-                <span className={styles.infoDescription}>Создано:</span>
-                {new Date(data.created_at).toLocaleDateString("ru-RU")}
-              </div>
-              <div className={styles.infoPiece}>
-                <Image src={StatusActiveImage} alt="active status image" />
-                <span className={styles.infoDescription}>Статус:</span>
-                {isActive && "Активен"}
-                {data.status === ProjectStatusEnum.FINISHED && "Завершён"}
-                {data.status === ProjectStatusEnum.DELETED && "Удалён"}
-              </div>
-            </div>
-            <ProjectTextarea
-              height={238}
-              label="Описание:"
-              placeholder="Введите новое описание проекта..."
-              {...registerField("description")}
-            />
-          </form>
-        )}
-      </div>
+          {updateError && <ValidationError messages={[updateError]} />}
 
-      {updateError && <ValidationError messages={[updateError]} />}
-
-      <div className={styles.countInfo}>
-        <div className={styles.box}>
-          <span className={styles.count}>{data.participants_count}</span>
-          <span>участников</span>
-        </div>
-        <div className={styles.box}>
-          <span className={styles.count}>{data.tasks_count}</span>
-          <span>заданий</span>
-        </div>
-        <div className={styles.box}>
-          <span className={styles.count}>{data.answers_count}</span>
-          <span>ответов</span>
+          <div className={styles.countInfo}>
+            <div className={styles.box}>
+              <span className={styles.count}>{data.participants_count}</span>
+              <span>участников</span>
+            </div>
+            <div className={styles.box}>
+              <span className={styles.count}>{data.tasks_count}</span>
+              <span>заданий</span>
+            </div>
+            <div className={styles.box}>
+              <span className={styles.count}>{data.answers_count}</span>
+              <span>ответов</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -507,7 +510,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
           </>
         )}
 
-        {publications.length == 0 && 
+        {publications.length == 0 &&
         <div className={styles.noTasks}>
             <p>
             В данном проекте пока нету задач или публикаций.
