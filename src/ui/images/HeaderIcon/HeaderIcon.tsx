@@ -1,15 +1,31 @@
 import styles from './HeaderIcon.module.css'
 
-const DEFAULT_AVATAR = "/assets/project/example.png";
+function DefaultAvatar() {
+    return (
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+            style={{ width: "100%", height: "100%", borderRadius: "inherit" }}>
+            <rect width="40" height="40" fill="#E8ECE4"/>
+            <g transform="translate(7.5, 9.5)">
+                <path d="M16.3645 11.3287C17.3858 10.5252 18.1312 9.42343 18.4971 8.17658C18.863 6.92973 18.8311 5.59983 18.406 4.37192C17.9808 3.144 17.1835 2.07913 16.125 1.32545C15.0665 0.571764 13.7994 0.166748 12.5 0.166748C11.2005 0.166748 9.9334 0.571764 8.87488 1.32545C7.81635 2.07913 7.01906 3.144 6.59392 4.37192C6.16878 5.59983 6.13694 6.92973 6.50282 8.17658C6.86871 9.42343 7.61412 10.5252 8.63537 11.3287C6.88545 12.0298 5.35858 13.1926 4.21755 14.6932C3.07651 16.1938 2.36408 17.9759 2.1562 19.8496C2.14115 19.9863 2.08325 21.0058 2.08325 21.0058H22.9166C22.9166 21.0058 22.9042 20.1333 22.8749 19.86C22.6661 17.981 21.9498 16.1943 20.8029 14.6914C19.656 13.1885 18.1217 12.0261 16.3645 11.3287ZM12.5 10.5891C11.6759 10.5891 10.8703 10.3448 10.1851 9.88693C9.49987 9.42909 8.96582 8.77835 8.65045 8.01699C8.33509 7.25563 8.25257 6.41785 8.41334 5.6096C8.57411 4.80134 8.97095 4.05891 9.55367 3.47619C10.1364 2.89348 10.8788 2.49664 11.6871 2.33587C12.4953 2.1751 13.3331 2.25761 14.0945 2.57298C14.8558 2.88834 15.5066 3.42239 15.9644 4.1076C16.4222 4.7928 16.6666 5.59838 16.6666 6.42247C16.6666 7.52754 16.2276 8.58735 15.4462 9.36875C14.6648 10.1502 13.605 10.5891 12.5 10.5891Z" fill="#9AA398"/>
+            </g>
+        </svg>
+    )
+}
 
 export default function HeaderIcon({ className, src }: { className?: string; src?: string }) {
+    const hasAvatar = src && src.length > 0;
     return (
         <div className={`${styles.icon} ${className ?? ''}`}>
-            <img
-                src={src || DEFAULT_AVATAR}
-                alt="Аватар"
-                style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }}
-            />
+            {hasAvatar ? (
+                <img
+                    src={src}
+                    alt=""
+                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                />
+            ) : (
+                <DefaultAvatar />
+            )}
         </div>
     )
 }

@@ -239,6 +239,7 @@ export default function TaskPageClient({
                   value.user_name ??
                   "Загрузка..."
                 }
+                avatar_url={profiles[value.user_id]?.avatar_url}
                 isAdmin={isAdmin}
                 onApprove={() =>
                   changeStatusMutation.mutate({

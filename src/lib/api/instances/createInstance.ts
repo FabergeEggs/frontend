@@ -68,7 +68,15 @@ export function createInstance(baseURL: string | undefined = process.env.NEXT_PU
           clearAccessToken();
           setUserId("");
           if (typeof window !== "undefined") {
-            window.location.href = "/login";
+            const PUBLIC_PREFIXES = ["/feed", "/testcli", "/testsrv"];
+            const PROTECTED_PREFIXES = ["/feed/create"];
+            const path = window.location.pathname;
+            const isPublic =
+              PUBLIC_PREFIXES.some((p) => path.startsWith(p)) &&
+              !PROTECTED_PREFIXES.some((p) => path.startsWith(p));
+            if (!isPublic) {
+              window.location.href = "/login";
+            }
           }
         }
       }

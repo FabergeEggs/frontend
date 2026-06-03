@@ -30,7 +30,7 @@ export default function TransparentTextImageButton({
                     }
 
                 }`}</style>}
-    <span className={`${styles.container} ${className}`} onClick={(e) => {e.stopPropagation(); e.preventDefault(); onClick?.(e)}} role={onClick ? "button" : undefined}>
+    <span className={`${styles.container} ${className}`} onClick={(e) => { if (onClick) { e.stopPropagation(); e.preventDefault(); onClick(e); } }} role={onClick ? "button" : undefined}>
         {!imageFirst && <>
           <span className="transparentButtonText" style={{color}}>{text}</span>
           <Image className={styles.image} src={src} alt={text} />

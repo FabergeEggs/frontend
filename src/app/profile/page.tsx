@@ -19,10 +19,23 @@ import {
 } from "@/src/lib/models/export/project";
 import { useAuth } from "@/src/lib/providers/AuthProvider";
 import { useProfileInfo } from "@/src/lib/query/profile";
-import { useUserMemberships } from "@/src/lib/query/project";
+import { useUserMemberships, useProjectStatistics } from "@/src/lib/query/project";
 import { updateProfile } from "@/src/lib/api/profile";
 import { getQueryStatus } from "@/src/lib/query/status";
 import ValidationError from "@/src/ui/forms/ValidationError/ValidationError";
+
+function MembershipCard({ project }: { project: MembershipProjectDTO }) {
+  const statsQuery = useProjectStatistics(project.project_id);
+  return (
+    <ProjectCard
+      project_id={project.project_id}
+      label={project.label}
+      short_description={project.short_description}
+      tasks_count={statsQuery.data?.tasks_count ?? 0}
+      participants_count={statsQuery.data?.participants_count ?? 0}
+    />
+  );
+}
 
 export default function ProfilePage() {
   const [showScientistProjects, setShowScientistProjects] = useState(true);
@@ -85,11 +98,33 @@ export default function ProfilePage() {
         <div className={styles.pictureInputContainer}>
           <ProfilePictureInput
             value={avatarUrl}
-            onChange={async ({ assetId, displayUrl }) => {
+            onChange={async ({ displayUrl }) => {
               setAvatarUrl(displayUrl);
+              if (userId) {
+                try {
+                  await updateProfile(userId, {
+                    first_name: profileData.first_name,
+                    last_name: profileData.last_name ?? "",
+                    bio: profileData.bio ?? "",
+                    avatar_url: displayUrl,
+                  });
+                } catch {
+                  // avatar displays locally; silently ignore save error
+                }
+              }
             }}
             onDelete={async () => {
               setAvatarUrl("");
+              if (userId) {
+                try {
+                  await updateProfile(userId, {
+                    first_name: profileData.first_name,
+                    last_name: profileData.last_name ?? "",
+                    bio: profileData.bio ?? "",
+                    avatar_url: "",
+                  });
+                } catch {}
+              }
             }}
           />
         </div>
@@ -115,7 +150,7 @@ export default function ProfilePage() {
             <div className={styles.projects}>
               {scientistProjects.map((value: MembershipProjectDTO, index: number) => (
                 <Fragment key={index}>
-                  <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+                  <MembershipCard project={value} />
                 </Fragment>
               ))}
             </div>
@@ -146,7 +181,7 @@ export default function ProfilePage() {
           { (showVolunteerProjects && volunteerProjects.length > 0) && <div className={styles.projects}>
             {volunteerProjects.map((value: MembershipProjectDTO, index: number) => (
               <Fragment key={index}>
-                <ProjectCard project_id={value.project_id} label={value.label} short_description={value.short_description} />
+                <MembershipCard project={value} />
               </Fragment>
             ))}
           </div>}
