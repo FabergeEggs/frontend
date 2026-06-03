@@ -423,7 +423,6 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             </div>
           </div>
         </div>
-      </div>
 
       {!isAdmin && isActive && !isMember && (
         <button
@@ -437,7 +436,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         >
           {addMemberMutation.isPending ? "Вступление…" : "Присоединиться"}
         </button>
-      )}
+      )},
       {!isAdmin && isMember && (
         <button
           className="basic-btn"
@@ -451,7 +450,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         >
           {removeMemberMutation.isPending ? "Выход…" : "Выйти из проекта"}
         </button>
-      )}
+      )},
 
       {isAdmin && isCreatingTask && (
         <div id="taskform">
@@ -460,7 +459,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             onSuccess={() => setCreatingTask(false)}
           />
         </div>
-      )}
+      )},
 
       {isAdmin && isPosting && (
         <div id="postform">
@@ -469,7 +468,7 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
             onSuccess={() => setPosting(false)}
           />
         </div>
-      )}
+      )},
 
       <div className={styles.projects}>
         {publicationsStatus.isLoading && <p>Загрузка публикаций…</p>}
@@ -519,5 +518,6 @@ function ProjectPageContent({ data }: { data: ProjectFull }) {
         </div>
         }
       </div>
-    </div>)
+    </div>
+  )
 }
